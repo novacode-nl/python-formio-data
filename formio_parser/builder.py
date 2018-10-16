@@ -27,7 +27,11 @@ class Builder:
     def extract_components(self, components, cons={}):
         for comp in components:
             if comp.get('key'):
-                cons.update({comp['key']: comp})
+                cons[comp['key']] = {
+                    'raw': comp,
+                    'component': self.get_component_object(comp)
+                }
+
                 if comp.get('components'):
                     self.extract_components(comp.get('components'), cons)
             elif comp.get('type') == 'columns':
@@ -35,3 +39,6 @@ class Builder:
                 for col in comp.get('columns'):
                     self.extract_components(col.get('components'), cons)
         return cons
+
+    def get_component_object(self, comp):
+        return comp
