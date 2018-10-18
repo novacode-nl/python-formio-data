@@ -7,9 +7,8 @@ import json
 
 class Builder:
 
-    def __init__(self, schema_str, lang='en', **kwargs):
-        self.schema_str = schema_str
-        self.schema = json.loads(schema_str)
+    def __init__(self, schema_json, lang='en', **kwargs):
+        self.schema = json.loads(schema_json)
 
         self.lang = lang
         self.context = None

@@ -9,4 +9,4 @@ sys.path.append('..')
 
 from . import test_common
 from . import test_builder
-# from . import test_form
+from . import test_submission
