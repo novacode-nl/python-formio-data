@@ -2,6 +2,9 @@
 # See LICENSE file for full licensing details.
 
 import json
+import logging
+
+import components
 
 
 class Builder:
@@ -16,6 +19,10 @@ class Builder:
 
         self.components = {}
         self.set_components()
+
+        # TODO kwargs['component_cls']
+        # Custom component classes
+        self._component_cls = []
 
     def set_components(self):
         root_components = self.schema.get('components')
@@ -39,4 +46,15 @@ class Builder:
         return cons
 
     def get_component_object(self, comp):
-        return comp
+        comp_type = comp.get('type')
+        if comp_type:
+            try:
+                cls_name = '%sComponent' % comp_type
+                cls = getattr(components, cls_name)
+                return cls(comp)
+            except AttributeError as e:
+                # TODO try to find/load from self._component_cls else
+                # re-raise exception or silence (log error and return False)
+                logging.error(e)
+        else:
+            return False
