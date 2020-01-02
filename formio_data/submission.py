@@ -35,6 +35,7 @@ class Submission:
 
         self.components = {}
         self.init_components()
+        self.data = SubmissionData(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -44,25 +45,15 @@ class Submission:
             # Rather lazy check, but sane.
             if not self.submission.get(key):
                 continue
-            
-            component_submission = self.submission.get(key)
 
-            # Instantiate the compoent class
-            component_class = globals()[component.__class__.__name__]
-            component_obj = component_class(self.builder, component_submission)
-
-            if component_obj is not None:
-                component_obj.init_submission_attrs(component_submission)
-                self.components[key] = component_obj
+            component['component'].value = self.submission.get(key)
+            self.components[key] = component
 
 
-# class SubmissionStore:
-#
-#     def __init__(self, submission):
-#         self._submission = submission
-#
-#     def _getattr__(self, key):
-#         if self._submission.builder.components.get(key):
-#             return self._submission.component.get(key)
-#         else:
-#             return None
+class SubmissionData:
+
+    def __init__(self, submission):
+        self._submission = submission
+
+    def __getattr__(self, key):
+        return self._submission.components.get(key)['component']
