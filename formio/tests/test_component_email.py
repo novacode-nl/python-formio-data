@@ -31,8 +31,8 @@ class EmailComponentTestCase(ComponentTestCase):
 
     def test_get_submission(self):
         email = self.submission.components['email']['component']
-        self.assertEqual(email.value, 'bob@novacode.nl')
         self.assertEqual(email.label, 'Email')
+        self.assertEqual(email.value, 'bob@novacode.nl')
 
     def test_get_submission_data(self):
         email = self.submission.data.email
