@@ -36,9 +36,6 @@ package index](https://pypi.python.org/pypi/python-formio-data)
 # PyPI
 pip install python-formio-data
 ```
-
-**Dependencies:** `lxml, xmltodict, xmlunittest`
-
 ## License
 [MIT](LICENSE)
 
