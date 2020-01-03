@@ -18,6 +18,10 @@ class PhoneNumberComponentTestCase(ComponentTestCase):
         submit = self.builder.components['submit']
         self.assertNotIsInstance(submit, phoneNumberComponent)
 
+    def test_get_key(self):
+        phoneNumber = self.builder.components['phoneNumber']
+        self.assertEqual(phoneNumber.key, 'phoneNumber')
+
     def test_get_type(self):
         phoneNumber = self.builder.components['phoneNumber']
         self.assertEqual(phoneNumber.type, 'phoneNumber')

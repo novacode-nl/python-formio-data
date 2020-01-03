@@ -8,6 +8,10 @@ class Component:
         self.submission = {}
 
     @property
+    def key(self):
+        return self.raw.get('key')
+
+    @property
     def type(self):
         return self.raw.get('type')
 

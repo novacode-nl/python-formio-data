@@ -21,6 +21,10 @@ class TextfieldComponentTestCase(ComponentTestCase):
         submit = self.builder.components['submit']
         self.assertNotIsInstance(submit, textfieldComponent)
 
+    def test_get_key(self):
+        firstName = self.builder.components['firstName']
+        self.assertEqual(firstName.key, 'firstName')
+
     def test_get_type(self):
         firstName = self.builder.components['firstName']
         self.assertEqual(firstName.type, 'textfield')

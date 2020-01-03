@@ -18,6 +18,10 @@ class SurveyComponentTestCase(ComponentTestCase):
         submit = self.builder.components['submit']
         self.assertNotIsInstance(submit, surveyComponent)
 
+    def test_get_key(self):
+        survey = self.builder.components['survey']
+        self.assertEqual(survey.key, 'survey')
+
     def test_get_type(self):
         survey = self.builder.components['survey']
         self.assertEqual(survey.type, 'survey')

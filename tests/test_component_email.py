@@ -18,6 +18,10 @@ class EmailComponentTestCase(ComponentTestCase):
         submit = self.builder.components['submit']
         self.assertNotIsInstance(submit, emailComponent)
 
+    def test_get_key(self):
+       email = self.builder.components['email']
+       self.assertEqual(email.key, 'email')
+
     def test_get_type(self):
         email = self.builder.components['email']
         self.assertEqual(email.type, 'email')
