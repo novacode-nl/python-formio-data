@@ -12,7 +12,7 @@ setup(
     author_email='bob@novacode.nl',
     license='MIT',
     packages=[
-        'formio_data'
+        'formio'
     ],
     # install_requires=[]
 )
