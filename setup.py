@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 packages = find_packages(exclude=['tests*'])
 
 setup(
-    name='python-formio-data',
+    name='formio-data',
     version='0.1.0.dev1',
     description='Python object API for Form.io (JSON) data',
     url='https://github.com/novacode-nl/python-formio-data',
