@@ -1,7 +1,6 @@
 from setuptools import setup, find_packages
 
-# TODO
-# packages = find_packages(exclude=['tests*'])
+packages = find_packages(exclude=['tests*'])
 
 setup(
     name='python-formio-data',
@@ -11,8 +10,5 @@ setup(
     author='Bob Leers',
     author_email='bob@novacode.nl',
     license='MIT',
-    packages=[
-        'formio'
-    ],
-    # install_requires=[]
-)
+    packages=packages
+ )
