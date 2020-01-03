@@ -10,9 +10,10 @@ class Submission:
 
     def __init__(self, submission_json, builder=None, builder_schema_json=None, lang='en'):
         """
-        @param submission
+        @param submission_json
         @param builder Builder
         @param builder_schema
+        @param lang
         """
         self.submission = json.loads(submission_json)
         
@@ -45,8 +46,7 @@ class Submission:
             # Rather lazy check, but sane.
             if not self.submission.get(key):
                 continue
-
-            component['component'].value = self.submission.get(key)
+            component.value = self.submission.get(key)
             self.components[key] = component
 
 
@@ -56,4 +56,4 @@ class SubmissionData:
         self._submission = submission
 
     def __getattr__(self, key):
-        return self._submission.components.get(key)['component']
+        return self._submission.components.get(key)

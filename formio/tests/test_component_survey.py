@@ -10,37 +10,40 @@ class SurveyComponentTestCase(ComponentTestCase):
     def test_object(self):
         # surveyComponent
         survey = self.builder.components['survey']
-        self.assertIsInstance(survey['component'], surveyComponent)
+        self.assertIsInstance(survey, surveyComponent)
 
         # Not surveyComponent
         firstName = self.builder.components['firstName']
-        self.assertNotIsInstance(firstName['component'], surveyComponent)
-
+        self.assertNotIsInstance(firstName, surveyComponent)
         submit = self.builder.components['submit']
-        self.assertNotIsInstance(submit['component'], surveyComponent)
+        self.assertNotIsInstance(submit, surveyComponent)
+
+    def test_get_type(self):
+        survey = self.builder.components['survey']
+        self.assertEqual(survey.type, 'survey')
 
     def test_get_label(self):
-        survey = self.builder.components['survey']['component']
+        survey = self.builder.components['survey']
         self.assertEqual(survey.label, 'Survey')
 
     def test_set_label(self):
-        survey = self.builder.components['survey']['component']
+        survey = self.builder.components['survey']
         self.assertEqual(survey.label, 'Survey')
         survey.label = 'Foobar'
         self.assertEqual(survey.label, 'Foobar')
 
     def test_get_submission(self):
-        survey = self.submission.components['survey']['component']
+        survey = self.submission.components['survey']
         self.assertEqual(survey.label, 'Survey')
-
         self.assertEqual(survey.value['overallExperience'], 'excellent')
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')
         self.assertEqual(survey.value['howWouldYouRateTheFormIoPlatform'], 'excellent')
+        self.assertEqual(survey.type, 'survey')
 
     def test_get_submission_data(self):
         survey = self.submission.data.survey
         self.assertEqual(survey.label, 'Survey')
-
         self.assertEqual(survey.value['overallExperience'], 'excellent')
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')
         self.assertEqual(survey.value['howWouldYouRateTheFormIoPlatform'], 'excellent')
+        self.assertEqual(survey.type, 'survey')

@@ -10,6 +10,10 @@ import components
 class Builder:
 
     def __init__(self, schema_json, lang='en', **kwargs):
+        """
+        @param schema_json
+        @param lang
+        """
         self.schema = json.loads(schema_json)
 
         self.lang = lang
@@ -27,22 +31,18 @@ class Builder:
     def set_components(self):
         root_components = self.schema.get('components')
         if root_components:
-            self.components = self.extract_components(root_components)
+            self.components = self.load_components(root_components)
 
-    def extract_components(self, components, cons={}):
+    def load_components(self, components, cons={}):
         for comp in components:
             if comp.get('key'):
-                cons[comp['key']] = {
-                    'raw': comp,
-                    'component': self.get_component_object(comp)
-                }
-
+                cons[comp['key']] = self.get_component_object(comp)
                 if comp.get('components'):
-                    self.extract_components(comp.get('components'), cons)
+                    self.load_components(comp.get('components'), cons)
             elif comp.get('type') == 'columns':
                 # TODO Check more type (cases) needed here.
                 for col in comp.get('columns'):
-                    self.extract_components(col.get('components'), cons)
+                    self.load_components(col.get('components'), cons)
         return cons
 
     def get_component_object(self, comp):
@@ -53,8 +53,9 @@ class Builder:
                 cls = getattr(components, cls_name)
                 return cls(comp)
             except AttributeError as e:
-                # TODO try to find/load from self._component_cls else
+                # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
                 logging.error(e)
+                return components.Component(comp)
         else:
             return False

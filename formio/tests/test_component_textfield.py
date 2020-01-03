@@ -10,34 +10,39 @@ class TextfieldComponentTestCase(ComponentTestCase):
     def test_object(self):
         # TextfieldComponent
         firstName = self.builder.components['firstName']
-        self.assertIsInstance(firstName['component'], textfieldComponent)
+        self.assertIsInstance(firstName, textfieldComponent)
 
         lastName = self.builder.components['lastName']
-        self.assertIsInstance(firstName['component'], textfieldComponent)
+        self.assertIsInstance(lastName, textfieldComponent)
 
         # Not TextfieldComponent
         email = self.builder.components['email']
-        self.assertNotIsInstance(email['component'], textfieldComponent)
-
+        self.assertNotIsInstance(email, textfieldComponent)
         submit = self.builder.components['submit']
-        self.assertNotIsInstance(submit['component'], textfieldComponent)
+        self.assertNotIsInstance(submit, textfieldComponent)
+
+    def test_get_type(self):
+        firstName = self.builder.components['firstName']
+        self.assertEqual(firstName.type, 'textfield')
 
     def test_get_label(self):
-        firstName = self.builder.components['firstName']['component']
+        firstName = self.builder.components['firstName']
         self.assertEqual(firstName.label, 'First Name')
 
     def test_set_label(self):
-        firstName = self.builder.components['firstName']['component']
+        firstName = self.builder.components['firstName']
         self.assertEqual(firstName.label, 'First Name')
         firstName.label = 'Foobar'
         self.assertEqual(firstName.label, 'Foobar')
 
     def test_get_submission(self):
-        firstName = self.submission.components['firstName']['component']
+        firstName = self.submission.components['firstName']
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
+        self.assertEqual(firstName.type, 'textfield')
         
     def test_get_submission_data(self):
         firstName = self.submission.data.firstName
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
+        self.assertEqual(firstName.type, 'textfield')
