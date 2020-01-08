@@ -59,10 +59,6 @@ For more examples of usage, see the unit-tests.
 >> print(submission.data.firstname.label)
 'First Name'
 
-# Raw JSON value
->> print(submission.data.firstname.raw_value)
-'Bob'
-
 # Value as Python string too
 >> print(submission.data.firstname.value)
 'Bob'
@@ -70,10 +66,6 @@ For more examples of usage, see the unit-tests.
 # Date (control)
 >> print(submission.data.birthday.label)
 'Birthday'
-
-# Raw JSON
->> print(submission.data.birthday.raw_value)
-'2009-10-16'
 
 # Value as Python Date object
 >> print(submission.data.birthday.value)
