@@ -76,8 +76,9 @@ datetime.date(2009 10 16)
 
 ### Run all unittests
 
+From toplevel directory:
+
 ```
-cd tests
 python -m unittest
 ```
 
