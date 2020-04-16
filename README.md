@@ -47,7 +47,7 @@ All contributions, bug reports, bug fixes, documentation improvements, enhanceme
 For more examples of usage, see the unit-tests.
 
 ``` python
->> from formiodata import Builder, Submission
+>> from formio-data import Builder, Submission
 >>
 # builder_json is a Form.io Builder JSON document (text/string)
 # submission_json is a Form.io Submission JSON document (text/string)
