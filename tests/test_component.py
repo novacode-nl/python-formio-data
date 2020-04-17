@@ -2,8 +2,8 @@
 # See LICENSE file for full licensing details.
 
 from test_common import CommonTestCase
-from builder import Builder
-from submission import Submission
+from formiodata.builder import Builder
+from formiodata.submission import Submission
 
 
 class ComponentTestCase(CommonTestCase):

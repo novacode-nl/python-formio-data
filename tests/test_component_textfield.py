@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from components import textfieldComponent
+from formiodata.components import textfieldComponent
 
 
 class TextfieldComponentTestCase(ComponentTestCase):

@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from components import surveyComponent
+from formiodata.components import surveyComponent
 
 
 class SurveyComponentTestCase(ComponentTestCase):

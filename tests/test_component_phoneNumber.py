@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from components import phoneNumberComponent
+from formiodata.components import phoneNumberComponent
 
 
 class PhoneNumberComponentTestCase(ComponentTestCase):

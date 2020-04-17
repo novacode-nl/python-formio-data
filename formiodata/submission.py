@@ -3,7 +3,7 @@
 
 import json
 
-from builder import Builder
+from formiodata.builder import Builder
 
 
 class Submission:

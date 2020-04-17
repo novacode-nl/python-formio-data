@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from components import emailComponent
+from formiodata.components import emailComponent
 
 
 class EmailComponentTestCase(ComponentTestCase):

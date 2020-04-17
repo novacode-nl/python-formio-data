@@ -4,7 +4,7 @@
 import json
 import logging
 
-import components
+from formiodata import components
 
 
 class Builder:
@@ -17,10 +17,6 @@ class Builder:
         self.schema = json.loads(schema_json)
 
         self.lang = lang
-        self.context = None
-        if kwargs.get('context', False):
-            self._context(kwargs['context'])
-
         self.components = {}
         self.set_components()
 
