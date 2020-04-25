@@ -33,15 +33,74 @@ class Component:
         self.submission['value'] = value
 
 
+# Basic
+
 class textfieldComponent(Component):
     pass
 
+
+class textareaComponent(Component):
+    pass
+
+
+class numberComponent(Component):
+    pass
+
+
+class passwordComponent(Component):
+    pass
+
+
+class checkboxComponent(Component):
+    pass
+
+
+class selectboxesComponent(Component):
+    pass
+
+
+class selectComponent(Component):
+    pass
+
+
+class radioComponent(Component):
+    pass
+
+
+class buttonComponent(Component):
+    pass
+
+
+# Advanced
 
 class emailComponent(Component):
     pass
 
 
+class urlComponent(Component):
+    pass
+
+
 class phoneNumberComponent(Component):
+    pass
+
+
+# TODO: tags, address
+
+
+class datetimeComponent(Component):
+    pass
+
+
+class dateComponent(Component):
+    pass
+
+
+class timeComponent(Component):
+    pass
+
+
+class currencyComponent(Component):
     pass
 
 
@@ -53,5 +112,27 @@ class signatureComponent(Component):
     pass
 
 
-class buttonComponent(Component):
+# Layout components
+
+class htmlelementComponent(Component):
+    pass
+
+
+class contentComponent(Component):
+    pass
+
+
+class columnsComponent(Component):
+    pass
+
+
+class fieldsetComponent(Component):
+    pass
+
+
+class panelComponent(Component):
+    pass
+
+
+class tableComponent(Component):
     pass
