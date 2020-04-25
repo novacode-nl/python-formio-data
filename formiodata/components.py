@@ -3,9 +3,13 @@
 
 class Component:
 
-    def __init__(self, raw):
+    def __init__(self, raw, language='en', **kwargs):
+        # TODO or provide the Builder object?
         self.raw = raw
         self.form = {}
+        self.language = language
+        # i18n (translations)
+        self.i18n = kwargs.get('i18n', {})
 
     @property
     def key(self):
@@ -17,7 +21,11 @@ class Component:
 
     @property
     def label(self):
-        return self.raw.get('label')
+        label = self.raw.get('label')
+        if self.i18n.get(self.language):
+            return self.i18n[self.language].get(label, label)
+        else:
+            return label
 
     @label.setter
     def label(self, value):

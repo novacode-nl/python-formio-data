@@ -50,3 +50,14 @@ class TextfieldComponentTestCase(ComponentTestCase):
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')
+
+    # i18n translations
+    def test_get_label_i18n_nl(self):
+        firstName = self.builder_i18n_nl.form_components['firstName']
+        self.assertEqual(firstName.label, 'Voornaam')
+        lastName = self.builder_i18n_nl.form_components['lastName']
+        self.assertEqual(lastName.label, 'Achternaam')
+
+    def test_get_form_data_i18n_nl(self):
+        self.assertEqual(self.form_i18n_nl.data.firstName.label, 'Voornaam')
+        self.assertEqual(self.form_i18n_nl.data.lastName.label, 'Achternaam')

@@ -51,3 +51,16 @@ class SurveyComponentTestCase(ComponentTestCase):
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')
         self.assertEqual(survey.value['howWouldYouRateTheFormIoPlatform'], 'excellent')
         self.assertEqual(survey.type, 'survey')
+
+    # i18n translations
+    def test_get_label_i18n_nl(self):
+        survey = self.builder_i18n_nl.form_components['survey']
+        self.assertEqual(survey.label, 'Enquête')
+
+    def test_get_form_data_i18n_nl(self):
+        survey = self.form_i18n_nl.data.survey
+        self.assertEqual(survey.label, 'Enquête')
+        # TODO Labels for questions and values
+        # self.assertEqual(survey.value['overallExperience'], 'uitstekend')
+        # self.assertEqual(survey.value['howWasCustomerSupport'], 'super goed')
+        # self.assertEqual(survey.value['howWouldYouRateTheFormIoPlatform'], 'uitstekend')
