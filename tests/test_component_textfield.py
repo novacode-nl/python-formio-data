@@ -9,32 +9,32 @@ class TextfieldComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # TextfieldComponent
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertIsInstance(firstName, textfieldComponent)
 
-        lastName = self.builder.components['lastName']
+        lastName = self.builder.form_components['lastName']
         self.assertIsInstance(lastName, textfieldComponent)
 
         # Not TextfieldComponent
-        email = self.builder.components['email']
+        email = self.builder.form_components['email']
         self.assertNotIsInstance(email, textfieldComponent)
-        submit = self.builder.components['submit']
+        submit = self.builder.form_components['submit']
         self.assertNotIsInstance(submit, textfieldComponent)
 
     def test_get_key(self):
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertEqual(firstName.key, 'firstName')
 
     def test_get_type(self):
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertEqual(firstName.type, 'textfield')
 
     def test_get_label(self):
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertEqual(firstName.label, 'First Name')
 
     def test_set_label(self):
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertEqual(firstName.label, 'First Name')
         firstName.label = 'Foobar'
         self.assertEqual(firstName.label, 'Foobar')

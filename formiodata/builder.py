@@ -4,54 +4,72 @@
 import json
 import logging
 
+from copy import deepcopy
+
 from formiodata import components
 
 
 class Builder:
 
-    def __init__(self, schema_json, lang='en', **kwargs):
+    def __init__(self, schema_json, language='en', **kwargs):
         """
         @param schema_json
         @param lang
         """
         self.schema = json.loads(schema_json)
+        self.language = language
 
-        self.lang = lang
-        self.components = {}
-        self.set_components()
+        # Components
+        ## Raw components from the schema
+        self.raw_components = []
+        ## Raw components enriched with Component(object) API.
+        self.components = []
+        ## Key/value dictionay of Form components for instant access.
+        self.form_components = {}
+        ## Set/load component attrs intialized above.
+        self.load_components()
 
         # TODO kwargs['component_cls']
         # Custom component classes
         self._component_cls = []
 
-    def set_components(self):
-        root_components = self.schema.get('components')
-        if root_components:
-            self.components = self.load_components(root_components)
+    def load_components(self):
+        self.raw_components = self.schema.get('components')
+        self.components = deepcopy(self.schema.get('components'))
+        self._load_components(self.components)
 
-    def load_components(self, components, cons={}):
-        for comp in components:
-            if comp.get('key'):
-                cons[comp['key']] = self.get_component_object(comp)
-                if comp.get('components'):
-                    self.load_components(comp.get('components'), cons)
-            elif comp.get('type') == 'columns':
-                # TODO Check more type (cases) needed here.
-                for col in comp.get('columns'):
-                    self.load_components(col.get('components'), cons)
-        return cons
+    def _load_components(self, components):
+        """
+        @param components
+        """
+        for component in components:
+            # First level
+            component_obj = self.get_component_object(component)
+            component['_object'] = component_obj
+            if component.get('key'):
+                self.form_components[component.get('key')] = component_obj
 
-    def get_component_object(self, comp):
-        comp_type = comp.get('type')
-        if comp_type:
+            # Nested components in e.g. columns, panels
+            for k, vals in component.copy().items():
+                if isinstance(vals, list):
+                    for v in vals:
+                        if v.get('components'):
+                            self._load_components(v.get('components'))
+
+    def get_component_object(self, component):
+        """
+        @param component
+        """
+        component_type = component.get('type')
+        if component_type:
             try:
-                cls_name = '%sComponent' % comp_type
+                cls_name = '%sComponent' % component_type
                 cls = getattr(components, cls_name)
-                return cls(comp)
+                return cls(component)
             except AttributeError as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
                 logging.error(e)
-                return components.Component(comp)
+                return components.Component(component)
         else:
             return False

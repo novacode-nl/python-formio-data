@@ -9,29 +9,29 @@ class PhoneNumberComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # phoneNumberComponent
-        phoneNumber = self.builder.components['phoneNumber']
+        phoneNumber = self.builder.form_components['phoneNumber']
         self.assertIsInstance(phoneNumber, phoneNumberComponent)
 
         # Not phoneNumberComponent
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, phoneNumberComponent)
-        submit = self.builder.components['submit']
+        submit = self.builder.form_components['submit']
         self.assertNotIsInstance(submit, phoneNumberComponent)
 
     def test_get_key(self):
-        phoneNumber = self.builder.components['phoneNumber']
+        phoneNumber = self.builder.form_components['phoneNumber']
         self.assertEqual(phoneNumber.key, 'phoneNumber')
 
     def test_get_type(self):
-        phoneNumber = self.builder.components['phoneNumber']
+        phoneNumber = self.builder.form_components['phoneNumber']
         self.assertEqual(phoneNumber.type, 'phoneNumber')
 
     def test_get_label(self):
-        phoneNumber = self.builder.components['phoneNumber']
+        phoneNumber = self.builder.form_components['phoneNumber']
         self.assertEqual(phoneNumber.label, 'Phone Number')
 
     def test_set_label(self):
-        phoneNumber = self.builder.components['phoneNumber']
+        phoneNumber = self.builder.form_components['phoneNumber']
         self.assertEqual(phoneNumber.label, 'Phone Number')
         phoneNumber.label = 'Foobar'
         self.assertEqual(phoneNumber.label, 'Foobar')

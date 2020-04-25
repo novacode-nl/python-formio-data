@@ -9,29 +9,29 @@ class EmailComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # EmailComponent
-        email = self.builder.components['email']
+        email = self.builder.form_components['email']
         self.assertIsInstance(email, emailComponent)
 
         # Not EmailComponent
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, emailComponent)
-        submit = self.builder.components['submit']
+        submit = self.builder.form_components['submit']
         self.assertNotIsInstance(submit, emailComponent)
 
     def test_get_key(self):
-       email = self.builder.components['email']
+       email = self.builder.form_components['email']
        self.assertEqual(email.key, 'email')
 
     def test_get_type(self):
-        email = self.builder.components['email']
+        email = self.builder.form_components['email']
         self.assertEqual(email.type, 'email')
 
     def test_get_label(self):
-        email = self.builder.components['email']
+        email = self.builder.form_components['email']
         self.assertEqual(email.label, 'Email')
 
     def test_set_label(self):
-        email = self.builder.components['email']
+        email = self.builder.form_components['email']
         self.assertEqual(email.label, 'Email')
         email.label = 'Foobar'
         self.assertEqual(email.label, 'Foobar')

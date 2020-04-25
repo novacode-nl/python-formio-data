@@ -9,29 +9,29 @@ class SurveyComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # surveyComponent
-        survey = self.builder.components['survey']
+        survey = self.builder.form_components['survey']
         self.assertIsInstance(survey, surveyComponent)
 
         # Not surveyComponent
-        firstName = self.builder.components['firstName']
+        firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, surveyComponent)
-        submit = self.builder.components['submit']
+        submit = self.builder.form_components['submit']
         self.assertNotIsInstance(submit, surveyComponent)
 
     def test_get_key(self):
-        survey = self.builder.components['survey']
+        survey = self.builder.form_components['survey']
         self.assertEqual(survey.key, 'survey')
 
     def test_get_type(self):
-        survey = self.builder.components['survey']
+        survey = self.builder.form_components['survey']
         self.assertEqual(survey.type, 'survey')
 
     def test_get_label(self):
-        survey = self.builder.components['survey']
+        survey = self.builder.form_components['survey']
         self.assertEqual(survey.label, 'Survey')
 
     def test_set_label(self):
-        survey = self.builder.components['survey']
+        survey = self.builder.form_components['survey']
         self.assertEqual(survey.label, 'Survey')
         survey.label = 'Foobar'
         self.assertEqual(survey.label, 'Foobar')

@@ -35,14 +35,14 @@ class Submission:
             self.set_builder_by_builder_schema_json()
 
         self.components = {}
-        self.init_components()
+        self.load_components()
         self.data = SubmissionData(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
 
-    def init_components(self):
-        for key, component in self.builder.components.items():
+    def load_components(self):
+        for key, component in self.builder.form_components.items():
             # Rather lazy check, but sane.
             if not self.submission.get(key):
                 continue
