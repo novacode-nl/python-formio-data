@@ -1,11 +1,8 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-# import sys
-# sys.path.append('..')
-
 from test_common import CommonTestCase
-from submission import Submission # , SubmissionStore
+from formiodata.submission import Submission
 
 
 class SubmissionTestCase(CommonTestCase):

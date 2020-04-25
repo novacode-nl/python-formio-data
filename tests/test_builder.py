@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_common import CommonTestCase
-from builder import Builder
+from formiodata.builder import Builder
 
 
 class BuilderTestCase(CommonTestCase):
@@ -16,7 +16,5 @@ class BuilderTestCase(CommonTestCase):
     def test_components(self):
         builder = self._builder()
         keys = ('firstName', 'email', 'lastName', 'phoneNumber', 'survey', 'signature', 'submit')
-
-        for key, comp in builder.components.items():
-            self.assertIn(key, keys)
-            
+        for k in keys:
+            self.assertIn(k, builder.form_components.keys())

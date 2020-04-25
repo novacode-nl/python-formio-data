@@ -6,8 +6,8 @@ import unittest
 import sys
 
 from utils import readfile
-from builder import Builder
-from submission import Submission
+from formiodata.builder import Builder
+from formiodata.submission import Submission
 
 
 class CommonTestCase(unittest.TestCase):
