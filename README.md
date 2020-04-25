@@ -30,11 +30,11 @@ The source code is currently hosted on GitHub at:
 https://github.com/novacode-nl/python-formio-data
 
 Binary installers for the latest released version are available at the [Python
-package index](https://pypi.python.org/pypi/python-formio-data)
+package index](https://pypi.python.org/pypi/formio-data)
 
 ```sh
 # PyPI
-pip install python-formio-data
+pip install formio-data
 ```
 ## License
 [MIT](LICENSE)
