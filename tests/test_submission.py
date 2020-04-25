@@ -2,22 +2,22 @@
 # See LICENSE file for full licensing details.
 
 from test_common import CommonTestCase
-from formiodata.submission import Submission
+from formiodata.form import Form
 
 
-class SubmissionTestCase(CommonTestCase):
+class FormTestCase(CommonTestCase):
 
     def x_test_constructor_validation_ok(self):
-        sub = Submission(self.submission_json, None, self.builder_json)
-        self.assertIsInstance(sub, Submission)
+        sub = Form(self.form_json, None, self.builder_json)
+        self.assertIsInstance(sub, Form)
 
-        sub = Submission(self.submission_json, self.builder)
-        self.assertIsInstance(sub, Submission)
-        # self.assertIsInstance(self.submission.store, SubmissionStore)
+        sub = Form(self.form_json, self.builder)
+        self.assertIsInstance(sub, Form)
+        # self.assertIsInstance(self.form.store, FormStore)
 
     def x_test_constructor_validation_fails(self):
         with self.assertRaisesRegexp(Exception, "Provide either the argument: builder or builder_schema_json."):
-            Submission(self.submission_json)
+            Form(self.form_json)
 
         with self.assertRaisesRegexp(Exception, "Constructor accepts either builder or builder_schema_json."):
-            Submission(self.submission_json, self.builder, self.builder_schema_json)
+            Form(self.form_json, self.builder, self.builder_schema_json)

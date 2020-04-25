@@ -36,16 +36,16 @@ class SurveyComponentTestCase(ComponentTestCase):
         survey.label = 'Foobar'
         self.assertEqual(survey.label, 'Foobar')
 
-    def test_get_submission(self):
-        survey = self.submission.components['survey']
+    def test_get_form(self):
+        survey = self.form.components['survey']
         self.assertEqual(survey.label, 'Survey')
         self.assertEqual(survey.value['overallExperience'], 'excellent')
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')
         self.assertEqual(survey.value['howWouldYouRateTheFormIoPlatform'], 'excellent')
         self.assertEqual(survey.type, 'survey')
 
-    def test_get_submission_data(self):
-        survey = self.submission.data.survey
+    def test_get_form_data(self):
+        survey = self.form.data.survey
         self.assertEqual(survey.label, 'Survey')
         self.assertEqual(survey.value['overallExperience'], 'excellent')
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')

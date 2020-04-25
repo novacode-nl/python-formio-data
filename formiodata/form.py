@@ -6,16 +6,16 @@ import json
 from formiodata.builder import Builder
 
 
-class Submission:
+class Form:
 
-    def __init__(self, submission_json, builder=None, builder_schema_json=None, lang='en'):
+    def __init__(self, form_json, builder=None, builder_schema_json=None, lang='en'):
         """
-        @param submission_json
+        @param form_json
         @param builder Builder
         @param builder_schema
         @param lang
         """
-        self.submission = json.loads(submission_json)
+        self.form = json.loads(form_json)
         
         self.builder = builder
         self.builder_schema_json = builder_schema_json
@@ -36,7 +36,7 @@ class Submission:
 
         self.components = {}
         self.load_components()
-        self.data = SubmissionData(self)
+        self.data = FormData(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -44,16 +44,16 @@ class Submission:
     def load_components(self):
         for key, component in self.builder.form_components.items():
             # Rather lazy check, but sane.
-            if not self.submission.get(key):
+            if not self.form.get(key):
                 continue
-            component.value = self.submission.get(key)
+            component.value = self.form.get(key)
             self.components[key] = component
 
 
-class SubmissionData:
+class FormData:
 
-    def __init__(self, submission):
-        self._submission = submission
+    def __init__(self, form):
+        self._form = form
 
     def __getattr__(self, key):
-        return self._submission.components.get(key)
+        return self._form.components.get(key)

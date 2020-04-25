@@ -39,14 +39,14 @@ class TextfieldComponentTestCase(ComponentTestCase):
         firstName.label = 'Foobar'
         self.assertEqual(firstName.label, 'Foobar')
 
-    def test_get_submission(self):
-        firstName = self.submission.components['firstName']
+    def test_get_form(self):
+        firstName = self.form.components['firstName']
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')
         
-    def test_get_submission_data(self):
-        firstName = self.submission.data.firstName
+    def test_get_form_data(self):
+        firstName = self.form.data.firstName
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')

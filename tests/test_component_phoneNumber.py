@@ -36,14 +36,14 @@ class PhoneNumberComponentTestCase(ComponentTestCase):
         phoneNumber.label = 'Foobar'
         self.assertEqual(phoneNumber.label, 'Foobar')
 
-    def test_get_submission(self):
-        phoneNumber = self.submission.components['phoneNumber']
+    def test_get_form(self):
+        phoneNumber = self.form.components['phoneNumber']
         self.assertEqual(phoneNumber.label, 'Phone Number')
         self.assertEqual(phoneNumber.value, '(069) 999-9999')
         self.assertEqual(phoneNumber.type, 'phoneNumber')
 
-    def test_get_submission_data(self):
-        phoneNumber = self.submission.data.phoneNumber
+    def test_get_form_data(self):
+        phoneNumber = self.form.data.phoneNumber
         self.assertEqual(phoneNumber.label, 'Phone Number')
         self.assertEqual(phoneNumber.value, '(069) 999-9999')
         self.assertEqual(phoneNumber.type, 'phoneNumber')

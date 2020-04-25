@@ -5,7 +5,7 @@ class Component:
 
     def __init__(self, raw):
         self.raw = raw
-        self.submission = {}
+        self.form = {}
 
     @property
     def key(self):
@@ -26,11 +26,11 @@ class Component:
 
     @property
     def value(self):
-        return self.submission['value']
+        return self.form['value']
 
     @value.setter
     def value(self, value):
-        self.submission['value'] = value
+        self.form['value'] = value
 
 
 # Basic

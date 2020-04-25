@@ -7,7 +7,7 @@ import sys
 
 from utils import readfile
 from formiodata.builder import Builder
-from formiodata.submission import Submission
+from formiodata.form import Form
 
 
 class CommonTestCase(unittest.TestCase):
@@ -19,7 +19,7 @@ class CommonTestCase(unittest.TestCase):
         # - shown: https://formio.github.io/formio.js/
         # - source: https://examples.form.io/example
         self.builder_json = readfile('data', 'test_example_builder.json')
-        self.submission_json = readfile('data', 'test_example_submission.json')
+        self.form_json = readfile('data', 'test_example_form.json')
 
         # self.builder = Builder(self.builder_json)
-        # self.submission = Submission(self.submission_json, None, self.builder_json)
+        # self.form = Form(self.form_json, None, self.builder_json)
