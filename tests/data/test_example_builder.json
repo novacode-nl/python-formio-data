@@ -153,6 +153,33 @@
             "type": "columns"
         },
         {
+            "collapsible": false,
+            "tableView": false,
+            "key": "panel",
+            "type": "panel",
+            "label": "Panel",
+            "input": false,
+            "components": [
+                {
+                    "label": "Seasons",
+                    "optionsLabelPosition": "right",
+                    "tableView": false,
+                    "values": [
+                        {"label": "Spring", "value": "spring", "shortcut": ""},
+                        {"label": "Summer", "value": "summer", "shortcut": ""},
+                        {"label": "Autumn", "value": "autumn", "shortcut": ""},
+                        {"label": "Summer", "value": "summer", "shortcut": ""}
+                    ],
+                    "calculateServer": false,
+                    "key": "seasons",
+                    "type": "selectboxes",
+                    "input": true,
+                    "inputType": "checkbox",
+                    "defaultValue": {"": false}
+                }
+            ]
+        },
+        {
             "clearOnHide": true,
             "conditional": {
                 "eq": "",

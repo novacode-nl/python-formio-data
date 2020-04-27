@@ -45,13 +45,14 @@ class Builder:
         @param components
         """
         for component in components:
-            # First level
             component_obj = self.get_component_object(component)
             component['_object'] = component_obj
             if component.get('key'):
                 self.form_components[component.get('key')] = component_obj
 
             # Nested components in e.g. columns, panels
+            if component.get('components'):
+                self._load_components(component.get('components'))
             for k, vals in component.copy().items():
                 if isinstance(vals, list):
                     for v in vals:

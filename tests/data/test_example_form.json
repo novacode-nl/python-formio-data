@@ -9,5 +9,6 @@
         "howWouldYouRateTheFormIoPlatform": "excellent"
     },
     "lastName": "Leers",
+    "seasons": {"spring": true, "summer": false, "autumn": true, "winter": false},
     "submit": true
 }
