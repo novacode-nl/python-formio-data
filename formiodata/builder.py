@@ -21,14 +21,19 @@ class Builder:
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})
 
-        # Components
-        ## Raw components from the schema
+        # Raw components from the schema
+        self._raw_components = []
+
+        # Raw components enriched with Component(object) API.
         self.raw_components = []
-        ## Raw components enriched with Component(object) API.
-        self.components = []
-        ## Key/value dictionay of Form components for instant access.
+
+        # Key/value dictionay of all components for instant access.
+        self.components = {}
+
+        # Key/value dictionay of Form components for instant access.
         self.form_components = {}
-        ## Set/load component attrs intialized above.
+
+        # Set/load component attrs intialized above.
         self.load_components()
 
         # TODO kwargs['component_cls']
@@ -36,9 +41,9 @@ class Builder:
         self._component_cls = []
 
     def load_components(self):
-        self.raw_components = self.schema.get('components')
-        self.components = deepcopy(self.schema.get('components'))
-        self._load_components(self.components)
+        self._raw_components = self.schema.get('components')
+        self.raw_components = deepcopy(self.schema.get('components'))
+        self._load_components(self.raw_components)
 
     def _load_components(self, components):
         """
@@ -47,8 +52,15 @@ class Builder:
         for component in components:
             component_obj = self.get_component_object(component)
             component['_object'] = component_obj
-            if component.get('key'):
+            if component.get('key') and component.get('input'):
                 self.form_components[component.get('key')] = component_obj
+                self.components[component.get('key')] = component_obj
+            else:
+                if self.components.get(component.get('type')):
+                    key = component.get('type') + '_x'
+                else:
+                    key = component.get('type')
+                self.components[key] = component_obj
 
             # Nested components in e.g. columns, panels
             if component.get('components'):

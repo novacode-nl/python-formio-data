@@ -20,6 +20,7 @@ class ComponentTestCase(CommonTestCase):
                 'Survey': 'Enquête',
                 'excellent': 'uitstekend',
                 'great': 'supergoed',
+                'My Favourites': 'Mijn favorieten',
                 'Favourite Season': 'Favoriete seizoen',
                 'Autumn': 'Herfst',
                 'Favourite Food': 'Lievelingseten',
