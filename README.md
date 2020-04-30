@@ -1,4 +1,4 @@
-# python-formio-data
+# formio-data (Python)
 
 Form.io (JSON) data API for Python.
 

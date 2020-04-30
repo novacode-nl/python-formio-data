@@ -3,12 +3,14 @@
 
 class Component:
 
-    def __init__(self, raw, language='en', **kwargs):
+    def __init__(self, raw, builder, **kwargs):
         # TODO or provide the Builder object?
         self.raw = raw
+        self.builder = builder
         self.form = {}
-        self.language = language
-        # i18n (translations)
+
+        # i18n (language, translations)
+        self.language = kwargs.get('language', 'en')
         self.i18n = kwargs.get('i18n', {})
 
     @property
@@ -68,7 +70,33 @@ class selectboxesComponent(Component):
 
 
 class selectComponent(Component):
-    pass
+
+    @property
+    def value_label(self):
+        comp = self.builder.form_components.get(self.key)
+        values = comp.raw.get('data') and comp.raw['data'].get('values')
+        for val in values:
+            if val['value'] == self.value:
+                label = val['label']
+                if self.i18n.get(self.language):
+                    return self.i18n[self.language].get(label, label)
+                else:
+                    return label
+        else:
+            return False
+        
+    @property
+    def value_labels(self):
+        comp = self.builder.form_components.get(self.key)
+        values = comp.raw.get('data') and comp.raw['data'].get('values')
+        value_labels = []
+        for val in values:
+            if val['value'] in self.value:
+                if self.i18n.get(self.language):
+                    value_labels.append(self.i18n[self.language].get(val['label'], val['label']))
+                else:
+                    value_labels.append(val['label'])
+        return value_labels
 
 
 class radioComponent(Component):

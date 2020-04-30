@@ -11,13 +11,13 @@ from formiodata import components
 
 class Builder:
 
-    def __init__(self, schema_json, language='en', **kwargs):
+    def __init__(self, schema_json, **kwargs):
         """
         @param schema_json
         @param lang
         """
         self.schema = json.loads(schema_json)
-        self.language = language
+        self.language = kwargs.get('language', 'en')
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})
 
@@ -68,7 +68,7 @@ class Builder:
             try:
                 cls_name = '%sComponent' % component_type
                 cls = getattr(components, cls_name)
-                return cls(component, self.language, i18n=self.i18n)
+                return cls(component, self, language=self.language, i18n=self.i18n)
             except AttributeError as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)

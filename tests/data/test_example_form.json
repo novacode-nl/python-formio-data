@@ -9,6 +9,7 @@
         "howWouldYouRateTheFormIoPlatform": "excellent"
     },
     "lastName": "Leers",
-    "seasons": {"spring": true, "summer": false, "autumn": true, "winter": false},
+    "favouriteSeason": "autumn",
+    "favouriteFood": ["mexican", "chinese"],
     "submit": true
 }

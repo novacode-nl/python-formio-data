@@ -161,23 +161,285 @@
             "input": false,
             "components": [
                 {
-                    "label": "Seasons",
-                    "optionsLabelPosition": "right",
-                    "tableView": false,
-                    "values": [
-                        {"label": "Spring", "value": "spring", "shortcut": ""},
-                        {"label": "Summer", "value": "summer", "shortcut": ""},
-                        {"label": "Autumn", "value": "autumn", "shortcut": ""},
-                        {"label": "Summer", "value": "summer", "shortcut": ""}
-                    ],
+                    "label": "Favourite Season",
+                    "widget": "choicesjs",
+                    "tableView": true,
+                    "data": {
+                        "values": [
+                            {
+                                "label": "Spring",
+                                "value": "spring"
+                            },
+                            {
+                                "label": "Summer",
+                                "value": "summer"
+                            },
+                            {
+                                "label": "Autumn",
+                                "value": "autumn"
+                            },
+                            {
+                                "label": "Winter",
+                                "value": "winter"
+                            }
+                        ],
+                        "json": "",
+                        "url": "",
+                        "resource": "",
+                        "custom": ""
+                    },
+                    "selectThreshold": 0.3,
                     "calculateServer": false,
-                    "key": "seasons",
-                    "type": "selectboxes",
+                    "key": "favouriteSeason",
+                    "type": "select",
+                    "indexeddb": {
+                        "filter": {}
+                    },
                     "input": true,
-                    "inputType": "checkbox",
-                    "defaultValue": {"": false}
+                    "placeholder": "",
+                    "prefix": "",
+                    "customClass": "",
+                    "suffix": "",
+                    "multiple": false,
+                    "defaultValue": null,
+                    "protected": false,
+                    "unique": false,
+                    "persistent": true,
+                    "hidden": false,
+                    "clearOnHide": true,
+                    "refreshOn": "",
+                    "redrawOn": "",
+                    "modalEdit": false,
+                    "labelPosition": "top",
+                    "description": "",
+                    "errorLabel": "",
+                    "tooltip": "",
+                    "hideLabel": false,
+                    "tabindex": "",
+                    "disabled": false,
+                    "autofocus": false,
+                    "dbIndex": false,
+                    "customDefaultValue": "",
+                    "calculateValue": "",
+                    "attributes": {},
+                    "validateOn": "change",
+                    "validate": {
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "multiple": false,
+                        "unique": false
+                    },
+                    "conditional": {
+                        "show": null,
+                        "when": null,
+                        "eq": ""
+                    },
+                    "overlay": {
+                        "style": "",
+                        "left": "",
+                        "top": "",
+                        "width": "",
+                        "height": ""
+                    },
+                    "allowCalculateOverride": false,
+                    "encrypted": false,
+                    "showCharCount": false,
+                    "showWordCount": false,
+                    "properties": {},
+                    "allowMultipleMasks": false,
+                    "clearOnRefresh": false,
+                    "limit": 100,
+                    "dataSrc": "values",
+                    "valueProperty": "",
+                    "lazyLoad": true,
+                    "filter": "",
+                    "searchEnabled": true,
+                    "searchField": "",
+                    "minSearch": 0,
+                    "readOnlyValue": false,
+                    "authenticate": false,
+                    "template": "<span>{{ item.label }}</span>",
+                    "selectFields": "",
+                    "searchThreshold": 0.3,
+                    "fuseOptions": {
+                        "include": "score",
+                        "threshold": 0.3
+                    },
+                    "customOptions": {},
+                    "id": "eo69g8a"
+                },
+                {
+                    "label": "Favourite Food",
+                    "widget": "choicesjs",
+                    "tableView": true,
+                    "multiple": true,
+                    "data": {
+                        "values": [
+                            {
+                                "label": "Italian",
+                                "value": "italian"
+                            },
+                            {
+                                "label": "Mexican",
+                                "value": "mexican"
+                            },
+                            {
+                                "label": "Chinese",
+                                "value": "chinese"
+                            },
+                            {
+                                "label": "Fastfood",
+                                "value": "fastfood"
+                            }
+                        ],
+                        "json": "",
+                        "url": "",
+                        "resource": "",
+                        "custom": ""
+                    },
+                    "selectThreshold": 0.3,
+                    "calculateServer": false,
+                    "validate": {
+                        "multiple": true,
+                        "required": false,
+                        "custom": "",
+                        "customPrivate": false,
+                        "strictDateValidation": false,
+                        "unique": false
+                    },
+                    "key": "favouriteFood",
+                    "type": "select",
+                    "indexeddb": {
+                        "filter": {}
+                    },
+                    "input": true,
+                    "placeholder": "",
+                    "prefix": "",
+                    "customClass": "",
+                    "suffix": "",
+                    "defaultValue": null,
+                    "protected": false,
+                    "unique": false,
+                    "persistent": true,
+                    "hidden": false,
+                    "clearOnHide": true,
+                    "refreshOn": "",
+                    "redrawOn": "",
+                    "modalEdit": false,
+                    "labelPosition": "top",
+                    "description": "",
+                    "errorLabel": "",
+                    "tooltip": "",
+                    "hideLabel": false,
+                    "tabindex": "",
+                    "disabled": false,
+                    "autofocus": false,
+                    "dbIndex": false,
+                    "customDefaultValue": "",
+                    "calculateValue": "",
+                    "attributes": {},
+                    "validateOn": "change",
+                    "conditional": {
+                        "show": null,
+                        "when": null,
+                        "eq": ""
+                    },
+                    "overlay": {
+                        "style": "",
+                        "left": "",
+                        "top": "",
+                        "width": "",
+                        "height": ""
+                    },
+                    "allowCalculateOverride": false,
+                    "encrypted": false,
+                    "showCharCount": false,
+                    "showWordCount": false,
+                    "properties": {},
+                    "allowMultipleMasks": false,
+                    "clearOnRefresh": false,
+                    "limit": 100,
+                    "dataSrc": "values",
+                    "valueProperty": "",
+                    "lazyLoad": true,
+                    "filter": "",
+                    "searchEnabled": true,
+                    "searchField": "",
+                    "minSearch": 0,
+                    "readOnlyValue": false,
+                    "authenticate": false,
+                    "template": "<span>{{ item.label }}</span>",
+                    "selectFields": "",
+                    "searchThreshold": 0.3,
+                    "fuseOptions": {
+                        "include": "score",
+                        "threshold": 0.3
+                    },
+                    "customOptions": {},
+                    "id": "ewzk1a"
                 }
-            ]
+            ],
+            "placeholder": "",
+            "prefix": "",
+            "customClass": "",
+            "suffix": "",
+            "multiple": false,
+            "defaultValue": null,
+            "protected": false,
+            "unique": false,
+            "persistent": false,
+            "hidden": false,
+            "clearOnHide": false,
+            "refreshOn": "",
+            "redrawOn": "",
+            "modalEdit": false,
+            "labelPosition": "top",
+            "description": "",
+            "errorLabel": "",
+            "tooltip": "",
+            "hideLabel": false,
+            "tabindex": "",
+            "disabled": false,
+            "autofocus": false,
+            "dbIndex": false,
+            "customDefaultValue": "",
+            "calculateValue": "",
+            "widget": null,
+            "attributes": {},
+            "validateOn": "change",
+            "validate": {
+                "required": false,
+                "custom": "",
+                "customPrivate": false,
+                "strictDateValidation": false,
+                "multiple": false,
+                "unique": false
+            },
+            "conditional": {
+                "show": null,
+                "when": null,
+                "eq": ""
+            },
+            "overlay": {
+                "style": "",
+                "left": "",
+                "top": "",
+                "width": "",
+                "height": ""
+            },
+            "allowCalculateOverride": false,
+            "encrypted": false,
+            "showCharCount": false,
+            "showWordCount": false,
+            "properties": {},
+            "allowMultipleMasks": false,
+            "tree": false,
+            "title": "Panel",
+            "theme": "default",
+            "breadcrumb": "default",
+            "id": "em39da"
         },
         {
             "clearOnHide": true,

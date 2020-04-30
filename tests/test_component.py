@@ -19,8 +19,11 @@ class ComponentTestCase(CommonTestCase):
                 'Last Name': 'Achternaam',
                 'Survey': 'Enquête',
                 'excellent': 'uitstekend',
-                'great': 'supergoed'
+                'great': 'supergoed',
+                'Favourite Season': 'Favoriete seizoen',
+                'Autumn': 'Herfst',
+                'Favourite Food': 'Lievelingseten',
             }
         }
-        self.builder_i18n_nl = Builder(self.builder_json, 'nl', i18n=i18n)
+        self.builder_i18n_nl = Builder(self.builder_json, language='nl', i18n=i18n)
         self.form_i18n_nl = Form(self.form_json, self.builder_i18n_nl)
