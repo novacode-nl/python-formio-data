@@ -56,7 +56,9 @@ class Builder:
                 self.form_components[component.get('key')] = component_obj
                 self.components[component.get('key')] = component_obj
             else:
-                if self.components.get(component.get('type')):
+                if component.get('key'):
+                    key = component.get('key')
+                elif self.components.get(component.get('type')):
                     key = component.get('type') + '_x'
                 else:
                     key = component.get('type')

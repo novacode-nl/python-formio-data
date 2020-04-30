@@ -172,6 +172,9 @@ class panelComponent(Component):
     def title(self):
         component = self.builder.components.get(self.key)
         title = component.raw.get('title')
+        if not title:
+            title = component.raw.get('label')
+
         if self.i18n.get(self.language):
             return self.i18n[self.language].get(title, title)
         else:
