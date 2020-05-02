@@ -5,7 +5,7 @@ from test_component import ComponentTestCase
 from formiodata.components import emailComponent
 
 
-class EmailComponentTestCase(ComponentTestCase):
+class emailComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # EmailComponent

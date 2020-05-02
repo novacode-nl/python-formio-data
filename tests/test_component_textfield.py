@@ -5,7 +5,7 @@ from test_component import ComponentTestCase
 from formiodata.components import textfieldComponent
 
 
-class TextfieldComponentTestCase(ComponentTestCase):
+class textfieldComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # TextfieldComponent
