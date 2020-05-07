@@ -87,6 +87,6 @@ class Builder:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
                 logging.error(e)
-                return components.Component(component)
+                return components.Component(component, self)
         else:
             return False
