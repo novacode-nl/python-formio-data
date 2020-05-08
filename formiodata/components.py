@@ -66,8 +66,21 @@ class checkboxComponent(Component):
 
 
 class selectboxesComponent(Component):
-    pass
-
+    @property
+    def values_labels(self):
+        comp = self.builder.form_components.get(self.key)
+        builder_values = comp.raw.get('values')
+        values_labels = {}
+        for b_val in builder_values:
+            if self.i18n.get(self.language):
+                label = self.i18n[self.language].get(b_val['label'], b_val['label'])
+            else:
+                label = b_val['label']
+            val = {'key': b_val['value'], 'label': label, 'value': self.value.get(b_val['value'])}
+            values_labels[b_val['value']] = val
+        # import pdb
+        # pdb.set_trace()
+        return values_labels
 
 class selectComponent(Component):
 
