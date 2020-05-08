@@ -78,8 +78,6 @@ class selectboxesComponent(Component):
                 label = b_val['label']
             val = {'key': b_val['value'], 'label': label, 'value': self.value.get(b_val['value'])}
             values_labels[b_val['value']] = val
-        # import pdb
-        # pdb.set_trace()
         return values_labels
 
 class selectComponent(Component):
