@@ -43,7 +43,8 @@ class Builder:
     def load_components(self):
         self._raw_components = self.schema.get('components')
         self.raw_components = deepcopy(self.schema.get('components'))
-        self._load_components(self.raw_components)
+        if self.raw_components:
+            self._load_components(self.raw_components)
 
     def _load_components(self, components):
         """
