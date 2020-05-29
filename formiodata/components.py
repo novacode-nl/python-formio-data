@@ -194,3 +194,7 @@ class panelComponent(Component):
 
 class tableComponent(Component):
     pass
+
+
+class tabsComponent(Component):
+    pass

@@ -71,8 +71,12 @@ class Builder:
             for k, vals in component.copy().items():
                 if isinstance(vals, list):
                     for v in vals:
-                        if v.get('components'):
+                        if 'components' in v:
                             self._load_components(v.get('components'))
+                        elif isinstance(v, list):
+                            for sub_v in v:
+                                if 'components' in sub_v:
+                                    self._load_components(sub_v.get('components'))
 
     def get_component_object(self, component):
         """
