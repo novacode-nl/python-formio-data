@@ -198,3 +198,9 @@ class tableComponent(Component):
 
 class tabsComponent(Component):
     pass
+
+
+# Data components
+
+class datagridComponent(Component):
+    pass
