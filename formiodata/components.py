@@ -36,7 +36,7 @@ class Component:
 
     @property
     def value(self):
-        return self.form['value']
+        return self.form.get('value')
 
     @value.setter
     def value(self, value):
@@ -72,12 +72,13 @@ class selectboxesComponent(Component):
         builder_values = comp.raw.get('values')
         values_labels = {}
         for b_val in builder_values:
-            if self.i18n.get(self.language):
-                label = self.i18n[self.language].get(b_val['label'], b_val['label'])
-            else:
-                label = b_val['label']
-            val = {'key': b_val['value'], 'label': label, 'value': self.value.get(b_val['value'])}
-            values_labels[b_val['value']] = val
+            if self.value and b_val.get('value'):
+                if self.i18n.get(self.language):
+                    label = self.i18n[self.language].get(b_val['label'], b_val['label'])
+                else:
+                    label = b_val['label']
+                val = {'key': b_val['value'], 'label': label, 'value': self.value.get(b_val['value'])}
+                values_labels[b_val['value']] = val
         return values_labels
 
 class selectComponent(Component):
@@ -203,4 +204,10 @@ class tabsComponent(Component):
 # Data components
 
 class datagridComponent(Component):
+    pass
+
+
+# Premium components
+
+class fileComponent(Component):
     pass
