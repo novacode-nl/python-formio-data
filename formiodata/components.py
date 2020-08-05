@@ -42,6 +42,9 @@ class Component:
     def value(self, value):
         self.form['value'] = value
 
+    @property
+    def hidden(self):
+        return self.raw.get('hidden')
 
 # Basic
 
