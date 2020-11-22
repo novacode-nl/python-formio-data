@@ -85,6 +85,5 @@ python -m unittest
 ### Run component unittests
 
 ```
-cd tests
-python -m unittest test_component_*.py
+python -m unittest tests/test_component_*.py
 ```

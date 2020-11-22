@@ -11,5 +11,6 @@
     "lastName": "Leers",
     "favouriteSeason": "autumn",
     "favouriteFood": ["mexican", "chinese"],
+    "dataGrid": [{"textField": "abc", "checkbox": true}, {"textField": "def", "checkbox": false}],
     "submit": true
 }

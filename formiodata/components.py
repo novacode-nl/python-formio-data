@@ -1,6 +1,9 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
+from collections import OrderedDict
+
+
 class Component:
 
     def __init__(self, raw, builder, **kwargs):
@@ -20,6 +23,10 @@ class Component:
     @property
     def type(self):
         return self.raw.get('type')
+
+    @property
+    def input(self):
+        return self.raw.get('input')
 
     @property
     def label(self):
@@ -207,7 +214,39 @@ class tabsComponent(Component):
 # Data components
 
 class datagridComponent(Component):
-    pass
+    @property
+    def labels(self):
+        labels = OrderedDict()
+        for comp in self.raw['components']:
+            if self.i18n.get(self.language):
+                label = self.i18n[self.language].get(comp['label'], comp['label'])
+            else:
+                label = comp['label']
+            labels[comp['key']] = label
+        return labels
+
+    @property
+    def rows(self):
+        rows = []
+        components = self.builder.components
+
+        # Sanity check is really needed.
+        # TODO add test for empty datagrid value.
+        if not self.value:
+            return rows
+
+        for row_dict in self.value:
+            row = OrderedDict()
+            for key, val in row_dict.items():
+                # Copy component raw (dict), to ensure no binding and overwrite.
+                component = components[key].raw.copy()
+                component_obj = self.builder.get_component_object(component)
+                if component_obj.input:
+                    component_obj.value = val
+                component['_object'] = component_obj
+                row[key] = component
+            rows.append(row)
+        return rows
 
 
 # Premium components
