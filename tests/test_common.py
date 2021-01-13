@@ -5,7 +5,7 @@ import json
 import unittest
 import sys
 
-from utils import readfile
+from tests.utils import readfile
 from formiodata.builder import Builder
 from formiodata.form import Form
 

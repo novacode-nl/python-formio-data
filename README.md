@@ -29,13 +29,24 @@ captured as **Python objects**, which makes this API very versatile and usable.
 The source code is currently hosted on GitHub at:
 https://github.com/novacode-nl/python-formio-data
 
+**PyPI - Python Package Index**
+
 Binary installers for the latest released version are available at the [Python
-package index](https://pypi.python.org/pypi/formio-data)
+Package Index](https://pypi.python.org/pypi/formio-data)
 
 ```sh
-# PyPI
-pip install formio-data
+pip(3) install formio-data
 ```
+
+**Source Install**
+
+Convenient for developers. Also useful for running the (unit)tests.
+
+```sh
+git clone git@github.com:novacode-nl/python-formio-data.git
+pip(3) install -U -e python-formio-data
+```
+
 ## License
 [MIT](LICENSE)
 
@@ -74,16 +85,20 @@ datetime.date(2009 10 16)
 
 ## Unit tests
 
+**Notes:**
+- Internet access is required for running the
+  `filecStorageUrlComponentTestCase`. It tests the URL Storage (type).
+
 ### Run all unittests
 
 From toplevel directory:
 
 ```
-python -m unittest
+python(3) -m unittest
 ```
 
 ### Run component unittests
 
 ```
-python -m unittest tests/test_component_*.py
+python(3) -m unittest tests/test_component_*.py
 ```

@@ -24,6 +24,8 @@ class ComponentTestCase(CommonTestCase):
                 'Favourite Season': 'Favoriete seizoen',
                 'Autumn': 'Herfst',
                 'Favourite Food': 'Lievelingseten',
+                'Upload Base64': 'Upload binair naar ASCII',
+                'Upload Url': 'Upload naar locatie'
             }
         }
         self.builder_i18n_nl = Builder(self.builder_json, language='nl', i18n=i18n)

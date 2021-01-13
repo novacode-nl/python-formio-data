@@ -3,6 +3,8 @@
 
 from collections import OrderedDict
 
+from formiodata.utils import base64_encode_url
+
 
 class Component:
 
@@ -252,4 +254,38 @@ class datagridComponent(Component):
 # Premium components
 
 class fileComponent(Component):
-    pass
+
+    def __init__(self, raw, builder, **kwargs):
+        super().__init__(raw, builder, **kwargs)
+
+    @property
+    def storage(self):
+        return self.raw.get('storage', 'base64')
+
+    @property
+    def url(self):
+        return self.raw.get('url')
+
+    @property
+    def value(self):
+        if self.storage == 'url':
+            val = self.form.get('value')
+            if not val:
+                return False
+
+            # expecting a single file here
+            val = val[0]
+            name = val.get('name')
+            url = val.get('url')
+            b64encode = base64_encode_url(url)
+            return b64encode
+        else:
+            return super().value
+
+    @value.setter
+    def value(self, value):
+        """ Inherit property setter the right way, URLs:
+        - https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
+        - https://stackoverflow.com/questions/35290540/understanding-property-decorator-and-inheritance
+        """
+        super(self.__class__, self.__class__).value.fset(self, value)
