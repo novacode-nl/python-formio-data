@@ -260,32 +260,28 @@ class fileComponent(Component):
 
     @property
     def storage(self):
-        return self.raw.get('storage', 'base64')
+        return self.raw.get('storage')
 
     @property
     def url(self):
         return self.raw.get('url')
 
     @property
-    def value(self):
+    def base64(self):
         if self.storage == 'url':
-            val = self.form.get('value')
-            if not val:
-                return False
-
-            # expecting a single file here
-            val = val[0]
-            name = val.get('name')
-            url = val.get('url')
-            b64encode = base64_encode_url(url)
-            return b64encode
-        else:
+            res = ''
+            for val in self.form.get('value'):
+                name = val.get('name')
+                url = val.get('url')
+                res += base64_encode_url(url)
+            return res
+        elif self.storage == 'base64':
             return super().value
 
-    @value.setter
-    def value(self, value):
-        """ Inherit property setter the right way, URLs:
-        - https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
-        - https://stackoverflow.com/questions/35290540/understanding-property-decorator-and-inheritance
-        """
-        super(self.__class__, self.__class__).value.fset(self, value)
+    # @value.setter
+    # def value(self, value):
+    #     """ Inherit property setter the right way, URLs:
+    #     - https://gist.github.com/Susensio/979259559e2bebcd0273f1a95d7c1e79
+    #     - https://stackoverflow.com/questions/35290540/understanding-property-decorator-and-inheritance
+    #     """
+    #     super(self.__class__, self.__class__).value.fset(self, value)

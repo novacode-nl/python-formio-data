@@ -47,14 +47,14 @@ class fileComponentStorageUrlTestCase(ComponentTestCase):
         self.assertEqual(uploadUrl.label, 'Upload Url')
         self.assertEqual(uploadUrl.type, 'file')
         self.assertEqual(uploadUrl.storage, 'url')
-        self.assertEqual(uploadUrl.value, self.image_value_base64)
+        self.assertEqual(uploadUrl.base64, self.image_value_base64)
         
     def test_get_form_data(self):
         uploadUrl = self.form.data.uploadUrl
         self.assertEqual(uploadUrl.label, 'Upload Url')
         self.assertEqual(uploadUrl.type, 'file')
         self.assertEqual(uploadUrl.storage, 'url')
-        self.assertEqual(uploadUrl.value, self.image_value_base64)
+        self.assertEqual(uploadUrl.base64, self.image_value_base64)
 
     # i18n translations
     def test_get_label_i18n_nl(self):
