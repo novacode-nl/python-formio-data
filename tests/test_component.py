@@ -24,6 +24,11 @@ class ComponentTestCase(CommonTestCase):
                 'Favourite Season': 'Favoriete seizoen',
                 'Autumn': 'Herfst',
                 'Favourite Food': 'Lievelingseten',
+                'Cardinal Direction': 'Kardinale richting',
+                'North': 'Noord',
+                'East': 'Oost',
+                'South': 'Zuid',
+                'West': 'West',
                 'Upload Base64': 'Upload binair naar ASCII',
                 'Upload Url': 'Upload naar locatie'
             }
