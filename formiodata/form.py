@@ -51,6 +51,7 @@ class Form:
             #     continue
             # replaced with default value and fast
             component.value = self.form.get(key, component.defaultValue)
+            component.render()
             self.components[key] = component
 
 

@@ -63,7 +63,7 @@ class Component:
         return self.raw.get('hidden')
 
     def render(self):
-        self.html = "<p>render hook placeholder<p>"
+        self.html = f"<p>{self.form.get('value')}</p>"
 
 
 # Basic
