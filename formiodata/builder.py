@@ -16,7 +16,11 @@ class Builder:
         @param schema_json
         @param lang
         """
-        self.schema = json.loads(schema_json)
+        if isinstance(schema_json, dict):
+            self.schema = schema_json
+        else:
+            self.schema = json.loads(schema_json)
+
         self.language = kwargs.get('language', 'en')
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})

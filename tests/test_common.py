@@ -20,6 +20,7 @@ class CommonTestCase(unittest.TestCase):
         # - source: https://examples.form.io/example
         self.builder_json = readfile('data', 'test_example_builder.json')
         self.form_json = readfile('data', 'test_example_form.json')
+        self.form_json_check_default = readfile('data', 'test_example_form_check_default.json')
 
         # self.builder = Builder(self.builder_json)
         # self.form = Form(self.form_json, None, self.builder_json)

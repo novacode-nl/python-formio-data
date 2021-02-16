@@ -17,6 +17,9 @@ class Component:
         # i18n (language, translations)
         self.language = kwargs.get('language', 'en')
         self.i18n = kwargs.get('i18n', {})
+        self.resources = kwargs.get('resources', [])
+        self.html = ""
+        self.defaultValue = self.raw.get('defaultValue')
 
     @property
     def key(self):
@@ -29,6 +32,10 @@ class Component:
     @property
     def input(self):
         return self.raw.get('input')
+
+    @property
+    def properties(self):
+        return self.raw.get('properties')
 
     @property
     def label(self):
@@ -54,6 +61,10 @@ class Component:
     @property
     def hidden(self):
         return self.raw.get('hidden')
+
+    def render(self):
+        self.html = "<p>render hook placeholder<p>"
+
 
 # Basic
 
@@ -94,6 +105,7 @@ class selectboxesComponent(Component):
                 values_labels[b_val['value']] = val
         return values_labels
 
+
 class selectComponent(Component):
 
     @property
@@ -109,7 +121,7 @@ class selectComponent(Component):
                     return label
         else:
             return False
-        
+
     @property
     def value_labels(self):
         comp = self.builder.form_components.get(self.key)
@@ -232,7 +244,7 @@ class panelComponent(Component):
         if self.i18n.get(self.language):
             return self.i18n[self.language].get(title, title)
         else:
-             return title
+            return title
 
 
 class tableComponent(Component):

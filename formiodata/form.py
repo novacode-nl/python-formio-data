@@ -15,8 +15,11 @@ class Form:
         @param builder_schema
         @param lang
         """
-        self.form = json.loads(form_json)
-        
+        if isinstance(form_json, dict):
+            self.form = form_json
+        else:
+            self.form = json.loads(form_json)
+
         self.builder = builder
         self.builder_schema_json = builder_schema_json
         self.lang = lang
@@ -44,9 +47,10 @@ class Form:
     def load_components(self):
         for key, component in self.builder.form_components.items():
             # Rather lazy check, but sane.
-            if not self.form.get(key):
-                continue
-            component.value = self.form.get(key)
+            # if not self.form.get(key):
+            #     continue
+            # replaced with default value and fast
+            component.value = self.form.get(key, component.defaultValue)
             self.components[key] = component
 
 
