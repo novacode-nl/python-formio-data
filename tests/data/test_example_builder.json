@@ -55,7 +55,7 @@
                                 "show": "",
                                 "when": null
                             },
-                            "defaultValue": "",
+                            "defaultValue": "yourmail@yourlife.io",
                             "hidden": false,
                             "input": true,
                             "inputType": "email",

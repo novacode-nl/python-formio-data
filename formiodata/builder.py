@@ -16,10 +16,15 @@ class Builder:
         @param schema_json
         @param lang
         """
-        self.schema = json.loads(schema_json)
+        if isinstance(schema_json, dict):
+            self.schema = schema_json
+        else:
+            self.schema = json.loads(schema_json)
+
         self.language = kwargs.get('language', 'en')
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})
+        self.resources = kwargs.get('resources', {})
 
         # Raw components from the schema
         self._raw_components = []
@@ -87,7 +92,7 @@ class Builder:
             try:
                 cls_name = '%sComponent' % component_type
                 cls = getattr(components, cls_name)
-                return cls(component, self, language=self.language, i18n=self.i18n)
+                return cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
             except AttributeError as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
