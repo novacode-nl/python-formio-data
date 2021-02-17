@@ -51,8 +51,12 @@ class Form:
             #     continue
             # replaced with default value and fast
             component.value = self.form.get(key, component.defaultValue)
-            component.render()
             self.components[key] = component
+
+    def render_components(self, force=False):
+        for key, component in self.components.items():
+            if force or component.html_component == "":
+                component.render()
 
 
 class FormData:
