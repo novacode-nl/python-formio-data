@@ -100,5 +100,5 @@ python(3) -m unittest
 ### Run component unittests
 
 ```
-python(3) -m unittest tests/test_component_*.py
+python(3) -m unittest tests/test_*.py
 ```
