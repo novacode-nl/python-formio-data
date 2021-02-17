@@ -19,7 +19,7 @@ def base64_encode_url(url):
     return b64encode
 
 
-def decode_resouce_tempate(tmp):
+def decode_resouce_template(tmp):
     res = re.sub(r"<.*?>", " ", tmp)
     strcleaned = re.sub(r'\{{ |\ }}', "", res)
     list_kyes = strcleaned.strip().split(".")

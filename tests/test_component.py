@@ -38,7 +38,6 @@ class ComponentTestCase(CommonTestCase):
         self.form_i18n_nl = Form(self.form_json, self.builder_i18n_nl)
 
     def test_schema_dict(self):
-        super(ComponentTestCase, self).setUp()
         builder_json = json.loads(self.builder_json)
         form_json = json.loads(self.form_json)
         self.builder = Builder(builder_json)
