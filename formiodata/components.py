@@ -3,7 +3,7 @@
 import json
 from collections import OrderedDict
 
-from formiodata.utils import base64_encode_url, decode_resouce_template, fetch_dict_get_value
+from formiodata.utils import base64_encode_url, decode_resource_template, fetch_dict_get_value
 
 
 class Component:
@@ -20,7 +20,7 @@ class Component:
         self.resources = kwargs.get('resources', {})
         if self.resources and isinstance(self.resources, str):
             self.resources = json.loads(self.resources)
-        self.html = ""
+        self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
     @property
@@ -65,7 +65,7 @@ class Component:
         return self.raw.get('hidden')
 
     def render(self):
-        self.html = f"<p>{self.form.get('value')}</p>"
+        self.html_component = f"<p>{self.form.get('value')}</p>"
 
 
 # Basic
@@ -337,7 +337,7 @@ class resourceComponent(Component):
     def __init__(self, raw, builder, **kwargs):
         super().__init__(raw, builder, **kwargs)
         self.item_data = {}
-        self.template_label_keys = decode_resouce_template(self.raw.get('template'))
+        self.template_label_keys = decode_resource_template(self.raw.get('template'))
         self.compute_resources()
 
     def compute_resources(self):

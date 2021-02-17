@@ -9,4 +9,4 @@ class viewRenderEmailComponent(ComponentTestCase):
         self.form_check_default = Form(self.form_json_check_default, self.builder)
         # EmailComponent
         email = self.form_check_default.components['email']
-        self.assertEqual(email.html, '<p>yourmail@yourlife.io</p>')
+        self.assertEqual(email.html_component, '<p>yourmail@yourlife.io</p>')
