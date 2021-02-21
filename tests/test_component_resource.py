@@ -38,7 +38,7 @@ class resourceComponentTestCase(ComponentTestCase):
 
     def test_first_value(self):
         res = self.builder_res.form_components['resourceObj']
-        self.assertEqual(res.values[1], {'label': 'ResB', 'value': '60034ec3942c74ca500b32b1'})
+        self.assertEqual(res.values[1], {'label': 'ResB', 'value': {'$oid': '60034ec3942c74ca500b32b1'}} )
 
     def test_ext_resources(self):
         self.builder_res_ext = Builder(self.builder_with_resource, resources_ext=self.external_recource)
@@ -47,4 +47,4 @@ class resourceComponentTestCase(ComponentTestCase):
         self.assertIsInstance(res, resourceComponent)
         res = self.builder_res_ext.form_components['resourceObj']
         self.assertEqual(len(res.values), 4)
-        self.assertEqual(res.values[1], {'label': 'ResB', 'value': '60034ec3942c74ca500b32b1'})
+        self.assertEqual(res.values[1], {'label': 'ResB', 'value': {'$oid': '60034ec3942c74ca500b32b1'}} )

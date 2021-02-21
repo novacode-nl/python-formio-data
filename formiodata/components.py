@@ -719,7 +719,7 @@ class resourceComponent(Component):
                     label = fetch_dict_get_value(item, self.template_label_keys[:])
                     self.raw['data']['values'].append({
                         "label": label,
-                        "value": item['_id']['$oid']
+                        "value": item['_id']
                     })
 
     @property
