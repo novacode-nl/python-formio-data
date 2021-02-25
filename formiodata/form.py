@@ -50,7 +50,9 @@ class Form:
             # if not self.form.get(key):
             #     continue
             # replaced with default value and fast
-            component.value = self.form.get(key, component.defaultValue)
+            raw_value = self.form.get(key, component.defaultValue)
+            component.value = raw_value
+            component.raw_value = raw_value
             self.components[key] = component
 
     def render_components(self, force=False):

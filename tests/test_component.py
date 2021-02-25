@@ -14,10 +14,15 @@ class ComponentTestCase(CommonTestCase):
         self.builder = Builder(self.builder_json)
         self.form = Form(self.form_json, self.builder)
 
-        i18n = {
+        self.builder_i18n_nl = Builder(self.builder_json, language='nl', i18n=self._i18n())
+        self.form_i18n_nl = Form(self.form_json, self.builder_i18n_nl)
+
+    def _i18n(self):
+        return  {
             'nl': {
                 'First Name': 'Voornaam',
                 'Last Name': 'Achternaam',
+                'Appointment Date / Time': 'Afspraak Tijdstip',
                 'Survey': 'Enquête',
                 'excellent': 'uitstekend',
                 'great': 'supergoed',
@@ -34,8 +39,6 @@ class ComponentTestCase(CommonTestCase):
                 'Upload Url': 'Upload naar locatie'
             }
         }
-        self.builder_i18n_nl = Builder(self.builder_json, language='nl', i18n=i18n)
-        self.form_i18n_nl = Form(self.form_json, self.builder_i18n_nl)
 
     def test_schema_dict(self):
         builder_json = json.loads(self.builder_json)
@@ -43,27 +46,7 @@ class ComponentTestCase(CommonTestCase):
         self.builder = Builder(builder_json)
         self.form = Form(form_json, self.builder)
 
-        i18n = {
-            'nl': {
-                'First Name': 'Voornaam',
-                'Last Name': 'Achternaam',
-                'Survey': 'Enquête',
-                'excellent': 'uitstekend',
-                'great': 'supergoed',
-                'My Favourites': 'Mijn favorieten',
-                'Favourite Season': 'Favoriete seizoen',
-                'Autumn': 'Herfst',
-                'Favourite Food': 'Lievelingseten',
-                'Cardinal Direction': 'Kardinale richting',
-                'North': 'Noord',
-                'East': 'Oost',
-                'South': 'Zuid',
-                'West': 'West',
-                'Upload Base64': 'Upload binair naar ASCII',
-                'Upload Url': 'Upload naar locatie'
-            }
-        }
-        self.builder_i18n_nl = Builder(builder_json, language='nl', i18n=i18n)
+        self.builder_i18n_nl = Builder(builder_json, language='nl', i18n=self._i18n())
         self.form_i18n_nl = Form(form_json, self.builder_i18n_nl)
 
 
