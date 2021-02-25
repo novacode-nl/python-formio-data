@@ -66,6 +66,7 @@ class Component:
 
     def render(self):
         self.html_component = f"<p>{self.form.get('value')}</p>"
+        self.html_component = '<p>%s</p>' % self.form.get('value')
 
 
 # Basic
