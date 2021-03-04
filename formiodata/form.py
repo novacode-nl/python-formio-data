@@ -3,6 +3,8 @@
 
 import json
 
+from copy import deepcopy
+
 from formiodata.builder import Builder
 
 
@@ -40,6 +42,7 @@ class Form:
         self.components = {}
         self.load_components()
         self.data = FormData(self)
+        self.renderer = FormRenderer(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -59,6 +62,28 @@ class Form:
         for key, component in self.components.items():
             if force or component.html_component == "":
                 component.render()
+
+
+class FormRenderer:
+
+    def __init__(self, form):
+        self.form = form
+        self.builder = form.builder
+        self.components = []
+        self.component_ids = {}
+        self.load_components()
+
+    def load_components(self):
+        """ Loads the components (tree) to render, with values
+        (data) and obtaining the tree by creating all sub-components
+        e.g. in layout and datagrid. """
+        for component in self.builder.raw_components:
+            # XXX let's assume component['id'] is always set (for now)
+            builder_component_obj = self.builder.component_ids[component['id']]
+            # New object, don't affect the Builder component
+            component_obj = self.builder.get_component_object(builder_component_obj.raw)
+            component_obj.load(None, self.form.form, renderer=self)
+            self.components.append(component_obj)
 
 
 class FormData:

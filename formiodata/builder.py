@@ -3,6 +3,7 @@
 
 import json
 import logging
+import uuid
 
 from copy import deepcopy
 
@@ -34,6 +35,7 @@ class Builder:
 
         # Key/value dictionay of all components for instant access.
         self.components = {}
+        self.component_ids = {}
 
         # Key/value dictionay of Form components for instant access.
         self.form_components = {}
@@ -51,12 +53,20 @@ class Builder:
         if self.raw_components:
             self._load_components(self.raw_components)
 
-    def _load_components(self, components):
+    def _load_components(self, components, parent=None):
         """
         @param components
         """
         for component in components:
             component_obj = self.get_component_object(component)
+            component_obj.load(None, None)
+            self.component_ids[component_obj.id] = component_obj
+
+            if parent:
+                component_obj.parent = parent['_object']
+
+            component_obj.id = component.get('id', str(uuid.uuid4()))
+            self.component_ids[component_obj.id] = component_obj
             component['_object'] = component_obj
             if component.get('key') and component.get('input'):
                 self.form_components[component.get('key')] = component_obj
@@ -70,18 +80,20 @@ class Builder:
                     key = component.get('type')
                 self.components[key] = component_obj
 
-            # Nested components in e.g. columns, panels
+            # (Input) nested components (e.g. datagrid, editgrid)
             if component.get('components'):
-                self._load_components(component.get('components'))
+                self._load_components(component.get('components'), component)
+
+            # (Layout) nested components (e.g. columns, panels)
             for k, vals in component.copy().items():
                 if isinstance(vals, list):
                     for v in vals:
                         if 'components' in v:
-                            self._load_components(v.get('components'))
+                            self._load_components(v.get('components'), component)
                         elif isinstance(v, list):
                             for sub_v in v:
                                 if 'components' in sub_v:
-                                    self._load_components(sub_v.get('components'))
+                                    self._load_components(sub_v.get('components'), component)
 
     def get_component_object(self, component):
         """
@@ -92,11 +104,14 @@ class Builder:
             try:
                 cls_name = '%sComponent' % component_type
                 cls = getattr(components, cls_name)
-                return cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
+                component_obj = cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
+                return component_obj
             except AttributeError as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
                 logging.error(e)
+                # TODO: implement property (by kwargs) whether to return
+                # (raw) Component object or throw exception,
                 return components.Component(component, self)
         else:
             return False

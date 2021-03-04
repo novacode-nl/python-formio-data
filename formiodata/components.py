@@ -1,6 +1,9 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
+
 import json
+import uuid
+
 from collections import OrderedDict
 from datetime import datetime
 
@@ -13,6 +16,13 @@ class Component:
         # TODO or provide the Builder object?
         self.raw = raw
         self.builder = builder
+        self._parent = None
+        self.children = []
+
+        # XXX uuid to ensure (hope this won't break anything)
+        self.id = self.raw.get('id', str(uuid.uuid4()))
+
+        # submission {key: value, ...}
         self.form = {}
 
         # i18n (language, translations)
@@ -24,9 +34,70 @@ class Component:
         self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
+    def load_value(self, data):
+        if self.input and data and data.get(self.key):
+            self.value = data[self.key]
+
+    def load(self, parent=None, data=None, renderer=None):
+        if renderer:
+            self.load_value(data)
+            renderer.component_ids[self.id] = self
+
+        if parent:
+            self.parent = parent
+            self.parent.children.append(self)
+
+        # (Input) nested components (e.g. datagrid, editgrid)
+        for component in self.raw.get('components', []):
+            component_obj = self.builder.get_component_object(component)
+            if not component_obj.id in self.builder.component_ids:
+                self.builder.component_ids[component_obj.id] = component_obj
+            component_obj.load(self, data, renderer)
+
+        # (Layout) nested components (e.g. columns, panels)
+        for k, vals in self.raw.copy().items():
+            if isinstance(vals, list):
+                for v in vals:
+                    if 'components' in v:
+                        for v_component in v['components']:
+                            v_component_obj = self.builder.get_component_object(v_component)
+                            v_component_obj.parent = self
+
+                            if renderer and v_component_obj.id not in renderer.component_ids:
+                                renderer.component_ids[v_component_obj.id] = v_component_obj
+                                v_component_obj.load(self, data, renderer)
+                            elif not renderer and v_component_obj.id not in self.builder.component_ids:
+                                self.children.append(v_component_obj)
+                                self.builder.component_ids[v_component_obj.id] = v_component_obj
+                                v_component_obj.load(self, data, renderer)
+                    elif isinstance(v, list):
+                        # XXX still needed?
+                        for sub_v in v:
+                            if 'components' in sub_v:
+                                self.load(sub_v.get('components'), self.raw)
+
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, id=False):
+        if not id:
+            id = str(uuid.uuid4())
+        self._id = id
+
     @property
     def key(self):
         return self.raw.get('key')
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, parent):
+        if parent:
+            self._parent = parent
 
     @property
     def type(self):
@@ -35,6 +106,14 @@ class Component:
     @property
     def input(self):
         return self.raw.get('input')
+
+    @property
+    def valdidate(self):
+        return self.raw.get('validate')
+
+    @property
+    def required(self):
+        return self.raw.get('validate').get('required')
 
     @property
     def properties(self):
@@ -59,7 +138,7 @@ class Component:
 
     @value.setter
     def value(self, value):
-        self.form['value'] = value
+        self.form['value'] = self._encode_value(value)
 
     @property
     def raw_value(self):
@@ -72,6 +151,9 @@ class Component:
     @property
     def hidden(self):
         return self.raw.get('hidden')
+
+    def _encode_value(self, value):
+        return value
 
     def render(self):
         self.html_component = '<p>%s</p>' % self.form.get('value')
@@ -118,6 +200,10 @@ class selectboxesComponent(Component):
 
 
 class selectComponent(Component):
+
+    @property
+    def multiple(self):
+        return self.raw.get('multiple')
 
     @property
     def value_label(self):
@@ -181,7 +267,10 @@ class radioComponent(Component):
 
 
 class buttonComponent(Component):
-    pass
+
+    def load_value(self, data):
+        # just bypass this
+        pass
 
 
 # Advanced
@@ -353,15 +442,84 @@ class contentComponent(Component):
     pass
 
 
-class columnsComponent(Component):
+class layoutComponentBase(Component):
+
+    def propagate_children(self, data=[]):
+        # EXAMPLE data, e.g. of a columnComponent with data from components:
+        # - email => textComponent
+        # - typeOfEmail => selectComponent
+        #
+        # [{'email': 'personal@example.com'}, {'typeOfEmail': 'personal'}]
+
+        new_layout_comp = self.builder.get_component_object(self.raw)
+
+        for key_val in data:
+            for key, val in key_val.items():
+                for child in self.children:
+                    if key == child.key:
+                        raw = child.raw
+                        new_comp = self.builder.get_component_object(raw)
+                        new_comp.value = val
+                        new_layout_comp.children.append(new_comp)
+        return new_layout_comp
+
+
+class columnsComponent(layoutComponentBase):
+
+    @property
+    def rows(self):
+        rows = []
+
+        row = []
+        col_data = {'column': None, 'components': []}
+        total_width = 0
+
+        for col in self.raw['columns']:
+            components = []
+
+            for col_comp in col['components']:
+                for child in self.children:
+                    if col_comp['id'] == child.id:
+                        components.append(child)
+
+            if col['width'] >= 12:
+                # add previous (loop) row
+                if row:
+                    rows.append(row)
+
+                # init new row and add to rows
+                row = [{'column': col, 'components': components}]
+                rows.append(row)
+
+                # init next loop (new row and total_width)
+                row = []
+                total_width = 0
+            elif total_width >= 12:
+                # add previous (loop) row
+                rows.append(row)
+                row = []
+                # init new row for next loop
+                col_data = {'column': col, 'components': components}
+                rows.append(col_data)
+                total_width = col['width']
+            else:
+                if not row:
+                    row = [{'column': col, 'components': components}]
+                else:
+                    col_data = {'column': col, 'components': components}
+                    row.append(col_data)
+                total_width += col['width']
+        if row:
+            # add last generated row
+            rows.append(row)
+        return rows
+
+
+class fieldsetComponent(layoutComponentBase):
     pass
 
 
-class fieldsetComponent(Component):
-    pass
-
-
-class panelComponent(Component):
+class panelComponent(layoutComponentBase):
 
     @property
     def title(self):
@@ -375,17 +533,77 @@ class panelComponent(Component):
             return title
 
 
-class tableComponent(Component):
+class tableComponent(layoutComponentBase):
     pass
 
 
-class tabsComponent(Component):
+class tabsComponent(layoutComponentBase):
     pass
 
 
 # Data components
 
 class datagridComponent(Component):
+
+    def __init__(self, raw, builder, **kwargs):
+        self.rows = []
+        super().__init__(raw, builder, **kwargs)
+
+    def load(self, parent=None, data=None, renderer=None):
+        super(datagridComponent, self).load(parent, data, renderer)
+        if data:
+            self._load_rows(data, renderer)
+
+    def _load_rows(self, data, renderer):
+        rows = []
+
+        for row in self.value:
+            # EXAMPLE row:
+            # [{'email': 'personal@example.com'}, {'typeOfEmail': 'personal'}]
+
+            new_row = []
+            slots_todo = []
+            slots_done = []
+
+            for slot in row:
+                # EXAMPLE slot:
+                # {'email': 'personal@example.com'}
+                for key, val in slot.items():
+                    # EXAMPLE:
+                    # key => 'email'
+                    # val => 'personal@example.com'
+                    for child in self.children:
+                        if key == child.key:
+                            raw = child.raw
+                            new_slot = self.builder.get_component_object(raw)
+                            new_slot.value = val
+                            new_row.append(new_slot)
+                            slots_done.append(key)
+                    if key not in slots_done:
+                        slots_todo.append(slot)
+            if slots_todo:
+                for child in self.children:
+                    if hasattr(child, 'propagate_children'):
+                        new_row.append(child.propagate_children(slots_todo))
+            if new_row:
+                rows.append(new_row)
+        self.rows = rows
+
+    @property
+    def value(self):
+        return super().value
+
+    @value.setter
+    def value(self, value=[]):
+        rows = []
+        for row in value:
+            add_row = []
+            for key, val in row.items():
+                component = self.builder.components.get(key)
+                rec = {key: component._encode_value(val)}
+                add_row.append(rec)
+            rows.append(add_row)
+        super(self.__class__, self.__class__).value.fset(self, rows)
 
     @property
     def labels(self):
@@ -397,29 +615,6 @@ class datagridComponent(Component):
                 label = comp['label']
             labels[comp['key']] = label
         return labels
-
-    @property
-    def rows(self):
-        rows = []
-        components = self.builder.components
-
-        # Sanity check is really needed.
-        # TODO add test for empty datagrid value.
-        if not self.value:
-            return rows
-
-        for row_dict in self.value:
-            row = OrderedDict()
-            for key, val in row_dict.items():
-                # Copy component raw (dict), to ensure no binding and overwrite.
-                component = components[key].raw.copy()
-                component_obj = self.builder.get_component_object(component)
-                if component_obj.input:
-                    component_obj.value = val
-                component['_object'] = component_obj
-                row[key] = component
-            rows.append(row)
-        return rows
 
 
 # Premium components

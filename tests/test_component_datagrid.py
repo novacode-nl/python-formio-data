@@ -31,7 +31,8 @@ class datagridComponentTestCase(ComponentTestCase):
         self.assertEqual(dataGrid.label, 'Data Grid')
 
     def test_get_row_labels(self):
-        dataGrid = self.form.components['dataGrid']
+        builder_dataGrid = self.builder.components['dataGrid']
+        dataGrid = self.form.renderer.component_ids[builder_dataGrid.id]
 
         self.assertEqual(len(dataGrid.rows), 2)
 
@@ -40,12 +41,16 @@ class datagridComponentTestCase(ComponentTestCase):
             self.assertIn(label , labels)
 
     def test_get_rows_values(self):
-        dataGrid = self.form.components['dataGrid']
+        builder_dataGrid = self.builder.components['dataGrid']
+        dataGrid = self.form.renderer.component_ids[builder_dataGrid.id]
 
         self.assertEqual(len(dataGrid.rows), 2)
 
         textField_values = ['abc', 'def']
         checkbox_values = [True, False]
-        for row_dict in dataGrid.rows:
-            self.assertIn(row_dict['textField']['_object'].value , textField_values)
-            self.assertIn(row_dict['checkbox']['_object'].value , checkbox_values)
+        for row_with_components in dataGrid.rows:
+            for component in row_with_components:
+                if component.type == 'textfield':
+                    self.assertIn(component.value , textField_values)
+                if component.type == 'checkbox':
+                    self.assertIn(component.value , checkbox_values)
