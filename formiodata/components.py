@@ -595,6 +595,8 @@ class datagridComponent(Component):
 
     @value.setter
     def value(self, value=[]):
+        if not isinstance(value, list):
+            value = []
         rows = []
         for row in value:
             add_row = []
