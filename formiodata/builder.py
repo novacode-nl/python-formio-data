@@ -58,42 +58,44 @@ class Builder:
         @param components
         """
         for component in components:
-            component_obj = self.get_component_object(component)
-            component_obj.load(None, None)
-            self.component_ids[component_obj.id] = component_obj
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = self.get_component_object(component)
+                component_obj.load(None, None)
+                self.component_ids[component_obj.id] = component_obj
 
-            if parent:
-                component_obj.parent = parent['_object']
+                if parent:
+                    component_obj.parent = parent
 
-            component_obj.id = component.get('id', str(uuid.uuid4()))
-            self.component_ids[component_obj.id] = component_obj
-            component['_object'] = component_obj
-            if component.get('key') and component.get('input'):
-                self.form_components[component.get('key')] = component_obj
-                self.components[component.get('key')] = component_obj
-            else:
-                if component.get('key'):
-                    key = component.get('key')
-                elif self.components.get(component.get('type')):
-                    key = component.get('type') + '_x'
+                component_obj.id = component.get('id', str(uuid.uuid4()))
+                self.component_ids[component_obj.id] = component_obj
+                component['_object'] = component_obj
+                if component.get('key') and component.get('input'):
+                    self.form_components[component.get('key')] = component_obj
+                    self.components[component.get('key')] = component_obj
                 else:
-                    key = component.get('type')
-                self.components[key] = component_obj
+                    if component.get('key'):
+                        key = component.get('key')
+                    elif self.components.get(component.get('type')):
+                        key = component.get('type') + '_x'
+                    else:
+                        key = component.get('type')
+                    self.components[key] = component_obj
 
-            # (Input) nested components (e.g. datagrid, editgrid)
-            if component.get('components'):
-                self._load_components(component.get('components'), component)
+                # (Input) nested components (e.g. datagrid, editgrid)
+                if component.get('components'):
+                    self._load_components(component.get('components'), component_obj)
 
-            # (Layout) nested components (e.g. columns, panels)
-            for k, vals in component.copy().items():
-                if isinstance(vals, list):
-                    for v in vals:
-                        if 'components' in v:
-                            self._load_components(v.get('components'), component)
-                        elif isinstance(v, list):
-                            for sub_v in v:
-                                if 'components' in sub_v:
-                                    self._load_components(sub_v.get('components'), component)
+                # (Layout) nested components (e.g. columns, panels)
+                for k, vals in component.copy().items():
+                    if isinstance(vals, list):
+                        for v in vals:
+                            if 'components' in v:
+                                self._load_components(v.get('components'), component_obj)
+                            elif isinstance(v, list):
+                                for sub_v in v:
+                                    if 'components' in sub_v:
+                                        self._load_components(sub_v.get('components'), component_obj)
 
     def get_component_object(self, component):
         """

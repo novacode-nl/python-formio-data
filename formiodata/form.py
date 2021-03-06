@@ -78,12 +78,13 @@ class FormRenderer:
         (data) and obtaining the tree by creating all sub-components
         e.g. in layout and datagrid. """
         for component in self.builder.raw_components:
-            # XXX let's assume component['id'] is always set (for now)
-            builder_component_obj = self.builder.component_ids[component['id']]
-            # New object, don't affect the Builder component
-            component_obj = self.builder.get_component_object(builder_component_obj.raw)
-            component_obj.load(None, self.form.form, renderer=self)
-            self.components.append(component_obj)
+            # Only determine and load class if component type.
+            if 'type' in component:
+                builder_component_obj = self.builder.component_ids[component['id']]
+                # New object, don't affect the Builder component
+                component_obj = self.builder.get_component_object(builder_component_obj.raw)
+                component_obj.load(None, self.form.form, renderer=self)
+                self.components.append(component_obj)
 
 
 class FormData:

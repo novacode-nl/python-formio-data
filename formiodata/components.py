@@ -49,10 +49,12 @@ class Component:
 
         # (Input) nested components (e.g. datagrid, editgrid)
         for component in self.raw.get('components', []):
-            component_obj = self.builder.get_component_object(component)
-            if not component_obj.id in self.builder.component_ids:
-                self.builder.component_ids[component_obj.id] = component_obj
-            component_obj.load(self, data, renderer)
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = self.builder.get_component_object(component)
+                if not component_obj.id in self.builder.component_ids:
+                    self.builder.component_ids[component_obj.id] = component_obj
+                component_obj.load(self, data, renderer)
 
         # (Layout) nested components (e.g. columns, panels)
         for k, vals in self.raw.copy().items():
@@ -71,10 +73,20 @@ class Component:
                                 self.builder.component_ids[v_component_obj.id] = v_component_obj
                                 v_component_obj.load(self, data, renderer)
                     elif isinstance(v, list):
-                        # XXX still needed?
-                        for sub_v in v:
-                            if 'components' in sub_v:
-                                self.load(sub_v.get('components'), self.raw)
+                        # table component etc. which holds even deeper lists with components
+                        for list_v in v:
+                            if 'components' in list_v:
+                                for list_v_component in list_v.get('components'):
+                                    if list_v_component.get('type'):
+                                        list_v_component_obj = self.builder.get_component_object(list_v_component)
+                                        list_v_component_obj.parent = self
+                                        if renderer and list_v_component_obj.id not in renderer.component_ids:
+                                            renderer.component_ids[list_v_component_obj.id] = list_v_component_obj
+                                            list_v_component_obj.load(self, data, renderer)
+                                        elif not renderer and list_v_component_obj.id not in self.builder.component_ids:
+                                            self.children.append(list_v_component_obj)
+                                            self.builder.component_ids[list_v_component_obj.id] = list_v_component_obj
+                                            list_v_component_obj.load(self, data, renderer)
 
     @property
     def id(self):
@@ -534,11 +546,38 @@ class panelComponent(layoutComponentBase):
 
 
 class tableComponent(layoutComponentBase):
-    pass
+
+    @property
+    def rows(self):
+        rows = []
+        for row in self.raw['rows']:
+            row_components = []
+
+            for cols in row:
+                for col_comp in cols['components']:
+                    for child in self.children:
+                        if col_comp['id'] == child.id:
+                            row_components.append(child)
+            rows.append(row_components)
+        return rows
 
 
 class tabsComponent(layoutComponentBase):
-    pass
+
+    @property
+    def tabs(self):
+        tabs = []
+        for tab in self.raw['components']:
+            add_tab = {
+                'tab': tab,
+                'components': []
+            }
+            for comp in tab['components']:
+                for child in self.children:
+                    if comp['key'] == child.key:
+                        add_tab['components'].append(child)
+            tabs.append(add_tab)
+        return tabs
 
 
 # Data components
