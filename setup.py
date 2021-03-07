@@ -4,7 +4,7 @@ packages = find_packages(exclude=['tests*'])
 
 setup(
     name='formio-data',
-    version='0.2.2',
+    version='0.2.3',
     description='Form.io JSON-data API',
     url='https://github.com/novacode-nl/python-formio-data',
     author='Bob Leers',

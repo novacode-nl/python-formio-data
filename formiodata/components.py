@@ -512,7 +512,7 @@ class columnsComponent(layoutComponentBase):
                 row = []
                 # init new row for next loop
                 col_data = {'column': col, 'components': components}
-                rows.append(col_data)
+                row.append(col_data)
                 total_width = col['width']
             else:
                 if not row:
@@ -585,8 +585,11 @@ class tabsComponent(layoutComponentBase):
 class datagridComponent(Component):
 
     def __init__(self, raw, builder, **kwargs):
+        # TODO when adding other data/grid components, create new
+        # dataComponent class these can inherit from.
         self.rows = []
         super().__init__(raw, builder, **kwargs)
+        self.form = {'value': []}
 
     def load(self, parent=None, data=None, renderer=None):
         super(datagridComponent, self).load(parent, data, renderer)
