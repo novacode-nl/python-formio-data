@@ -28,7 +28,8 @@ class Component:
         # i18n (language, translations)
         self.language = kwargs.get('language', 'en')
         self.i18n = kwargs.get('i18n', {})
-        self.resources = kwargs.get('resources', {})
+        self.resources = kwargs.get('resources', False)
+        self.resources_ext = kwargs.get('resources_ext', False)
         if self.resources and isinstance(self.resources, str):
             self.resources = json.loads(self.resources)
         self.html_component = ""
@@ -706,10 +707,13 @@ class resourceComponent(Component):
         self.compute_resources()
 
     def compute_resources(self):
-        if self.resources:
-            resource_id = self.raw.get('resource')
-            if resource_id and not resource_id == "" and resource_id in self.resources:
+        resource_id = self.raw.get('resource')
+        if resource_id and not resource_id == "":
+            if not self.resources and self.resources_ext:
+                resource_list = self.resources_ext(resource_id)
+            else:
                 resource_list = self.resources[resource_id]
+            if resource_list:
                 self.raw['data'] = {"values": []}
                 for item in resource_list:
                     label = fetch_dict_get_value(item, self.template_label_keys[:])

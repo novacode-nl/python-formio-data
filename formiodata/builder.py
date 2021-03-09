@@ -26,6 +26,7 @@ class Builder:
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})
         self.resources = kwargs.get('resources', {})
+        self.resources_ext = kwargs.get('resources_ext', False)
 
         # Raw components from the schema
         self._raw_components = []
@@ -106,8 +107,12 @@ class Builder:
             try:
                 cls_name = '%sComponent' % component_type
                 cls = getattr(components, cls_name)
-                component_obj = cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
+                component_obj = cls(
+                    component, self, language=self.language,
+                    i18n=self.i18n, resources=self.resources, resources_ext=self.resources_ext
+                )
                 return component_obj
+
             except AttributeError as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
