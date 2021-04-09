@@ -42,7 +42,9 @@ class Form:
         self.components = {}
         self.load_components()
         self.data = FormData(self)
-        self.renderer = FormRenderer(self)
+
+    def render(self):
+        return FormRenderer(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -83,7 +85,7 @@ class FormRenderer:
                 builder_component_obj = self.builder.component_ids[component['id']]
                 # New object, don't affect the Builder component
                 component_obj = self.builder.get_component_object(builder_component_obj.raw)
-                component_obj.load(None, self.form.form, renderer=self)
+                component_obj.load(None, self.form.form)
                 self.components.append(component_obj)
 
 
