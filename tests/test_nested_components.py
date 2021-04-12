@@ -357,7 +357,7 @@ class NestedTestCase(unittest.TestCase):
 
         datagrid = form.components['dataGrid']
 
-        self.assertEqual(datagrid.rows, 2)
+        self.assertEqual(len(datagrid.rows), 2)
 
         email = ['bob@example.com', 'foo@example.com']
         for row in datagrid.rows:
@@ -377,7 +377,7 @@ class NestedTestCase(unittest.TestCase):
 
         datagrid = form.components['dataGrid1']
 
-        self.assertEqual(datagrid.rows, 3)
+        self.assertEqual(len(datagrid.rows), 3)
 
         # components
         deviceType = ['pumpB', 'pumpA', 'pumpC']

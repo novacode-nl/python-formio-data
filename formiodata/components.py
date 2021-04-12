@@ -36,8 +36,13 @@ class Component:
         self.defaultValue = self.raw.get('defaultValue')
 
     def load_value(self, data):
-        if self.input and data and data.get(self.key):
-            self.value = data[self.key]
+        if self.input and data:
+            if isinstance(data, dict) and data.get(self.key):
+                self.value = data[self.key]
+                self.raw_value = data[self.key]
+            else:
+                self.value = data
+                self.raw_value = data
 
     def load(self, parent=None, data=None):
         self.load_value(data)
@@ -468,9 +473,9 @@ class columnsComponent(layoutComponentBase):
             components = []
 
             for col_comp in col['components']:
-                for child in self.children:
-                    if col_comp['id'] == child.id:
-                        components.append(child)
+                for key, comp in self.components.items():
+                    if col_comp['id'] == comp.id:
+                        components.append(comp)
 
             if col['width'] >= 12:
                 # add previous (loop) row
@@ -533,9 +538,9 @@ class tableComponent(layoutComponentBase):
 
             for cols in row:
                 for col_comp in cols['components']:
-                    for child in self.children:
-                        if col_comp['id'] == child.id:
-                            row_components.append(child)
+                    for key, comp in self.components.items():
+                        if col_comp['id'] == comp.id:
+                            row_components.append(comp)
             rows.append(row_components)
         return rows
 
@@ -551,9 +556,9 @@ class tabsComponent(layoutComponentBase):
                 'components': []
             }
             for comp in tab['components']:
-                for child in self.children:
-                    if comp['key'] == child.key:
-                        add_tab['components'].append(child)
+                for key, comp in self.components.items():
+                    if comp['key'] == comp.key:
+                        add_tab['components'].append(comp[1])
             tabs.append(add_tab)
         return tabs
 
@@ -572,7 +577,17 @@ class datagridComponent(Component):
     def load(self, parent=None, data=None):
         super(datagridComponent, self).load(parent, data)
         # if data:
-        #     self._load_rows(data, renderer)
+        #     self._load_rows(data)
+
+    def load_value(self, data):
+        if data:
+            self._load_rows(data)
+
+        if self.input and data:
+            if isinstance(data, dict) and data.get(self.key):
+                self.value = data[self.key]
+            else:
+                self.value = data
 
     def _load_rows(self, data):
         rows = []
@@ -592,9 +607,9 @@ class datagridComponent(Component):
                     # EXAMPLE:
                     # key => 'email'
                     # val => 'personal@example.com'
-                    for child in self.children:
-                        if key == child.key:
-                            raw = child.raw
+                    for key, comp in self.components.items():
+                        if key == comp.key:
+                            raw = comp.raw
                             new_slot = self.builder.get_component_object(raw)
                             new_slot.value = val
                             new_row.append(new_slot)
@@ -602,9 +617,9 @@ class datagridComponent(Component):
                     if key not in slots_done:
                         slots_todo.append(slot)
             if slots_todo:
-                for child in self.children:
-                    if hasattr(child, 'propagate_children'):
-                        new_row.append(child.propagate_children(slots_todo))
+                for key, comp in self.components.items():
+                    if hasattr(comp, 'propagate_children'):
+                        new_row.append(comp.propagate_children(slots_todo))
             if new_row:
                 rows.append(new_row)
         self.rows = rows
