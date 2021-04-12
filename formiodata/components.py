@@ -50,10 +50,10 @@ class Component:
         if parent:
             self.parent = parent
 
-        # TODO FIX
-        # datagrid (child) components shouldn't be present, but children from self.key.
+        # TODO FIX !!!
+        # - wrong place to set Builder, Form, FormRenderer properties ?!
+        # - form_components: datagrid (child) components shouldn't be present, but children from self.key.
         self.builder.form_components[self.key] = self
-
         self.builder.component_ids[self.id] = self
 
         # if self.input and self.type != 'button':
