@@ -10,8 +10,8 @@ from datetime import datetime, date
 from tests.utils import readfile
 from formiodata.builder import Builder
 from formiodata.form import Form, FormRenderer
-from formiodata.components import columnsComponent, datetimeComponent, numberComponent, selectComponent, \
-    textfieldComponent, panelComponent, datagridComponent
+from formiodata.components import columnsComponent, datetimeComponent, emailComponent, numberComponent, \
+    selectComponent, textfieldComponent, panelComponent, datagridComponent
 
 
 class NestedTestCase(unittest.TestCase):
@@ -36,12 +36,12 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
 
-        for c in builder.component_ids.items():
-            comp = c[1]
-            if comp.parent:
-                print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
-            else:
-                print((comp.id, comp.key, comp.type))
+        # for key, comp in builder.component_ids.items():
+        #     if comp.parent:
+        #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
+        #     else:
+        #         print((comp.id, comp.key, comp))
+
         self.assertEqual(len(builder.component_ids.keys()), 32)
 
     def test_Builder_components(self):
@@ -66,8 +66,10 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
 
-        for key, comp in builder.components.items():
-            print((comp.id, comp.key, comp.type, comp.parent))
+        ## debug
+        # for key, comp in builder.components.items():
+        #     print((comp.id, comp.key, comp.type, comp.parent))
+
         self.assertEqual(len(builder.components.keys()), 12)
 
         #################################
@@ -82,9 +84,9 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(columns.key, 'columns')
         self.assertIsNone(columns.parent)
 
-        print('\n# Top component: columns')
-        for comp in columns.components:
-            print((comp))
+        # print('\n# (top) columnsComponent')
+        # for key, comp in columns.components.items():
+        #     print((comp.id, comp.key, comp))
 
         self.assertEqual(len(columns.components), 6)
         self.assertEqual(len(builder.components['columns'].components), 6)
@@ -103,11 +105,11 @@ class NestedTestCase(unittest.TestCase):
         # parent
         self.assertIsNone(panel.parent)
 
-        # components
-        print('\n# Top component: panel')
-        for comp in panel.components:
-            print((comp))
+        # print('\n# (top) panelsComponent')
+        # for key, comp in panel.components.items():
+        #     print((comp.id, comp.key, comp))
 
+        # components
         self.assertEqual(len(panel.components), 2)
         self.assertEqual(len(builder.components['panel'].components), 2)
 
@@ -126,9 +128,10 @@ class NestedTestCase(unittest.TestCase):
         self.assertIsNone(columns.parent)
 
         # components
-        print('\n# Top component: columns1')
-        for comp in columns.components:
-            print((comp))
+
+        # print('\n# (top) columnsComponent (columns1)')
+        # for key, comp in columns.components.items():
+        #     print((comp.id, comp.key, comp))
 
         self.assertEqual(len(columns.components), 3)
         self.assertEqual(len(builder.components['columns1'].components), 3)
@@ -152,9 +155,10 @@ class NestedTestCase(unittest.TestCase):
         self.assertIsNone(columns.parent)
 
         # components
-        print('\n# Top component: datagrid')
-        for comp in columns.components:
-            print((comp))
+
+        # print('\n# (top) datagridComponent')
+        # for key, comp in columns.components.items():
+        #     print((comp.id, comp.key, comp))
 
         self.assertEqual(len(datagrid.components), 2)
         self.assertEqual(len(builder.components['dataGrid'].components), 2)
@@ -179,9 +183,10 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(datagrid.parent.key, 'columns1')
 
         # components
-        print('\n# Component: columns1 => dataGrid')
-        for comp in datagrid.components:
-            print((comp))
+
+        # print('\n# Component: columns1 => dataGrid')
+        # for key, comp in datagrid.components.items():
+        #     print((comp.id, comp.key, comp))
 
         # dataGrid1.components: columns
         self.assertEqual(len(datagrid.components), 1)
@@ -203,9 +208,10 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(columns.parent.key, 'dataGrid1')
 
         # components
-        print('\n# Component: columns1 => dataGrid1 => columns')
-        for comp in columns.components:
-            print((comp))
+
+        # print('\n# Component: columns1 => dataGrid1 => columns')
+        # for key, comp in columns.components.items():
+        #     print((comp.id, comp.key, comp))
 
         keys = ['panel', 'escalate']
         for key, comp in columns.components.items():
@@ -227,9 +233,10 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(panel.parent.key, 'columns')
 
         # components
-        print('\n# Component: columns1 => dataGrid1 => columns => panel')
-        for key, comp in panel.components.items():
-            print((key, comp.id))
+
+        # print('\n# Component: columns1 => dataGrid1 => columns => panel')
+        # for key, comp in panel.components.items():
+        #     print((comp.id, comp.key, comp))
 
         #########################################################################
         # columnsComponent: columns1 => dataGrid1 => columns => panel => columns1
@@ -249,9 +256,9 @@ class NestedTestCase(unittest.TestCase):
         # components
         self.assertEqual(len(columns.components), 3)
 
-        print('\n# Component: columns1 => dataGrid1 => columns => panel => columns1')
-        for key, comp in columns.components.items():
-            print((key, comp.id))
+        # print('\n# Component: columns1 => dataGrid1 => columns => panel => columns1')
+        # for key, comp in columns.components.items():
+        #     print((comp.id, comp.key, comp))
 
         keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
         for key, comp in builder.component_ids['ep08ekn'].components.items():
@@ -286,16 +293,13 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
 
-        print('\n# Builder.form_components')
-        for key, comp in builder.form_components.items():
-            if comp.parent:
-                print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
-            else:
-                print((comp.id, comp.key, comp.type))            
+        # print('\n# Builder.form_components')
+        # for key, comp in builder.form_components.items():
+        #     if comp.parent:
+        #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
+        #     else:
+        #         print((comp.id, comp.key, comp.type))
 
-        # TODO FIX
-        # datagrid (child) components shouldn't be present
-        # 
         # Those 17 form_components are present in key/val of file: data/test_nesting_form.json
         # (except the submit ie buttonComponent)
         self.assertEqual(len(builder.form_components), 17)
@@ -306,12 +310,12 @@ class NestedTestCase(unittest.TestCase):
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
 
-        print('\n# Form.form_components')
-        for key, comp in form.components.items():
-            if comp.parent:
-                print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
-            else:
-                print((comp.id, comp.key, comp.type))
+        # print('\n# Form.form_components')
+        # for key, comp in form.components.items():
+        #     if comp.parent:
+        #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
+        #     else:
+        #         print((comp.id, comp.key, comp.type))
 
         self.assertEqual(len(form.components), 17)
 
@@ -561,9 +565,8 @@ class NestedTestCase(unittest.TestCase):
         row_1_panel = dataGrid1_row_1[0]
         row_1_escalate_checkbox = dataGrid1_row_1[1]
 
-        # XXX panel.components is OrderedDict() !!!
-        # XXX Component.components are OrderedDict() !!!!
-        columns_in_panel = row_1_panel.components[0]
+        # XXX panel.components is OrderedDict()
+        columns_in_panel = row_1_panel.components['panel']
 
         # only 1 row
         self.assertEqual(len(columns_in_panel.rows), 1)
