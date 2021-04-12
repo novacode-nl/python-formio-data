@@ -31,7 +31,7 @@ class NestedTestCase(unittest.TestCase):
         self.form_json = readfile('data', 'test_nested_components_form.json')
 
 
-    def test_builder_component_ids(self):
+    def test_Builder_component_ids(self):
         """ Builder: component_ids (Dict) for direct mapping """
 
         builder = Builder(self.builder_json)
@@ -44,7 +44,7 @@ class NestedTestCase(unittest.TestCase):
                 print((comp.id, comp.key, comp.type))
         self.assertEqual(len(builder.component_ids.keys()), 32)
 
-    def test_builder_components(self):
+    def test_Builder_components(self):
         """ Builder: components (OrderedDict) hierarchy, from toplevel and traverse
         nested components """
 
@@ -137,9 +137,9 @@ class NestedTestCase(unittest.TestCase):
         for key, comp in builder.components['columns1'].components.items():
             self.assertIn(comp.key, keys)
 
-        ##################################
+        ###################################
         # (top) datagridComponent: dataGrid
-        ##################################
+        ###################################
         # parent: None
         # components: name, email
 
@@ -281,7 +281,7 @@ class NestedTestCase(unittest.TestCase):
                 comp.label = 'Temperature Fahrenheit'
                 self.assertEqual(comp.label, 'Temperature Fahrenheit')
 
-    def test_builder_form_components(self):
+    def test_Builder_form_components(self):
         """ Builder: form_components should have the same structure as the Form (submission) JSON """
 
         builder = Builder(self.builder_json)
@@ -300,8 +300,8 @@ class NestedTestCase(unittest.TestCase):
         # (except the submit ie buttonComponent)
         self.assertEqual(len(builder.form_components), 17)
 
-    def test_form_not_datagrid(self):
-        """ Form: basic (not datagrid) input components """
+    def test_Form_components(self):
+        """ Form: components structure """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
@@ -314,6 +314,12 @@ class NestedTestCase(unittest.TestCase):
                 print((comp.id, comp.key, comp.type))
 
         self.assertEqual(len(form.components), 17)
+
+    def test_Form_not_datagrid(self):
+        """ Form: basic (not datagrid) input components """
+
+        builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
 
         # firstName in columnsComponent
         firstName = form.components['firstName']
@@ -337,39 +343,258 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(season.value_label, 'Autumn')        
         self.assertEqual(season.type, 'select')
 
-    def test_form_datagrid_simple(self):
+    def test_Form_datagrid_simple(self):
         """ Form: simple datagrid without (deep) nested components """
 
         builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
 
         self.assertIn('dataGrid', builder.form_components.keys())
 
-        form = Form(self.form_json, builder)
+        datagrid = form.components['dataGrid']
 
-    def test_form_datagrid_nested_components(self):
+        self.assertEqual(datagrid.rows, 2)
+
+        email = ['bob@example.com', 'foo@example.com']
+        for row in datagrid.rows:
+            # component object
+            self.assertIsInstance(row['email'], emailComponent)
+            self.assertIsInstance(row['registrationDateTime'], datetimeComponent)
+            # value
+            self.assertIn(row['email'].value, emails)
+
+    def test_Form_datagrid_nested_components(self):
         """ Form: complex datagrid with (deep) nested components """
 
         builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
 
         self.assertIn('dataGrid1', builder.form_components.keys())
 
-        form = Form(self.form_json, builder)
+        datagrid = form.components['dataGrid1']
 
-    def test_form_renderer(self):
-        """ FormRenderer: same structure has Builder and grid(s) properties with loaded data """
+        self.assertEqual(datagrid.rows, 3)
 
-        # Absolutely test all nested components here !
+        # components
+        deviceType = ['pumpB', 'pumpA', 'pumpC']
+        tempCelcius = [65, 78, 55]
+        escalate = [False, True]
+        measurement_date = date(2021, 4, 9)
+
+        for row in datagrid.rows:
+            # TODO in Form components the datagrid.rows should only
+            # have input components (not layout)
+
+            # component object
+            self.assertIsInstance(row['deviceType'], selectComponent)
+            self.assertIsInstance(row['measurementTime'], datetimeComponent)
+            self.assertIsInstance(row['temperatureCelsius'], integerComponent)
+            self.assertIsInstance(row['escalate'], checkboxComponent)
+            # value
+            self.assertIn(row['deviceType'].value, deviceType)
+            self.assertEqual(row['measurementTime'].to_date(), measurement_date)
+            self.assertIn(row['temperatureCelsius'].value, tempCelcius)
+            self.assertIn(row['escalate'].value, tempCelcius)
+
+    def test_FormRenderer_as_Builder(self):
+        """ FormRenderer: same structure as Builder """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
         renderer = form.render()
         
         self.assertIsInstance(renderer, FormRenderer)
+
+        # FormRenderer has same compoonents structure as Builder
         self.assertEqual(len(renderer.components), 12)
+        builder_components = sorted(builder.components.keys())
+        renderer_components = sorted(renderer.components.keys())
+        self.assertEqual(renderer_components, builder_components)
+
+    def test_FormRenderer_simple_components(self):
+        """ FormRenderer: simple components """
+
+        builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
+        renderer = form.render()
+
+        #################################
+        # (top) columnsComponent: columns
+        #################################
         
-        # FormRenderer
-        ##############
-        # - The components (types) are the same as Builder.
-        # - Has data (value) set on input compoonents
-        # - Has additional properties for layout components, eg columnComponent with rows (property).
-        self.assertEqual(len(renderer.components), len(builder.components.keys()))
+        columns = renderer.components['columns']
+        self.assertIsInstance(columns, columnsComponent)
+        self.assertEqual(columns.key, 'columns')
+
+        # row (only 1 row here)
+        row = columns.rows[0]
+
+        # col_1
+        col_1 = row[0]
+        col_1_keys = ['firstName', 'email', 'birthdate', 'appointmentDateTime']
+
+        ## keys
+        for comp in col_1['components']:
+            self.assertIn(comp.key, col_1_keys)
+
+        ## component objects
+        for comp in col_1['components']:
+            if comp.key == 'firstName':
+                self.assertIsInstance(comp, textfieldComponent)
+            elif comp.key == 'email':
+                self.assertIsInstance(comp, emailComponent)
+            elif comp.key == 'birthdate':
+                self.assertIsInstance(comp, datetimeComponent)
+            elif comp.key == 'appointmentDateTime':
+                self.assertIsInstance(comp, datetimeComponent)
+
+        ## values
+        for comp in col_1['components']:
+            if comp.key == 'firstName':
+                self.assertEqual(comp.value, 'Bob')
+            elif comp.key == 'email':
+                self.assertEqual(comp.value, 'bob@novacode.nl')
+            elif comp.key == 'birthdate':
+                self.assertEqual(comp.to_date(), date(1999, 12, 31))
+            elif comp.key == 'appointmentDateTime':
+                self.assertEqual(comp.to_date(), date(2021, 2, 26))
+
+        # col_2
+        col_2 = row[1]
+        col_2_keys = ['lastName', 'phoneNumber']
+
+        ## keys
+        for comp in col_2['components']:
+            self.assertIn(comp.key, col_2_keys)
+
+        ## values
+        for comp in col_2['components']:
+            if comp.key == 'lastName':
+                self.assertEqual(comp.value, 'Leers')
+            elif comp.key == 'phoneNumber':
+                self.assertEqual(comp.value, '(069) 999-9999')
+
+    def test_FormRenderer_nested_components_row_1_simple(self):
+        """ FormRenderer: nested components SIMPLE """
+
+        #############################
+        # columns1 // row_1 // SIMPLE
+        #############################
+
+        builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
+        renderer = form.render()
+
+        columns1 = renderer.components['columns1']
+        self.assertIsInstance(columns1, columnsComponent)
+        self.assertEqual(columns1.key, 'columns1')
+        self.assertEqual(len(columns1.rows), 2)
+
+        # row_1 has 2 columns
+        row_1 = columns1.rows[0]
+
+        # row_1: col_1
+        row_1_col_1 = row_1[0]
+
+        ## keys
+        keys = ['actionType']
+        for comp in row_1_col_1['components']:
+            self.assertIn(comp.key, keys)
+
+        ## values
+        # for comp in col_1['components']:
+        #     if comp.key == 'actionType':
+        #         self.assertEqual(comp.value, 'check')
+
+        # row_1: col_2
+        row_1_col_2 = row_1[1]
+
+        ## keys
+        keys = ['startDateTime']
+        for comp in row_1_col_2['components']:
+            self.assertIn(comp.key, keys)
+
+        ## values
+        # for comp in row_1_col_2['components']:
+        #     if comp.key == 'startDateTime':
+        #         self.assertEqual(comp.to_date(), date(2021, 4, 9))
+
+    def test_FormRenderer_nested_components_row_1_complex(self):
+        """ FormRenderer: nested components COMPLEX """
+
+        ##########################################
+        # columns1 // row_2 // columns1 // COMPLEX
+        ##########################################
+
+        builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
+        renderer = form.render()
+
+        columns1 = renderer.components['columns1']
+        self.assertIsInstance(columns1, columnsComponent)
+        self.assertEqual(columns1.key, 'columns1')
+        self.assertEqual(len(columns1.rows), 2)
+
+        # row_2 has 1 column
+        row_2 = columns1.rows[1]
+        row_2_col_1 = row_2[0]
+
+        ## keys
+        keys = ['dataGrid1']
+        dataGrid1 = None
+        for comp in row_2_col_1['components']:
+            self.assertIn(comp.key, keys)
+
+            if comp.key == 'dataGrid1':
+                dataGrid1 = comp
+
+        # dataGrid1
+        self.assertEqual(len(dataGrid1.rows), 3)
+        for row in dataGrid1.rows:
+            # row has only 1 component
+            comp = row[0]
+            self.assertIsInstance(comp, columnsComponent)
+            self.assertIsEqual(comp.key, 'columns')
+
+        ## dataGrid1 // row 1
+        dataGrid1_row_1 = dataGrid1.rows[0]
+        row_1_panel = dataGrid1_row_1[0]
+        row_1_escalate_checkbox = dataGrid1_row_1[1]
+
+        # XXX panel.components is OrderedDict() !!!
+        # XXX Component.components are OrderedDict() !!!!
+        columns_in_panel = row_1_panel.components[0]
+
+        # only 1 row
+        self.assertEqual(len(columns_in_panel.rows), 1)
+        row_columns_in_panel_ = columns_in_panel.rows[0]
+
+        ## keys
+        keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
+        for comp in row_columns_in_panel['components']:
+            self.assertIn(comp.key, keys)
+
+        ## component objects
+        for comp in row_columns_in_panel['components']:
+            if comp.key == 'deviceType':
+                self.assertIsInstance(comp, selectComponent)
+            elif comp.key == 'measurementTime':
+                self.assertIsInstance(comp, datetimeComponent)
+            elif comp.key == 'temperatureCelsius':
+                self.assertIsInstance(comp, integerComponent)
+
+        ## values
+        measurementTime = datetime(2021, 4, 9, 9, 00)
+        for comp in col_1['components']:
+            if comp.key == 'deviceType':
+                self.assertEqual(comp.value, 'pumpB')
+            elif comp.key == 'measurementTime':
+                self.assertEqual(comp.to_datetime(), measurementTime)
+            elif comp.key == 'temperatureCelsius':
+                self.assertEqual(comp.value, 65)
+
+        ## TODO dataGrid1 // row 2
+        # dataGrid1_row_2 = dataGrid1.rows[1]
+
+        ## TODO dataGrid1 // row 3
+        # dataGrid1_row_3 = dataGrid1.rows[2]
