@@ -2,6 +2,7 @@
 # See LICENSE file for full licensing details.
 
 import json
+import logging
 import unittest
 
 from datetime import datetime, date
@@ -13,17 +14,26 @@ from formiodata.components import columnsComponent, datetimeComponent, numberCom
     textfieldComponent, panelComponent, datagridComponent
 
 
-class NestingTestCase(unittest.TestCase):
+class NestedTestCase(unittest.TestCase):
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(format='\n%(message)s', level=logging.INFO)
 
     def setUp(self):
-        super(NestingTestCase, self).setUp()
-        self.builder_json = readfile('data', 'test_nesting_builder.json')
-        self.form_json = readfile('data', 'test_nesting_form.json')
-        # self.builder = Builder(self.builder_json)
-        # self.form = Form(self.form_json, self.builder)
+        super(NestedTestCase, self).setUp()
+
+        # logging
+        msg = self.id()
+        if self.shortDescription():
+            msg += ' -- %s' % self.shortDescription()
+        self.logger.info(msg)
+
+        self.builder_json = readfile('data', 'test_nested_components_builder.json')
+        self.form_json = readfile('data', 'test_nested_components_form.json')
+
 
     def test_builder_component_ids(self):
-        print('\ntest_builder_component_ids\n')
+        """ Builder: component_ids (Dict) for direct mapping """
+
         builder = Builder(self.builder_json)
 
         for c in builder.component_ids.items():
@@ -35,6 +45,9 @@ class NestingTestCase(unittest.TestCase):
         self.assertEqual(len(builder.component_ids.keys()), 32)
 
     def test_builder_components(self):
+        """ Builder: components (OrderedDict) hierarchy, from toplevel and traverse
+        nested components """
+
         """
         Top level components:
         - columns
@@ -50,7 +63,6 @@ class NestingTestCase(unittest.TestCase):
         - file (storage: Url)
         - button (submit)
         """
-        print('\ntest_builder_components_toplevel\n')
 
         builder = Builder(self.builder_json)
 
@@ -270,9 +282,11 @@ class NestingTestCase(unittest.TestCase):
                 self.assertEqual(comp.label, 'Temperature Fahrenheit')
 
     def test_builder_form_components(self):
+        """ Builder: form_components should have the same structure as the Form (submission) JSON """
+
         builder = Builder(self.builder_json)
 
-        print('\n# builder.form_components')
+        print('\n# Builder.form_components')
         for key, comp in builder.form_components.items():
             if comp.parent:
                 print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
@@ -287,9 +301,19 @@ class NestingTestCase(unittest.TestCase):
         self.assertEqual(len(builder.form_components), 17)
 
     def test_form_not_datagrid(self):
-        builder = Builder(self.builder_json)
+        """ Form: basic (not datagrid) input components """
 
+        builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
+
+        print('\n# Form.form_components')
+        for key, comp in form.components.items():
+            if comp.parent:
+                print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
+            else:
+                print((comp.id, comp.key, comp.type))
+
+        self.assertEqual(len(form.components), 17)
 
         # firstName in columnsComponent
         firstName = form.components['firstName']
@@ -314,13 +338,17 @@ class NestingTestCase(unittest.TestCase):
         self.assertEqual(season.type, 'select')
 
     def test_form_datagrid_simple(self):
+        """ Form: simple datagrid without (deep) nested components """
+
         builder = Builder(self.builder_json)
 
         self.assertIn('dataGrid', builder.form_components.keys())
 
         form = Form(self.form_json, builder)
 
-    def test_form_datagrid_nesting(self):
+    def test_form_datagrid_nested_components(self):
+        """ Form: complex datagrid with (deep) nested components """
+
         builder = Builder(self.builder_json)
 
         self.assertIn('dataGrid1', builder.form_components.keys())
@@ -328,6 +356,10 @@ class NestingTestCase(unittest.TestCase):
         form = Form(self.form_json, builder)
 
     def test_form_renderer(self):
+        """ FormRenderer: same structure has Builder and grid(s) properties with loaded data """
+
+        # Absolutely test all nested components here !
+
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
         renderer = form.render()
