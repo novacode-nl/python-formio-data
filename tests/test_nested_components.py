@@ -5,7 +5,7 @@ import json
 import logging
 import unittest
 
-from datetime import datetime, date
+from datetime import datetime, date, timezone, timedelta
 
 from tests.utils import readfile
 from formiodata.builder import Builder
@@ -360,7 +360,8 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(datagrid.rows), 2)
 
         emails = ['bob@example.com', 'foo@example.com']
-        registrationDateTimes = [datetime(2021, 4, 5), datetime(2021, 4, 6)]
+        tz = timezone(timedelta(hours=2))
+        registrationDateTimes = [datetime(2021, 4, 5, 12, tzinfo=tz), datetime(2021, 4, 6, 22, tzinfo=tz)]
 
         for index, row in enumerate(datagrid.rows):
             # component object
