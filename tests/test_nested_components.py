@@ -11,7 +11,7 @@ from tests.utils import readfile
 from formiodata.builder import Builder
 from formiodata.form import Form, FormRenderer
 from formiodata.components import columnsComponent, datetimeComponent, emailComponent, numberComponent, \
-    selectComponent, textfieldComponent, panelComponent, datagridComponent
+    selectComponent, textfieldComponent, panelComponent, datagridComponent, checkboxComponent
 
 
 class NestedTestCase(unittest.TestCase):
@@ -396,13 +396,13 @@ class NestedTestCase(unittest.TestCase):
             # component object
             self.assertIsInstance(row['deviceType'], selectComponent)
             self.assertIsInstance(row['measurementTime'], datetimeComponent)
-            self.assertIsInstance(row['temperatureCelsius'], integerComponent)
+            self.assertIsInstance(row['temperatureCelsius'], numberComponent)
             self.assertIsInstance(row['escalate'], checkboxComponent)
             # value
             self.assertIn(row['deviceType'].value, deviceType)
             self.assertEqual(row['measurementTime'].to_date(), measurement_date)
             self.assertIn(row['temperatureCelsius'].value, tempCelcius)
-            self.assertIn(row['escalate'].value, tempCelcius)
+            self.assertIn(row['escalate'].value, escalate)
 
     def test_FormRenderer_as_Builder(self):
         """ FormRenderer: same structure as Builder """
