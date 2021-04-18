@@ -360,15 +360,15 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(datagrid.rows), 2)
 
         emails = ['bob@example.com', 'foo@example.com']
-        registrationDateTimes = [datetime.datetime(2021, 4, 5), datetime.datetime(2021, 4, 6)]
+        registrationDateTimes = [datetime(2021, 4, 5), datetime(2021, 4, 6)]
 
-        for row in datagrid.rows:
+        for index, row in enumerate(datagrid.rows):
             # component object
             self.assertIsInstance(row['email'], emailComponent)
             self.assertIsInstance(row['registrationDateTime'], datetimeComponent)
             # value
             self.assertIn(row['email'].value, emails)
-            self.assertIsInstance(row['registrationDateTime'].to_datetime(), registrationDateTimes)
+            self.assertEqual(row['registrationDateTime'].to_datetime(), registrationDateTimes[index])
 
     def test_Form_datagrid_nested_components(self):
         """ Form: complex datagrid with (deep) nested components """
