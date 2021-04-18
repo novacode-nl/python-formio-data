@@ -632,15 +632,17 @@ class datagridComponent(Component):
     def value(self, value=[]):
         if not isinstance(value, list):
             value = []
-        rows = []
+        self.rows = []
         for row in value:
-            add_row = []
+            add_row = {}
             for key, val in row.items():
-                component = self.builder.form_components.get(key)
-                rec = {key: component._encode_value(val)}
-                add_row.append(rec)
-            rows.append(add_row)
-        super(self.__class__, self.__class__).value.fset(self, rows)
+                component = self.builder.form_components[key]
+                component_object = self.builder.get_component_object(component.raw)
+                component_object.value = val
+                component_object.raw_value = val
+                add_row[key] = component_object
+            self.rows.append(add_row)
+        super(self.__class__, self.__class__).value.fset(self, self.rows)
 
     @property
     def labels(self):
