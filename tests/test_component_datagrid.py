@@ -32,7 +32,8 @@ class datagridComponentTestCase(ComponentTestCase):
 
     def test_get_row_labels(self):
         builder_dataGrid = self.builder.components['dataGrid']
-        dataGrid = self.form.renderer.component_ids[builder_dataGrid.id]
+        renderer = self.form.render()
+        dataGrid = renderer.components[builder_dataGrid.key]
 
         self.assertEqual(len(dataGrid.rows), 2)
 
@@ -42,7 +43,8 @@ class datagridComponentTestCase(ComponentTestCase):
 
     def test_get_rows_values(self):
         builder_dataGrid = self.builder.components['dataGrid']
-        dataGrid = self.form.renderer.component_ids[builder_dataGrid.id]
+        renderer = self.form.render()
+        dataGrid = renderer.components[builder_dataGrid.key]
 
         self.assertEqual(len(dataGrid.rows), 2)
 

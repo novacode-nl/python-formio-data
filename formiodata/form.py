@@ -3,6 +3,7 @@
 
 import json
 
+from collections import OrderedDict
 from copy import deepcopy
 
 from formiodata.builder import Builder
@@ -42,7 +43,9 @@ class Form:
         self.components = {}
         self.load_components()
         self.data = FormData(self)
-        self.renderer = FormRenderer(self)
+
+    def render(self):
+        return FormRenderer(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -69,7 +72,7 @@ class FormRenderer:
     def __init__(self, form):
         self.form = form
         self.builder = form.builder
-        self.components = []
+        self.components = OrderedDict()
         self.component_ids = {}
         self.load_components()
 
@@ -83,8 +86,8 @@ class FormRenderer:
                 builder_component_obj = self.builder.component_ids[component['id']]
                 # New object, don't affect the Builder component
                 component_obj = self.builder.get_component_object(builder_component_obj.raw)
-                component_obj.load(None, self.form.form, renderer=self)
-                self.components.append(component_obj)
+                component_obj.load(None, self.form.form)
+                self.components[component_obj.key] = component_obj
 
 
 class FormData:
