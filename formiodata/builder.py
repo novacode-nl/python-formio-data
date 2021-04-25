@@ -64,7 +64,7 @@ class Builder:
                 component_obj = self.get_component_object(component)
                 # start and traverse from toplevel
                 self.components[component_obj.key] = component_obj
-                component_obj.load(None, None)
+                component_obj.load(self, parent=None, data=None)
 
     def get_component_object(self, component):
         """

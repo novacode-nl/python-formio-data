@@ -17,6 +17,7 @@ class Component:
         self.builder = builder
 
         self._parent = None
+        self._component_owner = None
         # components can also be seen as children
         self.components = OrderedDict()
 
@@ -44,27 +45,22 @@ class Component:
                 self.value = data
                 self.raw_value = data
 
-    def load(self, parent=None, data=None):
+    def load(self, component_owner, parent=None, data=None):
+        self.component_owner = component_owner
+
         self.load_value(data)
 
         if parent:
             self.parent = parent
 
-        # TODO FIX !!!
-        # - wrong place to set Builder, Form, FormRenderer properties ?!
-        # - form_components: datagrid (child) components shouldn't be present, but children from self.key.
-        self.builder.form_components[self.key] = self
         self.builder.component_ids[self.id] = self
-
-        # if self.input and self.type != 'button':
-        #     self.builder.form_components[self.key] = self
 
         # (Input) nested components (e.g. datagrid, editgrid)
         for component in self.raw.get('components', []):
             # Only determine and load class if component type.
             if 'type' in component:
                 component_obj = self.builder.get_component_object(component)
-                component_obj.load(self, data)
+                component_obj.load(self.child_component_owner, parent=self, data=data)
 
         # (Layout) nested components (e.g. columns, panels)
         for k, vals in self.raw.copy().items():
@@ -73,10 +69,8 @@ class Component:
                     if 'components' in v:
                         for v_component in v['components']:
                             v_component_obj = self.builder.get_component_object(v_component)
-                            v_component_obj.parent = self
-
                             if v_component_obj.id not in self.builder.component_ids:
-                                v_component_obj.load(self, data)
+                                v_component_obj.load(self.child_component_owner, parent=self, data=data)
                     elif isinstance(v, list):
                         # table component etc. which holds even deeper lists with components
                         for list_v in v:
@@ -84,9 +78,8 @@ class Component:
                                 for list_v_component in list_v.get('components'):
                                     if list_v_component.get('type'):
                                         list_v_component_obj = self.builder.get_component_object(list_v_component)
-                                        list_v_component_obj.parent = self
                                         if list_v_component_obj.id not in self.builder.component_ids:
-                                            list_v_component_obj.load(self, data)
+                                            list_v_component_obj.load(self.child_component_owner, parent=self, data=data)
 
     @property
     def id(self):
@@ -111,6 +104,31 @@ class Component:
         if parent:
             self._parent = parent
             self._parent.components[self.key] = self
+
+    @property
+    def is_form_component(self):
+        return bool(self.input)
+
+    @property
+    def component_owner(self):
+        """The component's "owner".  This is usually the Builder class which
+        created it.  But if this component is inside a datagrid
+        component which may clone the form element, then the datagrid
+        is the owner.  Each component adds itself to the `form_components`
+        property its owner.
+        """
+        return self._component_owner
+
+    @component_owner.setter
+    def component_owner(self, component_owner):
+        self._component_owner = component_owner
+        if self.is_form_component:
+            self._component_owner.form_components[self.key] = self
+
+    @property
+    def child_component_owner(self):
+        """The owner object for child components, to use in the recursion"""
+        return self.component_owner
 
     @property
     def type(self):
@@ -198,7 +216,7 @@ class selectboxesComponent(Component):
 
     @property
     def values_labels(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         builder_values = comp.raw.get('values')
         values_labels = {}
         for b_val in builder_values:
@@ -220,7 +238,7 @@ class selectComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         for val in values:
             if val['value'] == self.value:
@@ -234,7 +252,7 @@ class selectComponent(Component):
 
     @property
     def value_labels(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         value_labels = []
         for val in values:
@@ -250,7 +268,7 @@ class radioComponent(Component):
 
     @property
     def values_labels(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         builder_values = comp.raw.get('values')
         values_labels = {}
 
@@ -265,7 +283,7 @@ class radioComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         builder_values = comp.raw.get('values')
         value_label = {}
 
@@ -280,6 +298,10 @@ class radioComponent(Component):
 
 
 class buttonComponent(Component):
+
+    @property
+    def is_form_component(self):
+        return False
 
     def load_value(self, data):
         # just bypass this
@@ -360,7 +382,7 @@ class datetimeComponent(Component):
         if not value:
             return value
 
-        component = self.builder.form_components.get(self.key)
+        component = self.component_owner.form_components.get(self.key)
         dt = self._fromisoformat(value)
         py_dt_format = formio_dt_format = component.raw.get('format')
         mapping = self._format_mappings()
@@ -570,14 +592,10 @@ class datagridComponent(Component):
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
         # dataComponent class these can inherit from.
+        self.form_components = {}
         self.rows = []
         super().__init__(raw, builder, **kwargs)
         self.form = {'value': []}
-
-    def load(self, parent=None, data=None):
-        super(datagridComponent, self).load(parent, data)
-        # if data:
-        #     self._load_rows(data)
 
     def load_value(self, data):
         if data:
@@ -636,8 +654,9 @@ class datagridComponent(Component):
         for row in value:
             add_row = {}
             for key, val in row.items():
-                component = self.builder.form_components[key]
+                component = self.form_components[key]
                 component_object = self.builder.get_component_object(component.raw)
+                component_object.component_owner = self
                 component_object.value = val
                 component_object.raw_value = val
                 add_row[key] = component_object
@@ -654,6 +673,19 @@ class datagridComponent(Component):
                 label = comp['label']
             labels[comp['key']] = label
         return labels
+
+    @property
+    def is_form_component(self):
+        # NOTE: A datagrid is not _really_ a form component, but it
+        # has a key in the JSON for loading the form, so it acts as
+        # such, and it will create an entry in the "form_components"
+        # property of its owner.
+        return True
+
+
+    @property
+    def child_component_owner(self):
+        return self
 
 
 # Premium components
@@ -715,7 +747,7 @@ class resourceComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         for val in values:
             if val['value'] == self.value:
@@ -729,7 +761,7 @@ class resourceComponent(Component):
 
     @property
     def value_labels(self):
-        comp = self.builder.form_components.get(self.key)
+        comp = self.component_owner.form_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         value_labels = []
         for val in values:

@@ -51,12 +51,14 @@ class Form:
         self.builder = Builder(self.builder_schema_json, self.lang)
 
     def load_components(self):
+        # TODO: Make recursive(?)
         for key, component in self.builder.form_components.items():
             # Rather lazy check, but sane.
             # if not self.form.get(key):
             #     continue
             # replaced with default value and fast
             raw_value = self.form.get(key, component.defaultValue)
+            component.component_owner = self.builder
             component.value = raw_value
             component.raw_value = raw_value
             self.components[key] = component
@@ -72,23 +74,21 @@ class FormRenderer:
     def __init__(self, form):
         self.form = form
         self.builder = form.builder
-        self.components = OrderedDict()
-        self.component_ids = {}
         self.load_components()
 
     def load_components(self):
         """ Loads the components (tree) to render, with values
         (data) and obtaining the tree by creating all sub-components
         e.g. in layout and datagrid. """
-        for component in self.builder.raw_components:
-            # Only determine and load class if component type.
-            if 'type' in component:
-                builder_component_obj = self.builder.component_ids[component['id']]
-                # New object, don't affect the Builder component
-                component_obj = self.builder.get_component_object(builder_component_obj.raw)
-                component_obj.load(None, self.form.form)
-                self.components[component_obj.key] = component_obj
+        self.builder.load_components()
 
+    @property
+    def components(self):
+        return self.builder.components
+
+    @property
+    def component_ids(self):
+        return self.builder.component_ids
 
 class FormData:
 
