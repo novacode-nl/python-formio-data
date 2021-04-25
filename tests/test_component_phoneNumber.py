@@ -15,8 +15,6 @@ class PhoneNumberComponentTestCase(ComponentTestCase):
         # Not phoneNumberComponent
         firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, phoneNumberComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, phoneNumberComponent)
 
     def test_get_key(self):
         phoneNumber = self.builder.form_components['phoneNumber']

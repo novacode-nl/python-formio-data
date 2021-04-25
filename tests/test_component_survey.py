@@ -15,8 +15,6 @@ class surveyComponentTestCase(ComponentTestCase):
         # Not surveyComponent
         firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, surveyComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, surveyComponent)
 
     def test_get_key(self):
         survey = self.builder.form_components['survey']

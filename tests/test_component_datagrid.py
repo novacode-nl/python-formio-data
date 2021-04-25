@@ -15,8 +15,6 @@ class datagridComponentTestCase(ComponentTestCase):
         # Not TextfieldComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, datagridComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, datagridComponent)
 
     def test_get_key(self):
         dataGrid = self.builder.components['dataGrid']

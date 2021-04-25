@@ -15,8 +15,6 @@ class selectMultipleComponentTestCase(ComponentTestCase):
         # Not selectComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, selectComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, selectComponent)
 
     def test_get_key(self):
         food = self.builder.form_components['favouriteFood']
