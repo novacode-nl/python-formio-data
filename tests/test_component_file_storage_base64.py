@@ -20,8 +20,6 @@ class fileComponentStorageBase64TestCase(ComponentTestCase):
         # Not fileComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, fileComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, fileComponent)
 
     def test_get_key(self):
         uploadBase64 = self.builder.form_components['uploadBase64']

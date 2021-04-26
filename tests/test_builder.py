@@ -15,6 +15,7 @@ class BuilderTestCase(CommonTestCase):
 
     def test_components(self):
         builder = self._builder()
-        keys = ('firstName', 'email', 'lastName', 'phoneNumber', 'survey', 'signature', 'submit')
+        # NOTE: submit button is not considered a form component
+        keys = ('firstName', 'email', 'lastName', 'phoneNumber', 'survey', 'signature')
         for k in keys:
             self.assertIn(k, builder.form_components.keys())

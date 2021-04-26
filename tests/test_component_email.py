@@ -15,8 +15,6 @@ class emailComponentTestCase(ComponentTestCase):
         # Not EmailComponent
         firstName = self.builder.form_components['firstName']
         self.assertNotIsInstance(firstName, emailComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, emailComponent)
 
     def test_get_key(self):
        email = self.builder.form_components['email']

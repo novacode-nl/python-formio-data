@@ -14,8 +14,6 @@ class radioComponentTestCase(ComponentTestCase):
         # Not radioComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, radioComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, radioComponent)
 
     def test_get_key(self):
         cd = self.builder.form_components['cardinalDirection']

@@ -18,8 +18,6 @@ class textfieldComponentTestCase(ComponentTestCase):
         # Not TextfieldComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, textfieldComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, textfieldComponent)
 
     def test_get_key(self):
         firstName = self.builder.form_components['firstName']

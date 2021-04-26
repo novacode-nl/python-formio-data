@@ -20,8 +20,6 @@ class datetimeComponentTestCase(ComponentTestCase):
         # Not datetimeComponent
         email = self.builder.form_components['email']
         self.assertNotIsInstance(email, datetimeComponent)
-        submit = self.builder.form_components['submit']
-        self.assertNotIsInstance(submit, datetimeComponent)
 
     def test_get_key(self):
         birthdate = self.builder.form_components['birthdate']
