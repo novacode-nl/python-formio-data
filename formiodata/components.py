@@ -239,9 +239,15 @@ class selectComponent(Component):
     @property
     def value_label(self):
         comp = self.component_owner.form_components.get(self.key)
+        data_type = comp.raw.get('dataType')
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         for val in values:
-            if val['value'] == self.value:
+            if data_type == 'number':
+                data_val = int(val['value'])
+            else:
+                data_val = val['value']
+
+            if data_val == self.value:
                 label = val['label']
                 if self.i18n.get(self.language):
                     return self.i18n[self.language].get(label, label)
@@ -253,10 +259,16 @@ class selectComponent(Component):
     @property
     def value_labels(self):
         comp = self.component_owner.form_components.get(self.key)
+        data_type = comp.raw.get('dataType')
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         value_labels = []
         for val in values:
-            if val['value'] in self.value:
+            if data_type == 'number':
+                data_val = int(val['value'])
+            else:
+                data_val = val['value']
+
+            if data_val in self.value:
                 if self.i18n.get(self.language):
                     value_labels.append(self.i18n[self.language].get(val['label'], val['label']))
                 else:
