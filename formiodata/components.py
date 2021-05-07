@@ -117,7 +117,7 @@ class Component:
         """The component's "owner".  This is usually the Builder class which
         created it.  But if this component is inside a datagrid
         component which may clone the form element, then the datagrid
-        is the owner.  Each component adds itself to the `form_components`
+        is the owner.  Each component adds itself to the `input_components`
         property its owner.
         """
         return self._component_owner
@@ -126,7 +126,7 @@ class Component:
     def component_owner(self, component_owner):
         self._component_owner = component_owner
         if self.is_form_component:
-            self._component_owner.form_components[self.key] = self
+            self._component_owner.input_components[self.key] = self
 
     @property
     def child_component_owner(self):
@@ -219,7 +219,7 @@ class selectboxesComponent(Component):
 
     @property
     def values_labels(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         builder_values = comp.raw.get('values')
         values_labels = {}
         for b_val in builder_values:
@@ -241,7 +241,7 @@ class selectComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         data_type = comp.raw.get('dataType')
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         for val in values:
@@ -261,7 +261,7 @@ class selectComponent(Component):
 
     @property
     def value_labels(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         data_type = comp.raw.get('dataType')
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         value_labels = []
@@ -283,7 +283,7 @@ class radioComponent(Component):
 
     @property
     def values_labels(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         builder_values = comp.raw.get('values')
         values_labels = {}
 
@@ -298,7 +298,7 @@ class radioComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         builder_values = comp.raw.get('values')
         value_label = {}
 
@@ -397,7 +397,7 @@ class datetimeComponent(Component):
         if not value:
             return value
 
-        component = self.component_owner.form_components.get(self.key)
+        component = self.component_owner.input_components.get(self.key)
         dt = self._fromisoformat(value)
         py_dt_format = formio_dt_format = component.raw.get('format')
         mapping = self._format_mappings()
@@ -604,13 +604,13 @@ class tabsComponent(layoutComponentBase):
 
 class datagridComponent(Component):
     # Not *really* a component, but it implements the same partial
-    # interface with form_components and components.  TODO: Consider
+    # interface with input_components and components.  TODO: Consider
     # if there should be a shared base component for this (ComponentOwner?)
     class gridRow:
         def __init__(self, datagrid, data):
             self.datagrid = datagrid
             self.builder = datagrid.builder
-            self.form_components = {}
+            self.input_components = {}
             self.components = OrderedDict()
 
             datagrid.create_component_objects(self, data)
@@ -629,7 +629,7 @@ class datagridComponent(Component):
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
         # dataComponent class these can inherit from.
-        self.form_components = {}
+        self.input_components = {}
         self.rows = []
         super().__init__(raw, builder, **kwargs)
         self.form = {'value': []}
@@ -671,7 +671,7 @@ class datagridComponent(Component):
     def is_form_component(self):
         # NOTE: A datagrid is not _really_ a form component, but it
         # has a key in the JSON for loading the form, so it acts as
-        # such, and it will create an entry in the "form_components"
+        # such, and it will create an entry in the "input_components"
         # property of its owner.
         return True
 
@@ -740,7 +740,7 @@ class resourceComponent(Component):
 
     @property
     def value_label(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         for val in values:
             if val['value'] == self.value:
@@ -754,7 +754,7 @@ class resourceComponent(Component):
 
     @property
     def value_labels(self):
-        comp = self.component_owner.form_components.get(self.key)
+        comp = self.component_owner.input_components.get(self.key)
         values = comp.raw.get('data') and comp.raw['data'].get('values')
         value_labels = []
         for val in values:

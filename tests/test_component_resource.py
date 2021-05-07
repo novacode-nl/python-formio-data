@@ -17,21 +17,21 @@ class resourceComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # TextfieldComponent
-        res = self.builder_res.form_components['resourceObj']
+        res = self.builder_res.input_components['resourceObj']
         self.assertIsInstance(res, resourceComponent)
 
     def test_get_key(self):
-        res = self.builder_res.form_components['resourceObj']
+        res = self.builder_res.input_components['resourceObj']
         self.assertEqual(res.key, 'resourceObj')
 
     def test_get_type(self):
-        res = self.builder_res.form_components['resourceObj']
+        res = self.builder_res.input_components['resourceObj']
         self.assertEqual(res.type, 'resource')
 
     def test_values(self):
-        res = self.builder_res.form_components['resourceObj']
+        res = self.builder_res.input_components['resourceObj']
         self.assertEqual(len(res.values), 4)
 
     def test_first_value(self):
-        res = self.builder_res.form_components['resourceObj']
+        res = self.builder_res.input_components['resourceObj']
         self.assertEqual(res.values[1], {'label': 'ResB', 'value': '60034ec3942c74ca500b32b1'})

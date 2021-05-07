@@ -9,27 +9,27 @@ class surveyComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # surveyComponent
-        survey = self.builder.form_components['survey']
+        survey = self.builder.input_components['survey']
         self.assertIsInstance(survey, surveyComponent)
 
         # Not surveyComponent
-        firstName = self.builder.form_components['firstName']
+        firstName = self.builder.input_components['firstName']
         self.assertNotIsInstance(firstName, surveyComponent)
 
     def test_get_key(self):
-        survey = self.builder.form_components['survey']
+        survey = self.builder.input_components['survey']
         self.assertEqual(survey.key, 'survey')
 
     def test_get_type(self):
-        survey = self.builder.form_components['survey']
+        survey = self.builder.input_components['survey']
         self.assertEqual(survey.type, 'survey')
 
     def test_get_label(self):
-        survey = self.builder.form_components['survey']
+        survey = self.builder.input_components['survey']
         self.assertEqual(survey.label, 'Survey')
 
     def test_set_label(self):
-        survey = self.builder.form_components['survey']
+        survey = self.builder.input_components['survey']
         self.assertEqual(survey.label, 'Survey')
         survey.label = 'Foobar'
         self.assertEqual(survey.label, 'Foobar')
@@ -52,7 +52,7 @@ class surveyComponentTestCase(ComponentTestCase):
 
     # i18n translations
     def test_get_label_i18n_nl(self):
-        survey = self.builder_i18n_nl.form_components['survey']
+        survey = self.builder_i18n_nl.input_components['survey']
         self.assertEqual(survey.label, 'Enquête')
 
     def test_get_form_data_i18n_nl(self):

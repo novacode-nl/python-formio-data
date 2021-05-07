@@ -9,33 +9,33 @@ class selectMultipleComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # selectComponent
-        food = self.builder.form_components['favouriteFood']
+        food = self.builder.input_components['favouriteFood']
         self.assertIsInstance(food, selectComponent)
 
         # Not selectComponent
-        email = self.builder.form_components['email']
+        email = self.builder.input_components['email']
         self.assertNotIsInstance(email, selectComponent)
 
     def test_get_key(self):
-        food = self.builder.form_components['favouriteFood']
+        food = self.builder.input_components['favouriteFood']
         self.assertEqual(food.key, 'favouriteFood')
 
     def test_get_type(self):
-        food = self.builder.form_components['favouriteFood']
+        food = self.builder.input_components['favouriteFood']
         self.assertEqual(food.type, 'select')
 
     def test_get_label(self):
-        food = self.builder.form_components['favouriteFood']
+        food = self.builder.input_components['favouriteFood']
         self.assertEqual(food.label, 'Favourite Food')
 
     def test_set_label(self):
-        food = self.builder.form_components['favouriteFood']
+        food = self.builder.input_components['favouriteFood']
         self.assertEqual(food.label, 'Favourite Food')
         food.label = 'Gimme which Food'
         self.assertEqual(food.label, 'Gimme which Food')
 
     def test_get_form(self):
-        food = self.form.components['favouriteFood']
+        food = self.form.input_components['favouriteFood']
         self.assertEqual(food.label, 'Favourite Food')
         self.assertEqual(food.value, ['mexican', 'chinese'])
         self.assertEqual(food.value_labels, ['Mexican', 'Chinese'])
@@ -52,7 +52,7 @@ class selectMultipleComponentTestCase(ComponentTestCase):
 
     # i18n translations
     def test_get_label_i18n_nl(self):
-        food = self.builder_i18n_nl.form_components['favouriteFood']
+        food = self.builder_i18n_nl.input_components['favouriteFood']
         self.assertEqual(food.label, 'Lievelingseten')
 
     def test_get_form_data_i18n_nl(self):

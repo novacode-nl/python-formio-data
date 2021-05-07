@@ -13,7 +13,7 @@ class panelComponentTestCase(ComponentTestCase):
         self.assertIsInstance(panel, panelComponent)
 
         # Not TextfieldComponent
-        email = self.builder.form_components['email']
+        email = self.builder.input_components['email']
         self.assertNotIsInstance(email, panelComponent)
 
     def test_get_key(self):

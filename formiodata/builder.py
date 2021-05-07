@@ -38,8 +38,8 @@ class Builder:
         self.components = OrderedDict()
         self.component_ids = {}
 
-        # Key/value dictionay of Form components for instant access.
-        self.form_components = {}
+        # Key/value dictionay of Form input-only components (i.e., no layout components) for instant access.
+        self.input_components = {}
 
         # Set/load component attrs intialized above.
         self.load_components()

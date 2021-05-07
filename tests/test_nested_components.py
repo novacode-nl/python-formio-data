@@ -9,7 +9,7 @@ from datetime import datetime, date, timezone, timedelta
 
 from tests.utils import readfile
 from formiodata.builder import Builder
-from formiodata.form import Form, FormRenderer
+from formiodata.form import Form
 from formiodata.components import columnsComponent, datetimeComponent, emailComponent, numberComponent, \
     selectComponent, textfieldComponent, panelComponent, datagridComponent, checkboxComponent
 
@@ -288,36 +288,36 @@ class NestedTestCase(unittest.TestCase):
                 comp.label = 'Temperature Fahrenheit'
                 self.assertEqual(comp.label, 'Temperature Fahrenheit')
 
-    def test_Builder_form_components(self):
-        """ Builder: form_components should have the same structure as the Form (submission) JSON """
+    def test_Builder_input_components(self):
+        """ Builder: input_components should have the same structure as the Form (submission) JSON """
 
         builder = Builder(self.builder_json)
 
-        # print('\n# Builder.form_components')
-        # for key, comp in builder.form_components.items():
+        # print('\n# Builder.input_components')
+        # for key, comp in builder.input_components.items():
         #     if comp.parent:
         #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
         #     else:
         #         print((comp.id, comp.key, comp.type))
 
-        # Those 17 form_components are present in key/val of file: data/test_nesting_form.json
+        # Those 17 input_components are present in key/val of file: data/test_nesting_form.json
         # (except the submit ie buttonComponent)
-        self.assertEqual(len(builder.form_components), 17)
+        self.assertEqual(len(builder.input_components), 17)
 
-    def test_Form_components(self):
+    def test_input_components(self):
         """ Form: components structure """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
 
-        # print('\n# Form.form_components')
-        # for key, comp in form.components.items():
+        # print('\n# Form.input_components')
+        # for key, comp in form.input_components.items():
         #     if comp.parent:
         #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
         #     else:
         #         print((comp.id, comp.key, comp.type))
 
-        self.assertEqual(len(form.components), 17)
+        self.assertEqual(len(form.input_components), 17)
 
     def test_Form_not_datagrid(self):
         """ Form: basic (not datagrid) input components """
@@ -326,14 +326,14 @@ class NestedTestCase(unittest.TestCase):
         form = Form(self.form_json, builder)
 
         # firstName in columnsComponent
-        firstName = form.components['firstName']
+        firstName = form.input_components['firstName']
         self.assertIsInstance(firstName, textfieldComponent)
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')
 
         # birthdate in columnsComponent
-        birthdate = form.components['birthdate']
+        birthdate = form.input_components['birthdate']
         self.assertIsInstance(birthdate, datetimeComponent)
         self.assertEqual(birthdate.label, 'Birthdate')
         self.assertEqual(birthdate.value, '1999-12-31')
@@ -341,7 +341,7 @@ class NestedTestCase(unittest.TestCase):
         self.assertIsInstance(birthdate.to_datetime().date(), date)
 
         # favouriteSeason in panelComponent
-        season = form.components['favouriteSeason']
+        season = form.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
         self.assertEqual(season.value, 'autumn')
         self.assertEqual(season.value_label, 'Autumn')        
@@ -353,9 +353,9 @@ class NestedTestCase(unittest.TestCase):
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
 
-        self.assertIn('dataGrid', builder.form_components.keys())
+        self.assertIn('dataGrid', builder.input_components.keys())
 
-        datagrid = form.components['dataGrid']
+        datagrid = form.input_components['dataGrid']
 
         self.assertEqual(len(datagrid.rows), 2)
 
@@ -365,11 +365,11 @@ class NestedTestCase(unittest.TestCase):
 
         for index, row in enumerate(datagrid.rows):
             # component object
-            self.assertIsInstance(row.form_components['email'], emailComponent)
-            self.assertIsInstance(row.form_components['registrationDateTime'], datetimeComponent)
+            self.assertIsInstance(row.input_components['email'], emailComponent)
+            self.assertIsInstance(row.input_components['registrationDateTime'], datetimeComponent)
             # value
-            self.assertIn(row.form_components['email'].value, emails)
-            self.assertEqual(row.form_components['registrationDateTime'].to_datetime(), registrationDateTimes[index])
+            self.assertIn(row.input_components['email'].value, emails)
+            self.assertEqual(row.input_components['registrationDateTime'].to_datetime(), registrationDateTimes[index])
 
     def test_Form_datagrid_nested_components(self):
         """ Form: complex datagrid with (deep) nested components """
@@ -377,9 +377,9 @@ class NestedTestCase(unittest.TestCase):
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
 
-        self.assertIn('dataGrid1', builder.form_components.keys())
+        self.assertIn('dataGrid1', builder.input_components.keys())
 
-        datagrid = form.components['dataGrid1']
+        datagrid = form.input_components['dataGrid1']
 
         self.assertEqual(len(datagrid.rows), 3)
 
@@ -394,43 +394,27 @@ class NestedTestCase(unittest.TestCase):
             # have input components (not layout)
 
             # component object
-            self.assertIsInstance(row.form_components['deviceType'], selectComponent)
-            self.assertIsInstance(row.form_components['measurementTime'], datetimeComponent)
-            self.assertIsInstance(row.form_components['temperatureCelsius'], numberComponent)
-            self.assertIsInstance(row.form_components['escalate'], checkboxComponent)
+            self.assertIsInstance(row.input_components['deviceType'], selectComponent)
+            self.assertIsInstance(row.input_components['measurementTime'], datetimeComponent)
+            self.assertIsInstance(row.input_components['temperatureCelsius'], numberComponent)
+            self.assertIsInstance(row.input_components['escalate'], checkboxComponent)
             # value
-            self.assertIn(row.form_components['deviceType'].value, deviceType)
-            self.assertEqual(row.form_components['measurementTime'].to_date(), measurement_date)
-            self.assertIn(row.form_components['temperatureCelsius'].value, tempCelcius)
-            self.assertIn(row.form_components['escalate'].value, escalate)
+            self.assertIn(row.input_components['deviceType'].value, deviceType)
+            self.assertEqual(row.input_components['measurementTime'].to_date(), measurement_date)
+            self.assertIn(row.input_components['temperatureCelsius'].value, tempCelcius)
+            self.assertIn(row.input_components['escalate'].value, escalate)
 
-    def test_FormRenderer_as_Builder(self):
-        """ FormRenderer: same structure as Builder """
-
-        builder = Builder(self.builder_json)
-        form = Form(self.form_json, builder)
-        renderer = form.render()
-        
-        self.assertIsInstance(renderer, FormRenderer)
-
-        # FormRenderer has same compoonents structure as Builder
-        self.assertEqual(len(renderer.components), 12)
-        builder_components = sorted(builder.components.keys())
-        renderer_components = sorted(renderer.components.keys())
-        self.assertEqual(renderer_components, builder_components)
-
-    def test_FormRenderer_simple_components(self):
-        """ FormRenderer: simple components """
+    def test_Form_simple_components(self):
+        """ Form: simple components """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
-        renderer = form.render()
 
         #################################
         # (top) columnsComponent: columns
         #################################
         
-        columns = renderer.components['columns']
+        columns = form.components['columns']
         self.assertIsInstance(columns, columnsComponent)
         self.assertEqual(columns.key, 'columns')
 
@@ -482,8 +466,8 @@ class NestedTestCase(unittest.TestCase):
             elif comp.key == 'phoneNumber':
                 self.assertEqual(comp.value, '(069) 999-9999')
 
-    def test_FormRenderer_nested_components_row_1_simple(self):
-        """ FormRenderer: nested components SIMPLE """
+    def test_Form_nested_components_row_1_simple(self):
+        """ Form: nested components SIMPLE """
 
         #############################
         # columns1 // row_1 // SIMPLE
@@ -491,9 +475,8 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
-        renderer = form.render()
 
-        columns1 = renderer.components['columns1']
+        columns1 = form.components['columns1']
         self.assertIsInstance(columns1, columnsComponent)
         self.assertEqual(columns1.key, 'columns1')
         self.assertEqual(len(columns1.rows), 2)
@@ -527,8 +510,8 @@ class NestedTestCase(unittest.TestCase):
         #     if comp.key == 'startDateTime':
         #         self.assertEqual(comp.to_date(), date(2021, 4, 9))
 
-    def test_FormRenderer_nested_components_row_1_complex(self):
-        """ FormRenderer: nested components COMPLEX """
+    def test_Form_nested_components_row_1_complex(self):
+        """ Form: nested components COMPLEX """
 
         ##########################################
         # columns1 // row_2 // columns1 // COMPLEX
@@ -536,9 +519,8 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
-        renderer = form.render()
 
-        columns1 = renderer.components['columns1']
+        columns1 = form.components['columns1']
         self.assertIsInstance(columns1, columnsComponent)
         self.assertEqual(columns1.key, 'columns1')
         self.assertEqual(len(columns1.rows), 2)

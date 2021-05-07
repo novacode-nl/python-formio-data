@@ -40,17 +40,13 @@ class Form:
         if self.builder is None and self.builder_schema_json:
             self.set_builder_by_builder_schema_json()
 
-        self.form_components = {}
+        self.input_components = {}
 
-        # TODO rename and wipe out the dispatch property getters.
-        self.all_components = OrderedDict()
-        self.all_component_ids = {}
+        self.components = OrderedDict()
+        self.component_ids = {}
 
         self.load_components()
         self.data = FormData(self)
-
-    def render(self):
-        return FormRenderer(self)
 
     def set_builder_by_builder_schema_json(self):
         self.builder = Builder(self.builder_schema_json, self.lang)
@@ -60,40 +56,14 @@ class Form:
             # New object, don't affect the Builder component
             component_obj = self.builder.get_component_object(component.raw)
             component_obj.load(component_owner=self, parent=None, data=self.form)
-            self.all_components[key] = component_obj
-            self.all_component_ids[component_obj.id] = component_obj
+            self.components[key] = component_obj
+            self.component_ids[component_obj.id] = component_obj
 
     def render_components(self, force=False):
-        for key, component in self.components.items():
+        for key, component in self.input_components.items():
             if force or component.html_component == "":
                 component.render()
 
-    # TODO: Deprecated, use form_components directly
-    @property
-    def components(self):
-        return self.form_components
-
-class FormRenderer:
-
-    def __init__(self, form):
-        self.form = form
-        self.builder = form.builder
-
-        self.load_components()
-
-    def load_components(self):
-        """ Loads the components (tree) to render, with values
-        (data) and obtaining the tree by creating all sub-components
-        e.g. in layout and datagrid. """
-        pass
-
-    @property
-    def components(self):
-        return self.form.all_components
-
-    @property
-    def component_ids(self):
-        return self.form.all_component_ids
 
 class FormData:
 
@@ -101,4 +71,4 @@ class FormData:
         self._form = form
 
     def __getattr__(self, key):
-        return self._form.components.get(key)
+        return self._form.input_components.get(key)

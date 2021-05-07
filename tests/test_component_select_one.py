@@ -9,33 +9,33 @@ class selectOneComponentTestCase(ComponentTestCase):
 
     def test_object(self):
         # selectComponent
-        season = self.builder.form_components['favouriteSeason']
+        season = self.builder.input_components['favouriteSeason']
         self.assertIsInstance(season, selectComponent)
 
         # Not selectComponent
-        email = self.builder.form_components['email']
+        email = self.builder.input_components['email']
         self.assertNotIsInstance(email, selectComponent)
 
     def test_get_key(self):
-        season = self.builder.form_components['favouriteSeason']
+        season = self.builder.input_components['favouriteSeason']
         self.assertEqual(season.key, 'favouriteSeason')
 
     def test_get_type(self):
-        season = self.builder.form_components['favouriteSeason']
+        season = self.builder.input_components['favouriteSeason']
         self.assertEqual(season.type, 'select')
 
     def test_get_label(self):
-        season = self.builder.form_components['favouriteSeason']
+        season = self.builder.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
 
     def test_set_label(self):
-        season = self.builder.form_components['favouriteSeason']
+        season = self.builder.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
         season.label = 'Which Season'
         self.assertEqual(season.label, 'Which Season')
 
     def test_get_form(self):
-        season = self.form.components['favouriteSeason']
+        season = self.form.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
         self.assertEqual(season.value, 'autumn')
         self.assertEqual(season.value_label, 'Autumn')        
@@ -50,7 +50,7 @@ class selectOneComponentTestCase(ComponentTestCase):
 
     # i18n translations
     def test_get_label_i18n_nl(self):
-        season = self.builder_i18n_nl.form_components['favouriteSeason']
+        season = self.builder_i18n_nl.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favoriete seizoen')
 
     def test_get_form_data_i18n_nl(self):

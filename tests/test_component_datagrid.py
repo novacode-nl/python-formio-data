@@ -13,7 +13,7 @@ class datagridComponentTestCase(ComponentTestCase):
         self.assertIsInstance(dataGrid, datagridComponent)
 
         # Not TextfieldComponent
-        email = self.builder.form_components['email']
+        email = self.builder.input_components['email']
         self.assertNotIsInstance(email, datagridComponent)
 
     def test_get_key(self):
@@ -30,8 +30,7 @@ class datagridComponentTestCase(ComponentTestCase):
 
     def test_get_row_labels(self):
         builder_dataGrid = self.builder.components['dataGrid']
-        renderer = self.form.render()
-        dataGrid = renderer.components[builder_dataGrid.key]
+        dataGrid = self.form.input_components[builder_dataGrid.key]
 
         self.assertEqual(len(dataGrid.rows), 2)
 
@@ -41,15 +40,14 @@ class datagridComponentTestCase(ComponentTestCase):
 
     def test_get_rows_values(self):
         builder_dataGrid = self.builder.components['dataGrid']
-        renderer = self.form.render()
-        dataGrid = renderer.components[builder_dataGrid.key]
+        dataGrid = self.form.input_components[builder_dataGrid.key]
 
         self.assertEqual(len(dataGrid.rows), 2)
 
         textField_values = ['abc', 'def']
         checkbox_values = [True, False]
         for row_with_components in dataGrid.rows:
-            for component in row_with_components.form_components.values():
+            for component in row_with_components.input_components.values():
                 if component.type == 'textfield':
                     self.assertIn(component.value , textField_values)
                 if component.type == 'checkbox':
