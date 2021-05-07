@@ -40,7 +40,12 @@ class Form:
         if self.builder is None and self.builder_schema_json:
             self.set_builder_by_builder_schema_json()
 
-        self.components = {}
+        self.form_components = {}
+
+        # TODO rename and wipe out the dispatch property getters.
+        self.all_components = OrderedDict()
+        self.all_component_ids = {}
+
         self.load_components()
         self.data = FormData(self)
 
@@ -51,44 +56,44 @@ class Form:
         self.builder = Builder(self.builder_schema_json, self.lang)
 
     def load_components(self):
-        # TODO: Make recursive(?)
-        for key, component in self.builder.form_components.items():
-            # Rather lazy check, but sane.
-            # if not self.form.get(key):
-            #     continue
-            # replaced with default value and fast
-            raw_value = self.form.get(key, component.defaultValue)
-            component.component_owner = self.builder
-            component.value = raw_value
-            component.raw_value = raw_value
-            self.components[key] = component
+        for key, component in self.builder.components.items():
+            # New object, don't affect the Builder component
+            component_obj = self.builder.get_component_object(component.raw)
+            component_obj.load(component_owner=self, parent=None, data=self.form)
+            self.all_components[key] = component_obj
+            self.all_component_ids[component_obj.id] = component_obj
 
     def render_components(self, force=False):
         for key, component in self.components.items():
             if force or component.html_component == "":
                 component.render()
 
+    # TODO: Deprecated, use form_components directly
+    @property
+    def components(self):
+        return self.form_components
 
 class FormRenderer:
 
     def __init__(self, form):
         self.form = form
         self.builder = form.builder
+
         self.load_components()
 
     def load_components(self):
         """ Loads the components (tree) to render, with values
         (data) and obtaining the tree by creating all sub-components
         e.g. in layout and datagrid. """
-        self.builder.load_components()
+        pass
 
     @property
     def components(self):
-        return self.builder.components
+        return self.form.all_components
 
     @property
     def component_ids(self):
-        return self.builder.component_ids
+        return self.form.all_component_ids
 
 class FormData:
 

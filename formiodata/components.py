@@ -36,24 +36,15 @@ class Component:
         self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
-    def load_value(self, data):
+    def load_data(self, data):
         if self.input and data:
-            if isinstance(data, dict) and data.get(self.key):
+            try:
                 self.value = data[self.key]
                 self.raw_value = data[self.key]
-            else:
-                self.value = data
-                self.raw_value = data
-
-    def load(self, component_owner, parent=None, data=None):
-        self.component_owner = component_owner
-
-        self.load_value(data)
-
-        if parent:
-            self.parent = parent
-
-        self.builder.component_ids[self.id] = self
+            except KeyError:
+                # NOTE: getter will read out defaultValue if it's missing in self.form
+                # TODO: Is this the right approach?
+                pass
 
         # (Input) nested components (e.g. datagrid, editgrid)
         for component in self.raw.get('components', []):
@@ -62,6 +53,8 @@ class Component:
                 component_obj = self.builder.get_component_object(component)
                 component_obj.load(self.child_component_owner, parent=self, data=data)
 
+        # TODO: This code is iffy and tries to be generic for unknown components.
+        # Maybe only call this (and the above) if not an input component?
         # (Layout) nested components (e.g. columns, panels)
         for k, vals in self.raw.copy().items():
             if isinstance(vals, list):
@@ -69,8 +62,7 @@ class Component:
                     if 'components' in v:
                         for v_component in v['components']:
                             v_component_obj = self.builder.get_component_object(v_component)
-                            if v_component_obj.id not in self.builder.component_ids:
-                                v_component_obj.load(self.child_component_owner, parent=self, data=data)
+                            v_component_obj.load(self.child_component_owner, parent=self, data=data)
                     elif isinstance(v, list):
                         # table component etc. which holds even deeper lists with components
                         for list_v in v:
@@ -80,6 +72,17 @@ class Component:
                                         list_v_component_obj = self.builder.get_component_object(list_v_component)
                                         if list_v_component_obj.id not in self.builder.component_ids:
                                             list_v_component_obj.load(self.child_component_owner, parent=self, data=data)
+
+
+    def load(self, component_owner, parent=None, data=None):
+        self.component_owner = component_owner
+
+        if parent:
+            self.parent = parent
+
+        self.load_data(data)
+
+        self.builder.component_ids[self.id] = self
 
     @property
     def id(self):
@@ -165,7 +168,7 @@ class Component:
 
     @property
     def value(self):
-        return self.form.get('value')
+        return self.form.get('value', self.defaultValue)
 
     @value.setter
     def value(self, value):
@@ -187,7 +190,7 @@ class Component:
         return value
 
     def render(self):
-        self.html_component = '<p>%s</p>' % self.form.get('value')
+        self.html_component = '<p>%s</p>' % self.value
 
 
 # Basic
@@ -268,7 +271,7 @@ class selectComponent(Component):
             else:
                 data_val = val['value']
 
-            if data_val in self.value:
+            if self.value and data_val in self.value:
                 if self.i18n.get(self.language):
                     value_labels.append(self.i18n[self.language].get(val['label'], val['label']))
                 else:
@@ -315,7 +318,7 @@ class buttonComponent(Component):
     def is_form_component(self):
         return False
 
-    def load_value(self, data):
+    def load_data(self, data):
         # just bypass this
         pass
 
@@ -600,6 +603,28 @@ class tabsComponent(layoutComponentBase):
 # Data components
 
 class datagridComponent(Component):
+    # Not *really* a component, but it implements the same partial
+    # interface with form_components and components.  TODO: Consider
+    # if there should be a shared base component for this (ComponentOwner?)
+    class gridRow:
+        def __init__(self, datagrid, data):
+            self.datagrid = datagrid
+            self.builder = datagrid.builder
+            self.form_components = {}
+            self.components = OrderedDict()
+
+            datagrid.create_component_objects(self, data)
+
+    # This is a weird one, it creates component object for the
+    # "blueprint" inside the Builder, with parent = dataGrid,
+    # and in a form on each grid row with parent = gridRow
+    def create_component_objects(self, parent, data):
+        for component in self.raw.get('components', []):
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = parent.builder.get_component_object(component)
+                component_obj.load(component_owner=parent, parent=parent, data=data)
+                parent.components[component_obj.key] = component_obj
 
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
@@ -609,71 +634,27 @@ class datagridComponent(Component):
         super().__init__(raw, builder, **kwargs)
         self.form = {'value': []}
 
-    def load_value(self, data):
-        if data:
-            self._load_rows(data)
-
-        if self.input and data:
-            if isinstance(data, dict) and data.get(self.key):
-                self.value = data[self.key]
-            else:
-                self.value = data
+    def load_data(self, data):
+        if data: # TODO: Make sure data is always a dict here?
+            self._load_rows(data[self.key])
+            self.value = data[self.key]
+            self.raw_value = data[self.key]
+        else:
+            # Always instantiate child components, even if no data.
+            # This makes it exist both in the builder and in the form.
+            self.create_component_objects(self, None)
 
     def _load_rows(self, data):
         rows = []
 
-        for row in self.value:
-            # EXAMPLE row:
-            # [{'email': 'personal@example.com'}, {'typeOfEmail': 'personal'}]
+        for row in data:
+            # EXAMPLE row (which is an entry in the data list):
+            # {'email': 'personal@example.com', 'typeOfEmail': 'personal'}
+            new_row = self.gridRow(self, row)
 
-            new_row = []
-            slots_todo = []
-            slots_done = []
-
-            for slot in row:
-                # EXAMPLE slot:
-                # {'email': 'personal@example.com'}
-                for key, val in slot.items():
-                    # EXAMPLE:
-                    # key => 'email'
-                    # val => 'personal@example.com'
-                    for key, comp in self.components.items():
-                        if key == comp.key:
-                            raw = comp.raw
-                            new_slot = self.builder.get_component_object(raw)
-                            new_slot.value = val
-                            new_row.append(new_slot)
-                            slots_done.append(key)
-                    if key not in slots_done:
-                        slots_todo.append(slot)
-            if slots_todo:
-                for key, comp in self.components.items():
-                    if hasattr(comp, 'propagate_children'):
-                        new_row.append(comp.propagate_children(slots_todo))
             if new_row:
                 rows.append(new_row)
         self.rows = rows
-
-    @property
-    def value(self):
-        return super().value
-
-    @value.setter
-    def value(self, value=[]):
-        if not isinstance(value, list):
-            value = []
-        self.rows = []
-        for row in value:
-            add_row = {}
-            for key, val in row.items():
-                component = self.form_components[key]
-                component_object = self.builder.get_component_object(component.raw)
-                component_object.component_owner = self
-                component_object.value = val
-                component_object.raw_value = val
-                add_row[key] = component_object
-            self.rows.append(add_row)
-        super(self.__class__, self.__class__).value.fset(self, self.rows)
 
     @property
     def labels(self):

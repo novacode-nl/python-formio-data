@@ -49,7 +49,7 @@ class datagridComponentTestCase(ComponentTestCase):
         textField_values = ['abc', 'def']
         checkbox_values = [True, False]
         for row_with_components in dataGrid.rows:
-            for component in row_with_components:
+            for component in row_with_components.form_components.values():
                 if component.type == 'textfield':
                     self.assertIn(component.value , textField_values)
                 if component.type == 'checkbox':

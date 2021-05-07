@@ -365,11 +365,11 @@ class NestedTestCase(unittest.TestCase):
 
         for index, row in enumerate(datagrid.rows):
             # component object
-            self.assertIsInstance(row['email'], emailComponent)
-            self.assertIsInstance(row['registrationDateTime'], datetimeComponent)
+            self.assertIsInstance(row.form_components['email'], emailComponent)
+            self.assertIsInstance(row.form_components['registrationDateTime'], datetimeComponent)
             # value
-            self.assertIn(row['email'].value, emails)
-            self.assertEqual(row['registrationDateTime'].to_datetime(), registrationDateTimes[index])
+            self.assertIn(row.form_components['email'].value, emails)
+            self.assertEqual(row.form_components['registrationDateTime'].to_datetime(), registrationDateTimes[index])
 
     def test_Form_datagrid_nested_components(self):
         """ Form: complex datagrid with (deep) nested components """
@@ -394,15 +394,15 @@ class NestedTestCase(unittest.TestCase):
             # have input components (not layout)
 
             # component object
-            self.assertIsInstance(row['deviceType'], selectComponent)
-            self.assertIsInstance(row['measurementTime'], datetimeComponent)
-            self.assertIsInstance(row['temperatureCelsius'], numberComponent)
-            self.assertIsInstance(row['escalate'], checkboxComponent)
+            self.assertIsInstance(row.form_components['deviceType'], selectComponent)
+            self.assertIsInstance(row.form_components['measurementTime'], datetimeComponent)
+            self.assertIsInstance(row.form_components['temperatureCelsius'], numberComponent)
+            self.assertIsInstance(row.form_components['escalate'], checkboxComponent)
             # value
-            self.assertIn(row['deviceType'].value, deviceType)
-            self.assertEqual(row['measurementTime'].to_date(), measurement_date)
-            self.assertIn(row['temperatureCelsius'].value, tempCelcius)
-            self.assertIn(row['escalate'].value, escalate)
+            self.assertIn(row.form_components['deviceType'].value, deviceType)
+            self.assertEqual(row.form_components['measurementTime'].to_date(), measurement_date)
+            self.assertIn(row.form_components['temperatureCelsius'].value, tempCelcius)
+            self.assertIn(row.form_components['escalate'].value, escalate)
 
     def test_FormRenderer_as_Builder(self):
         """ FormRenderer: same structure as Builder """
@@ -560,29 +560,28 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(dataGrid1.rows), 3)
         for row in dataGrid1.rows:
             # row has only 1 component
-            comp = row[0]
+            self.assertEqual(1, len(row.components.keys()))
+            comp = row.components['columns']
             self.assertIsInstance(comp, columnsComponent)
-            self.assertIsEqual(comp.key, 'columns')
+            self.assertEqual(comp.key, 'columns')
 
         ## dataGrid1 // row 1
-        dataGrid1_row_1 = dataGrid1.rows[0]
-        row_1_panel = dataGrid1_row_1[0]
-        row_1_escalate_checkbox = dataGrid1_row_1[1]
-
+        columns_row = dataGrid1.rows[0]
+        
         # XXX panel.components is OrderedDict()
-        columns_in_panel = row_1_panel.components['panel']
+        columns_in_panel = columns_row.components['columns'].components['panel'].components['columns1']
 
         # only 1 row
         self.assertEqual(len(columns_in_panel.rows), 1)
-        row_columns_in_panel_ = columns_in_panel.rows[0]
+        row_columns_in_panel = columns_in_panel.rows[0]
 
         ## keys
         keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
-        for comp in row_columns_in_panel['components']:
+        for comp in row_columns_in_panel[0]['components']:
             self.assertIn(comp.key, keys)
 
         ## component objects
-        for comp in row_columns_in_panel['components']:
+        for comp in row_columns_in_panel[0]['components']:
             if comp.key == 'deviceType':
                 self.assertIsInstance(comp, selectComponent)
             elif comp.key == 'measurementTime':
@@ -592,7 +591,7 @@ class NestedTestCase(unittest.TestCase):
 
         ## values
         measurementTime = datetime(2021, 4, 9, 9, 00)
-        for comp in col_1['components']:
+        for comp in row_columns_in_panel[0]['components']:
             if comp.key == 'deviceType':
                 self.assertEqual(comp.value, 'pumpB')
             elif comp.key == 'measurementTime':
