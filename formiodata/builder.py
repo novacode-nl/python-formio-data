@@ -63,8 +63,8 @@ class Builder:
             if 'type' in component:
                 component_obj = self.get_component_object(component)
                 # start and traverse from toplevel
+                component_obj.load(component_owner=self, parent=None, data=None)
                 self.components[component_obj.key] = component_obj
-                component_obj.load(self, parent=None, data=None)
 
     def get_component_object(self, component):
         """
