@@ -53,8 +53,6 @@ class radioComponentTestCase(ComponentTestCase):
     def test_get_label_i18n_nl(self):
         cd = self.builder_i18n_nl.form_components['cardinalDirection']
         self.assertEqual(cd.label, 'Kardinale richting')
-        self.assertEqual(cd.value, 'south')
-        self.assertEqual(cd.value_label, 'Zuid')
 
     def test_get_form_data_i18n_nl(self):
         self.assertEqual(self.form_i18n_nl.data.cardinalDirection.label, 'Kardinale richting')

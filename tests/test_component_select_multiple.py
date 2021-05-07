@@ -54,8 +54,6 @@ class selectMultipleComponentTestCase(ComponentTestCase):
     def test_get_label_i18n_nl(self):
         food = self.builder_i18n_nl.form_components['favouriteFood']
         self.assertEqual(food.label, 'Lievelingseten')
-        self.assertEqual(food.value, ['mexican', 'chinese'])
-        self.assertEqual(food.value_labels, ['Mexican', 'Chinese'])
 
     def test_get_form_data_i18n_nl(self):
         self.assertEqual(self.form_i18n_nl.data.favouriteFood.label, 'Lievelingseten')
