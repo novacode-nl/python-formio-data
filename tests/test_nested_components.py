@@ -22,10 +22,10 @@ class NestedTestCase(unittest.TestCase):
         super(NestedTestCase, self).setUp()
 
         # logging
-        msg = self.id()
-        if self.shortDescription():
-            msg += ' -- %s' % self.shortDescription()
-        self.logger.info(msg)
+        # msg = self.id()
+        # if self.shortDescription():
+        #     msg += ' -- %s' % self.shortDescription()
+        # self.logger.info(msg)
 
         self.builder_json = readfile('data', 'test_nested_components_builder.json')
         self.form_json = readfile('data', 'test_nested_components_form.json')
@@ -288,38 +288,30 @@ class NestedTestCase(unittest.TestCase):
                 comp.label = 'Temperature Fahrenheit'
                 self.assertEqual(comp.label, 'Temperature Fahrenheit')
 
-    def test_Builder_input_components(self):
-        """ Builder: input_components should have the same structure as the Form (submission) JSON """
-
+    def test_Builder_components_count(self):
         builder = Builder(self.builder_json)
+        self.assertEqual(len(builder.components), 12)
 
-        # print('\n# Builder.input_components')
-        # for key, comp in builder.input_components.items():
-        #     if comp.parent:
-        #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
-        #     else:
-        #         print((comp.id, comp.key, comp.type))
-
-        # Those 17 input_components are present in key/val of file: data/test_nesting_form.json
+    def test_Builder_input_components_count(self):
+        builder = Builder(self.builder_json)
+        # 17 input_components are present in key/val of file: data/test_nesting_form.json
         # (except the submit ie buttonComponent)
         self.assertEqual(len(builder.input_components), 17)
 
-    def test_input_components(self):
-        """ Form: components structure """
-
+    def test_Form_components_count(self):
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
 
-        # print('\n# Form.input_components')
-        # for key, comp in form.input_components.items():
-        #     if comp.parent:
-        #         print((comp.id, comp.key, comp.type, comp.parent, comp.parent.id))
-        #     else:
-        #         print((comp.id, comp.key, comp.type))
+        self.assertEqual(len(form.components), 12)
 
+    def test_Form_input_components_count(self):
+        builder = Builder(self.builder_json)
+        form = Form(self.form_json, builder)
+        # 17 input_components are present in key/val of file: data/test_nesting_form.json
+        # (except the submit ie buttonComponent)
         self.assertEqual(len(form.input_components), 17)
 
-    def test_Form_not_datagrid(self):
+    def test_Form_input_components_not_datagrid(self):
         """ Form: basic (not datagrid) input components """
 
         builder = Builder(self.builder_json)
@@ -347,8 +339,8 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(season.value_label, 'Autumn')        
         self.assertEqual(season.type, 'select')
 
-    def test_Form_datagrid_simple(self):
-        """ Form: simple datagrid without (deep) nested components """
+    def test_Form_input_components_datagrid_simple(self):
+        """ Form: simple datagrid without nested (layout) components """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
@@ -371,8 +363,8 @@ class NestedTestCase(unittest.TestCase):
             self.assertIn(row.input_components['email'].value, emails)
             self.assertEqual(row.input_components['registrationDateTime'].to_datetime(), registrationDateTimes[index])
 
-    def test_Form_datagrid_nested_components(self):
-        """ Form: complex datagrid with (deep) nested components """
+    def test_Form_input_components_datagrid_nested(self):
+        """ Form: complex datagrid with nested (layout) components """
 
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
@@ -404,7 +396,7 @@ class NestedTestCase(unittest.TestCase):
             self.assertIn(row.input_components['temperatureCelsius'].value, tempCelcius)
             self.assertIn(row.input_components['escalate'].value, escalate)
 
-    def test_Form_simple_components(self):
+    def test_Form_components_simple(self):
         """ Form: simple components """
 
         builder = Builder(self.builder_json)
@@ -466,7 +458,7 @@ class NestedTestCase(unittest.TestCase):
             elif comp.key == 'phoneNumber':
                 self.assertEqual(comp.value, '(069) 999-9999')
 
-    def test_Form_nested_components_row_1_simple(self):
+    def test_Form_components_row_1_simple(self):
         """ Form: nested components SIMPLE """
 
         #############################
@@ -510,7 +502,7 @@ class NestedTestCase(unittest.TestCase):
             if comp.key == 'startDateTime':
                 self.assertEqual(comp.to_date(), date(2021, 4, 9))
 
-    def test_Form_nested_components_row_1_complex(self):
+    def test_Form_components_row_1_complex(self):
         """ Form: nested components COMPLEX """
 
         ##########################################
