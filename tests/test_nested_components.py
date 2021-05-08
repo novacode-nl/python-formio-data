@@ -493,9 +493,9 @@ class NestedTestCase(unittest.TestCase):
             self.assertIn(comp.key, keys)
 
         ## values
-        # for comp in col_1['components']:
-        #     if comp.key == 'actionType':
-        #         self.assertEqual(comp.value, 'check')
+        for comp in row_1_col_1['components']:
+            if comp.key == 'actionType':
+                self.assertEqual(comp.value, 'check')
 
         # row_1: col_2
         row_1_col_2 = row_1[1]
@@ -506,9 +506,9 @@ class NestedTestCase(unittest.TestCase):
             self.assertIn(comp.key, keys)
 
         ## values
-        # for comp in row_1_col_2['components']:
-        #     if comp.key == 'startDateTime':
-        #         self.assertEqual(comp.to_date(), date(2021, 4, 9))
+        for comp in row_1_col_2['components']:
+            if comp.key == 'startDateTime':
+                self.assertEqual(comp.to_date(), date(2021, 4, 9))
 
     def test_Form_nested_components_row_1_complex(self):
         """ Form: nested components COMPLEX """
