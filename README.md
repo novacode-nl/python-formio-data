@@ -66,9 +66,9 @@ For more examples of usage, see the unit-tests.
 >> builder = Builder(builder_json)
 >> form = Form(builder, form_json)
 
-################
-input components
-################
+##################
+# input components
+##################
 
 # textfield label
 >> print(form.input_components['firstname'].label)
@@ -108,9 +108,9 @@ Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
 >> print(form.data.firstname.value)
 'Bob'
 
-###############################
-components (layout, input etc.)
-###############################
+#################################
+# components (layout, input etc.)
+#################################
 
 # columns
 >> print(form.components['addressColumns'])
