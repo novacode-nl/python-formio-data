@@ -85,4 +85,9 @@ class Builder:
                 # (raw) Component object or throw exception,
                 return components.Component(component, self)
         else:
+            msg = "Can't instantiate a (raw) component without a type.\n\n" \
+                "Component raw data\n" \
+                "==================\n" \
+                "%s\n"
+            logging.warning(msg % component)
             return False
