@@ -36,6 +36,16 @@ class Component:
         self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
+    def load(self, component_owner, parent=None, data=None):
+        self.component_owner = component_owner
+
+        if parent:
+            self.parent = parent
+
+        self.load_data(data)
+
+        self.builder.component_ids[self.id] = self
+
     def load_data(self, data):
         if self.input and data:
             try:
@@ -73,17 +83,6 @@ class Component:
                                         if list_v_component_obj.id not in self.builder.component_ids:
                                             list_v_component_obj.load(self.child_component_owner, parent=self, data=data)
 
-
-    def load(self, component_owner, parent=None, data=None):
-        self.component_owner = component_owner
-
-        if parent:
-            self.parent = parent
-
-        self.load_data(data)
-
-        self.builder.component_ids[self.id] = self
-
     @property
     def id(self):
         return self._id
@@ -97,6 +96,14 @@ class Component:
     @property
     def key(self):
         return self.raw.get('key')
+
+    @property
+    def type(self):
+        return self.raw.get('type')
+
+    @property
+    def input(self):
+        return self.raw.get('input')
 
     @property
     def parent(self):
@@ -132,14 +139,6 @@ class Component:
     def child_component_owner(self):
         """The owner object for child components, to use in the recursion"""
         return self.component_owner
-
-    @property
-    def type(self):
-        return self.raw.get('type')
-
-    @property
-    def input(self):
-        return self.raw.get('input')
 
     @property
     def valdidate(self):
@@ -603,10 +602,13 @@ class tabsComponent(layoutComponentBase):
 # Data components
 
 class datagridComponent(Component):
-    # Not *really* a component, but it implements the same partial
-    # interface with input_components and components.  TODO: Consider
-    # if there should be a shared base component for this (ComponentOwner?)
+
     class gridRow:
+        """Not *really* a component, but it implements the same
+        partial interface with input_components and components.
+        TODO: Consider if there should be a shared base component for
+        this (ComponentOwner?)
+        """
         def __init__(self, datagrid, data):
             self.datagrid = datagrid
             self.builder = datagrid.builder
@@ -615,17 +617,6 @@ class datagridComponent(Component):
 
             datagrid.create_component_objects(self, data)
 
-    # This is a weird one, it creates component object for the
-    # "blueprint" inside the Builder, with parent = dataGrid,
-    # and in a form on each grid row with parent = gridRow
-    def create_component_objects(self, parent, data):
-        for component in self.raw.get('components', []):
-            # Only determine and load class if component type.
-            if 'type' in component:
-                component_obj = parent.builder.get_component_object(component)
-                component_obj.load(component_owner=parent, parent=parent, data=data)
-                parent.components[component_obj.key] = component_obj
-
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
         # dataComponent class these can inherit from.
@@ -633,6 +624,18 @@ class datagridComponent(Component):
         self.rows = []
         super().__init__(raw, builder, **kwargs)
         self.form = {'value': []}
+
+    def create_component_objects(self, parent, data):
+        """This is a weird one, it creates component object for the
+        "blueprint" inside the Builder, with parent = dataGrid, and in
+        a form on each grid row with parent = gridRow
+        """
+        for component in self.raw.get('components', []):
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = parent.builder.get_component_object(component)
+                component_obj.load(component_owner=parent, parent=parent, data=data)
+                parent.components[component_obj.key] = component_obj
 
     def load_data(self, data):
         if data: # TODO: Make sure data is always a dict here?
