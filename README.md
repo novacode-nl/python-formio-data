@@ -12,16 +12,16 @@ aim is to provide easy access to a Form its components/fields, also
 captured as **Python objects**, which makes this API very versatile and usable.
 
 **Notes about terms:**
-  - "Builder" could be read/seen as "Builder Form"
-  - "Form" could be read/seen as "Form"
-  - "Component" could be read/seen as "Field"
+  - **Builder** The Form Builder which is the design/blueprint of a Form.
+  - **Form** A filled-in Form, aka Form submission.
+  - **Component** Input (field) or layout component in the Form Builder and Form.
 
 ## Features
 
   - Compatible with Python 3.3 and later
   - Constructor of the **Builder** and **Form** class, only requires
     the JSON and an optional language code for translations.
-  - Get a Form object its Components/Fields as a usable object e.g. DateTime, Boolean, Dict (for select component) etc.
+  - Get a Form object its Components as a usable object e.g. datetime, boolean, dict (for select component) etc.
   - Open source (MIT License)
 
 ## Installation
@@ -85,9 +85,10 @@ datetime.date(2009 10 16)
 
 ## Unit tests
 
-**Notes:**
-- Internet access is required for running the
-  `filecStorageUrlComponentTestCase`. It tests the URL Storage (type).
+**Note:**
+
+Internet access is recommended for running the `filecStorageUrlComponentTestCase`, because this also tests the URL Storage (type).\
+If no internet access, this test won't fail and a WARNING shall be logged regarding a ConnectionError.
 
 ### Run all unittests
 

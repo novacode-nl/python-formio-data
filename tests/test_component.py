@@ -1,8 +1,13 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
+
 import json
 
-from test_common import CommonTestCase
+from requests.exceptions import ConnectionError
+
+from tests.utils import log_unittest
+from tests.test_common import CommonTestCase
+
 from formiodata.builder import Builder
 from formiodata.form import Form
 
@@ -49,5 +54,9 @@ class ComponentTestCase(CommonTestCase):
         self.builder_i18n_nl = Builder(builder_json, language='nl', i18n=self._i18n())
         self.form_i18n_nl = Form(form_json, self.builder_i18n_nl)
 
-
-
+    def assertUrlBase64(self, component, expected_base64, log_level='warning'):
+        try:
+            self.assertEqual(component.base64, expected_base64)
+        except ConnectionError as e:
+            msg = 'Internet access is required, %s...\n%s' % (e.__class__.__name__, e)
+            log_unittest(self, msg, log_level)
