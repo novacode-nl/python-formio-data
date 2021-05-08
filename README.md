@@ -94,10 +94,12 @@ datetime.date(2009 10 16)
 ]
 
 >> for row in form.input_components['datagridMeasurements'].rows:
->>    print('DATETIME: %s, FAHRENHEIT: %s' % (row['measurementDatetime'].value, row['measurementFahrenheit'].value))
+>>    dtime = row['measurementDatetime']
+>>    fahrenheit = row['measurementFahrenheit']
+>>    print(%s: %s, %s: %s' % (dt.label, dt.value, fahrenheit.label, fahrenheit.value))
 
-DATETIME: datetime.datetime(2021, 5, 8, 11, 39, 0, 296487), FAHRENHEIT: 122
-DATETIME: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), FAHRENHEIT: 131
+Datetime: datetime.datetime(2021, 5, 8, 11, 39, 0, 296487), Fahrenheit: 122
+Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
 
 # alternative example, by getattr
 >> print(form.data.firstname.label)
