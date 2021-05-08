@@ -66,21 +66,59 @@ For more examples of usage, see the unit-tests.
 >> builder = Builder(builder_json)
 >> form = Form(builder, form_json)
 
-# Text Field (control)
+################
+input components
+################
+
+# textfield label
+>> print(form.input_components['firstname'].label)
+'First Name'
+
+# textfield value
+>> print(form.input_components['firstname'].value)
+'Bob'
+
+# datetime label
+>> print(form.input_components['birthday'].label)
+'Birthday'
+
+# datetime value
+>> print(form.input_components['birthday'].value)
+datetime.date(2009 10 16)
+
+# datagrid (rows property)
+>> print(form.input_components['datagridMeasurements'].rows)
+[
+  {'measurementDatetime': <datetimeComponent>, 'measurementFahrenheit': <numberComponent>}, 
+  {'measurementDatetime': <datetimeComponent>, 'measurementFahrenheit': <numberComponent>}
+]
+
+>> for row in form.input_components['datagridMeasurements'].rows:
+>>    print('DATETIME: %s, FAHRENHEIT: %s' % (row['measurementDatetime'].value, row['measurementFahrenheit'].value))
+
+DATETIME: datetime.datetime(2021, 5, 8, 11, 39, 0, 296487), FAHRENHEIT: 122
+DATETIME: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), FAHRENHEIT: 131
+
+# alternative example, by getattr
 >> print(form.data.firstname.label)
 'First Name'
 
-# Value as Python string too
 >> print(form.data.firstname.value)
 'Bob'
 
-# Date (control)
->> print(form.data.birthday.label)
-'Birthday'
+###############################
+components (layout, input etc.)
+###############################
 
-# Value as Python Date object
->> print(form.data.birthday.value)
-datetime.date(2009 10 16)
+# columns
+>> print(form.components['addressColumns'])
+<columnsComponent>
+
+>> print(form.components['addressColumns'].rows)
+[ 
+  {'firstName': <textfieldComponent>, 'lastName: <textfieldComponent>}, 
+  {'email': <emailComponent>, 'companyName: <textfieldComponent>}
+]
 ```
 
 ## Unit tests
