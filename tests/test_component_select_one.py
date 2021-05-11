@@ -42,7 +42,7 @@ class selectOneComponentTestCase(ComponentTestCase):
         self.assertEqual(season.type, 'select')
         
     def test_get_form_data(self):
-        season = self.form.data.favouriteSeason
+        season = self.form.input.favouriteSeason
         self.assertEqual(season.label, 'Favourite Season')
         self.assertEqual(season.value, 'autumn')
         self.assertEqual(season.value_label, 'Autumn')
@@ -54,6 +54,6 @@ class selectOneComponentTestCase(ComponentTestCase):
         self.assertEqual(season.label, 'Favoriete seizoen')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.favouriteSeason.label, 'Favoriete seizoen')
-        self.assertEqual(self.form_i18n_nl.data.favouriteSeason.value, 'autumn')
-        self.assertEqual(self.form_i18n_nl.data.favouriteSeason.value_label, 'Herfst')
+        self.assertEqual(self.form_i18n_nl.input.favouriteSeason.label, 'Favoriete seizoen')
+        self.assertEqual(self.form_i18n_nl.input.favouriteSeason.value, 'autumn')
+        self.assertEqual(self.form_i18n_nl.input.favouriteSeason.value_label, 'Herfst')

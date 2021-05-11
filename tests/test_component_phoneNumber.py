@@ -41,7 +41,7 @@ class PhoneNumberComponentTestCase(ComponentTestCase):
         self.assertEqual(phoneNumber.type, 'phoneNumber')
 
     def test_get_form_data(self):
-        phoneNumber = self.form.data.phoneNumber
+        phoneNumber = self.form.input.phoneNumber
         self.assertEqual(phoneNumber.label, 'Phone Number')
         self.assertEqual(phoneNumber.value, '(069) 999-9999')
         self.assertEqual(phoneNumber.type, 'phoneNumber')

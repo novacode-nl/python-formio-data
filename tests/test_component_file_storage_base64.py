@@ -47,7 +47,7 @@ class fileComponentStorageBase64TestCase(ComponentTestCase):
         self.assertEqual(uploadBase64.value, self.image_value_base64)
 
     def test_get_form_data(self):
-        uploadBase64 = self.form.data.uploadBase64
+        uploadBase64 = self.form.input.uploadBase64
         self.assertEqual(uploadBase64.label, 'Upload Base64')
         self.assertEqual(uploadBase64.type, 'file')
         self.assertEqual(uploadBase64.storage, 'base64')
@@ -59,4 +59,4 @@ class fileComponentStorageBase64TestCase(ComponentTestCase):
         self.assertEqual(uploadBase64.label, 'Upload binair naar ASCII')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.uploadBase64.label, 'Upload binair naar ASCII')
+        self.assertEqual(self.form_i18n_nl.input.uploadBase64.label, 'Upload binair naar ASCII')

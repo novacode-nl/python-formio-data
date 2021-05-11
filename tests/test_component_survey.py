@@ -43,7 +43,7 @@ class surveyComponentTestCase(ComponentTestCase):
         self.assertEqual(survey.type, 'survey')
 
     def test_get_form_data(self):
-        survey = self.form.data.survey
+        survey = self.form.input.survey
         self.assertEqual(survey.label, 'Survey')
         self.assertEqual(survey.value['overallExperience'], 'excellent')
         self.assertEqual(survey.value['howWasCustomerSupport'], 'great')
@@ -56,7 +56,7 @@ class surveyComponentTestCase(ComponentTestCase):
         self.assertEqual(survey.label, 'Enquête')
 
     def test_get_form_data_i18n_nl(self):
-        survey = self.form_i18n_nl.data.survey
+        survey = self.form_i18n_nl.input.survey
         self.assertEqual(survey.label, 'Enquête')
         # TODO Labels for questions and values
         # self.assertEqual(survey.value['overallExperience'], 'uitstekend')

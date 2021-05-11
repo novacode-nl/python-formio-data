@@ -65,22 +65,22 @@ class datetimeComponentTestCase(ComponentTestCase):
         self.assertEqual(appointmentDateTime.type, 'datetime')
 
     def test_get_form_data(self):
-        birthdate = self.form.data.birthdate
+        birthdate = self.form.input.birthdate
         self.assertEqual(birthdate.label, 'Birthdate')
         self.assertEqual(birthdate.value, '1999-12-31')
         self.assertEqual(birthdate.type, 'datetime')
 
-        appointmentDateTime = self.form.data.appointmentDateTime
+        appointmentDateTime = self.form.input.appointmentDateTime
         self.assertEqual(appointmentDateTime.label, 'Appointment Date / Time')
         self.assertEqual(appointmentDateTime.value, '2021-02-26 12:30 PM')
         self.assertEqual(appointmentDateTime.type, 'datetime')
 
     def test_to_datetime(self):
-        birthdate = self.form.data.birthdate
+        birthdate = self.form.input.birthdate
         self.assertIsInstance(birthdate.to_datetime(), datetime)
         self.assertIsInstance(birthdate.to_datetime().date(), date)
 
-        appointmentDateTime = self.form.data.appointmentDateTime
+        appointmentDateTime = self.form.input.appointmentDateTime
         self.assertIsInstance(appointmentDateTime.to_datetime(), datetime)
 
     # i18n translations
@@ -89,4 +89,4 @@ class datetimeComponentTestCase(ComponentTestCase):
         self.assertEqual(appointmentDateTime.label, 'Afspraak Tijdstip')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.appointmentDateTime.label, 'Afspraak Tijdstip')
+        self.assertEqual(self.form_i18n_nl.input.appointmentDateTime.label, 'Afspraak Tijdstip')

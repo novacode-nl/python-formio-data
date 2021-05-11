@@ -41,7 +41,7 @@ class emailComponentTestCase(ComponentTestCase):
         self.assertEqual(email.type, 'email')
 
     def test_get_form_data(self):
-        email = self.form.data.email
+        email = self.form.input.email
         self.assertEqual(email.label, 'Email')
         self.assertEqual(email.value, 'bob@novacode.nl')
         self.assertEqual(email.type, 'email')

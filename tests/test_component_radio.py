@@ -43,7 +43,7 @@ class radioComponentTestCase(ComponentTestCase):
         self.assertEqual(cd.type, 'radio')
         
     def test_get_form_data(self):
-        cd = self.form.data.cardinalDirection
+        cd = self.form.input.cardinalDirection
         self.assertEqual(cd.label, 'Cardinal Direction')
         self.assertEqual(cd.value, 'south')
         self.assertEqual(cd.value_label, 'South')        
@@ -55,6 +55,6 @@ class radioComponentTestCase(ComponentTestCase):
         self.assertEqual(cd.label, 'Kardinale richting')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.cardinalDirection.label, 'Kardinale richting')
-        self.assertEqual(self.form_i18n_nl.data.cardinalDirection.value, 'south')
-        self.assertEqual(self.form_i18n_nl.data.cardinalDirection.value_label, 'Zuid')
+        self.assertEqual(self.form_i18n_nl.input.cardinalDirection.label, 'Kardinale richting')
+        self.assertEqual(self.form_i18n_nl.input.cardinalDirection.value, 'south')
+        self.assertEqual(self.form_i18n_nl.input.cardinalDirection.value_label, 'Zuid')

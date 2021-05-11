@@ -49,7 +49,7 @@ class fileComponentStorageUrlTestCase(ComponentTestCase):
 
         
     def test_get_form_data(self):
-        uploadUrl = self.form.data.uploadUrl
+        uploadUrl = self.form.input.uploadUrl
         self.assertEqual(uploadUrl.label, 'Upload Url')
         self.assertEqual(uploadUrl.type, 'file')
         self.assertEqual(uploadUrl.storage, 'url')
@@ -61,4 +61,4 @@ class fileComponentStorageUrlTestCase(ComponentTestCase):
         self.assertEqual(uploadUrl.label, 'Upload naar locatie')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.uploadUrl.label, 'Upload naar locatie')
+        self.assertEqual(self.form_i18n_nl.input.uploadUrl.label, 'Upload naar locatie')

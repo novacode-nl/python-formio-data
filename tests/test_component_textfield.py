@@ -44,7 +44,7 @@ class textfieldComponentTestCase(ComponentTestCase):
         self.assertEqual(firstName.type, 'textfield')
         
     def test_get_form_data(self):
-        firstName = self.form.data.firstName
+        firstName = self.form.input.firstName
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')
@@ -57,5 +57,5 @@ class textfieldComponentTestCase(ComponentTestCase):
         self.assertEqual(lastName.label, 'Achternaam')
 
     def test_get_form_data_i18n_nl(self):
-        self.assertEqual(self.form_i18n_nl.data.firstName.label, 'Voornaam')
-        self.assertEqual(self.form_i18n_nl.data.lastName.label, 'Achternaam')
+        self.assertEqual(self.form_i18n_nl.input.firstName.label, 'Voornaam')
+        self.assertEqual(self.form_i18n_nl.input.lastName.label, 'Achternaam')
