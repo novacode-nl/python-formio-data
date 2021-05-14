@@ -12,7 +12,7 @@ from formiodata.builder import Builder
 
 class Form:
 
-    def __init__(self, form_json, builder=None, builder_schema_json=None, lang='en'):
+    def __init__(self, form_json, builder=None, builder_schema_json=None, lang='en', **kwargs):
         """
         @param form_json
         @param builder Builder
@@ -40,6 +40,10 @@ class Form:
 
         if self.builder is None and self.builder_schema_json:
             self.set_builder_by_builder_schema_json()
+
+        # defaults to English (en) date/time format
+        self.date_format = kwargs.get('date_format', '%m/%d/%Y')
+        self.time_format = kwargs.get('time_format', '%H:%M:%S')
 
         self.input_components = {}
 

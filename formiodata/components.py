@@ -465,6 +465,72 @@ class datetimeComponent(Component):
         return self.to_datetime().date()
 
 
+class dayComponent(Component):
+    pass
+
+    @property
+    def value(self):
+        return super().value
+
+    @value.setter
+    def value(self, value):
+        val = OrderedDict()
+        fields = self.raw['fields']
+
+        date_parts = []
+        date_format = []
+        date_format_index = {}
+
+        if not fields['month'].get('hide'):
+            date_parts.append(value[0:2])
+            date_format.append('%m')
+            date_format_index[self.component_owner.date_format.index('%m')] = 'month'
+
+        if not fields['day'].get('hide'):
+            date_parts.append(value[3:5])
+            date_format.append('%d')
+            date_format_index[self.component_owner.date_format.index('%d')] = 'day'
+
+        if not fields['year'].get('hide'):
+            date_parts.append(value[6:10])
+            date_format.append('%Y')
+            date_format_index[self.component_owner.date_format.index('%Y')] = 'year'
+
+        date_str = '/'.join(date_parts)
+        date_format = '/'.join(date_format)
+        dt_obj = datetime.strptime(date_str, date_format)
+
+        for key in sorted(date_format_index):
+            part = date_format_index[key]
+            val[part] = getattr(dt_obj, part)
+
+        super(self.__class__, self.__class__).value.fset(self, val)
+
+    @property
+    def day(self):
+        fields = self.raw['fields']
+        if not fields['day'].get('hide'):
+            return self.raw_value[0:2]
+        else:
+            return None
+
+    @property
+    def month(self):
+        fields = self.raw['fields']
+        if not fields['month'].get('hide'):
+            return self.raw_value[3:5]
+        else:
+            return None
+
+    @property
+    def year(self):
+        fields = self.raw['fields']
+        if not fields['year'].get('hide'):
+            return self.raw_value[6:10]
+        else:
+            return None
+
+
 class timeComponent(Component):
     pass
 
@@ -484,8 +550,11 @@ class signatureComponent(Component):
 # Layout components
 
 class htmlelementComponent(Component):
-    pass
 
+    @property
+    def html(self):
+        html = '<%s>%s</%s>' % (self.raw['tag'], self.raw['content'], self.raw['tag'])
+        return html
 
 class contentComponent(Component):
     pass
