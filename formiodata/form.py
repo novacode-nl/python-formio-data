@@ -76,7 +76,10 @@ class Form:
     def render_components(self, force=False):
         for key, component in self.input_components.items():
             if force or component.html_component == "":
-                component.render()
+                if component.is_visible:
+                    component.render()
+                else:
+                    component.html_component = ""
 
 
 class FormInput:

@@ -191,6 +191,27 @@ class Component:
     def render(self):
         self.html_component = '<p>%s</p>' % self.value
 
+    @property
+    def is_visible(self):
+        """
+        If conditional visibility applies, evaluate to see if it is visible.
+        Note that the component can also be hidden, which is a separate concept.
+        """
+        try:
+            cond = self.raw['conditional']
+            triggering_component = self.component_owner.input_components[cond['when']]
+            triggering_value = cond['eq']
+            if triggering_component.value == triggering_value:
+                return cond['show']
+            else:
+                return not cond['show']
+        except KeyError:
+            # Unknown component or no 'when', 'eq' or 'show' property
+            pass
+
+        # By default, it's visible
+        return True
+
 
 # Basic
 
