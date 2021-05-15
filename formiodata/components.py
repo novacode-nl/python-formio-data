@@ -192,7 +192,7 @@ class Component:
         self.html_component = '<p>%s</p>' % self.value
 
     @property
-    def is_visible(self):
+    def conditionally_visible(self):
         """
         If conditional visibility applies, evaluate to see if it is visible.
         Note that the component can also be hidden, which is a separate concept.
@@ -212,6 +212,9 @@ class Component:
         # By default, it's visible
         return True
 
+    @property
+    def is_visible(self):
+        return not self.hidden and self.conditionally_visible
 
 # Basic
 

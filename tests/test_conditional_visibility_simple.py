@@ -22,23 +22,23 @@ class ConditionalVisbilitySimpleTestCase(unittest.TestCase):
     def test_conditionally_shown_form_elements_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
-        self.assertTrue(builder.input_components['textField'].is_visible)
-        self.assertFalse(builder.input_components['maybeTextField'].is_visible)
-        self.assertTrue(builder.input_components['maybePassword'].is_visible)
+        self.assertTrue(builder.input_components['textField'].conditionally_visible)
+        self.assertFalse(builder.input_components['maybeTextField'].conditionally_visible)
+        self.assertTrue(builder.input_components['maybePassword'].conditionally_visible)
 
 
     def test_conditionally_shown_form_elements_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
 
         hide_password_form = Form(self.hide_password_form_json, builder)
-        self.assertTrue(hide_password_form.input_components['textField'].is_visible)
-        self.assertFalse(hide_password_form.input_components['maybeTextField'].is_visible)
-        self.assertFalse(hide_password_form.input_components['maybePassword'].is_visible)
+        self.assertTrue(hide_password_form.input_components['textField'].conditionally_visible)
+        self.assertFalse(hide_password_form.input_components['maybeTextField'].conditionally_visible)
+        self.assertFalse(hide_password_form.input_components['maybePassword'].conditionally_visible)
 
         show_textfield_form = Form(self.show_textfield_form_json, builder)
-        self.assertTrue(show_textfield_form.input_components['textField'].is_visible)
-        self.assertTrue(show_textfield_form.input_components['maybeTextField'].is_visible)
-        self.assertTrue(show_textfield_form.input_components['maybePassword'].is_visible)
+        self.assertTrue(show_textfield_form.input_components['textField'].conditionally_visible)
+        self.assertTrue(show_textfield_form.input_components['maybeTextField'].conditionally_visible)
+        self.assertTrue(show_textfield_form.input_components['maybePassword'].conditionally_visible)
 
 
     def test_conditionally_shown_form_elements_do_not_render_when_hidden(self):
