@@ -4,6 +4,7 @@
 import calendar
 import json
 import uuid
+import logging
 
 from collections import OrderedDict
 from datetime import datetime
@@ -200,12 +201,23 @@ class Component:
         """
         try:
             cond = self.raw['conditional']
-            triggering_component = self.component_owner.input_components[cond['when']]
-            triggering_value = cond['eq']
-            if triggering_component.value == triggering_value:
-                return cond['show']
-            else:
-                return not cond['show']
+            if cond.get('json'):
+                # Optional package
+                try:
+                    from json_logic import jsonLogic
+                    return jsonLogic(cond['json'], {'data': self.component_owner.form})
+                except ImportError:
+                    logger = logging.getLogger(__name__)
+                    logger.warn(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
+                    return True
+
+            elif cond.get('when'):
+                triggering_component = self.component_owner.input_components[cond['when']]
+                triggering_value = cond['eq']
+                if triggering_component.value == triggering_value:
+                    return cond['show']
+                else:
+                    return not cond['show']
         except KeyError:
             # Unknown component or no 'when', 'eq' or 'show' property
             pass

@@ -10,5 +10,9 @@ setup(
     author='Bob Leers',
     author_email='bob@novacode.nl',
     license='MIT',
-    packages=packages
+    packages=packages,
+    extras_require={
+        # Optional dependencies
+        'json_logic': ['json-logic-qubit'],
+    },
  )

@@ -91,3 +91,12 @@ class Builder:
                 "%s\n"
             logging.warning(msg % component)
             return False
+
+
+    @property
+    def form(self):
+        """
+        Placeholder form dict, always empty.  Useful in contexts where the component owner's form
+        is requested because there is a need for form data.
+        """
+        return {}
