@@ -40,6 +40,9 @@ class ComponentTestCase(CommonTestCase):
                 'East': 'Oost',
                 'South': 'Zuid',
                 'West': 'West',
+                'Month Day Year': 'Maand dag jaar',
+                'Day Month Year': 'Dag maand jaar',
+                'May': 'Mei',
                 'Upload Base64': 'Upload binair naar ASCII',
                 'Upload Url': 'Upload naar locatie'
             }

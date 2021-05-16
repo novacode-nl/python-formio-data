@@ -1,6 +1,7 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
+import calendar
 import json
 import uuid
 
@@ -370,7 +371,7 @@ class datetimeComponent(Component):
         Dictionary of mappings between Formio Datetime component
         (key) to Python format (value).
 
-        Formio uses the format codes refererend in:
+        Formio uses the format codes referenced in:
         https://github.com/angular-ui/bootstrap/tree/master/src/dateparser/docs#uibdateparsers-format-codes
         """
         return {
@@ -490,7 +491,10 @@ class datetimeComponent(Component):
 
 
 class dayComponent(Component):
-    pass
+
+    @property
+    def dayFirst(self):
+        return self.raw.get('dayFirst')
 
     @property
     def value(self):
@@ -505,15 +509,25 @@ class dayComponent(Component):
         date_format = []
         date_format_index = {}
 
-        if not fields['month'].get('hide'):
-            date_parts.append(value[0:2])
-            date_format.append('%m')
-            date_format_index[self.component_owner.date_format.index('%m')] = 'month'
-
-        if not fields['day'].get('hide'):
-            date_parts.append(value[3:5])
-            date_format.append('%d')
-            date_format_index[self.component_owner.date_format.index('%d')] = 'day'
+        # XXX Maybe future formio versions have more formatting possibilites.
+        if self.dayFirst:
+            if not fields['day'].get('hide'):
+                date_parts.append(value[0:2])
+                date_format.append('%d')
+                date_format_index[self.component_owner.date_format.index('%d')] = 'day'
+            if not fields['month'].get('hide'):
+                date_parts.append(value[3:5])
+                date_format.append('%m')
+                date_format_index[self.component_owner.date_format.index('%m')] = 'month'
+        else:
+            if not fields['month'].get('hide'):
+                date_parts.append(value[0:2])
+                date_format.append('%m')
+                date_format_index[self.component_owner.date_format.index('%m')] = 'month'
+            if not fields['day'].get('hide'):
+                date_parts.append(value[3:5])
+                date_format.append('%d')
+                date_format_index[self.component_owner.date_format.index('%d')] = 'day'
 
         if not fields['year'].get('hide'):
             date_parts.append(value[6:10])
@@ -534,7 +548,7 @@ class dayComponent(Component):
     def day(self):
         fields = self.raw['fields']
         if not fields['day'].get('hide'):
-            return self.raw_value[0:2]
+            return self.value['day']
         else:
             return None
 
@@ -542,7 +556,19 @@ class dayComponent(Component):
     def month(self):
         fields = self.raw['fields']
         if not fields['month'].get('hide'):
-            return self.raw_value[3:5]
+            return self.value['month']
+        else:
+            return None
+
+    @property
+    def month_name(self):
+        fields = self.raw['fields']
+        if not fields['month'].get('hide'):
+            month_name = calendar.month_name[self.value['month']]
+            if self.i18n.get(self.language):
+                return self.i18n[self.language].get(month_name, month_name)
+            else:
+                return month_name
         else:
             return None
 
@@ -550,7 +576,7 @@ class dayComponent(Component):
     def year(self):
         fields = self.raw['fields']
         if not fields['year'].get('hide'):
-            return self.raw_value[6:10]
+            return self.value['year']
         else:
             return None
 
