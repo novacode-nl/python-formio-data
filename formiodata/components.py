@@ -502,12 +502,13 @@ class dayComponent(Component):
 
     @value.setter
     def value(self, value):
+        """
+        Notes:
+        - value format: dd/dd/yyyy
+        - Empty value: '00/00/0000'
+        """
         val = OrderedDict()
         fields = self.raw['fields']
-
-        date_parts = []
-        date_format = []
-        date_format_index = {}
 
         # XXX Maybe future formio versions have more formatting possibilites.
         if self.dayFirst:

@@ -147,5 +147,5 @@ python(3) -m unittest tests/test_nested_components.py
 ### Run specific component unittest
 
 ```
-python3 -m unittest tests.test_component_day.dayComponentTestCase.tet_get_form_dayMonthYear
+python3 -m unittest tests.test_component_day.dayComponentTestCase.test_get_form_dayMonthYear
 ```
