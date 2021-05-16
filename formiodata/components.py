@@ -141,7 +141,7 @@ class Component:
         return self.component_owner
 
     @property
-    def valdidate(self):
+    def validate(self):
         return self.raw.get('validate')
 
     @property
