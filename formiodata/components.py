@@ -512,35 +512,38 @@ class dayComponent(Component):
         # XXX Maybe future formio versions have more formatting possibilites.
         if self.dayFirst:
             if not fields['day'].get('hide'):
-                date_parts.append(value[0:2])
-                date_format.append('%d')
-                date_format_index[self.component_owner.date_format.index('%d')] = 'day'
+                day_val = value[0:2]
+                if day_val != '00':
+                    val['day'] = int(day_val)
+                else:
+                    val['day'] = None
             if not fields['month'].get('hide'):
-                date_parts.append(value[3:5])
-                date_format.append('%m')
-                date_format_index[self.component_owner.date_format.index('%m')] = 'month'
+                month_val = value[3:5]
+                if month_val != '00':
+                    val['month'] = int(month_val)
+                else:
+                    val['month'] = None
         else:
             if not fields['month'].get('hide'):
-                date_parts.append(value[0:2])
-                date_format.append('%m')
-                date_format_index[self.component_owner.date_format.index('%m')] = 'month'
+                month_val = value[0:2]
+                if month_val != '00':
+                    val['month'] = int(month_val)
+                else:
+                    val['month'] = None
             if not fields['day'].get('hide'):
-                date_parts.append(value[3:5])
-                date_format.append('%d')
-                date_format_index[self.component_owner.date_format.index('%d')] = 'day'
+                day_val = value[3:5]
+                if day_val != '00':
+                    val['day'] = int(day_val)
+                else:
+                    val['day'] = None
 
         if not fields['year'].get('hide'):
-            date_parts.append(value[6:10])
-            date_format.append('%Y')
-            date_format_index[self.component_owner.date_format.index('%Y')] = 'year'
-
-        date_str = '/'.join(date_parts)
-        date_format = '/'.join(date_format)
-        dt_obj = datetime.strptime(date_str, date_format)
-
-        for key in sorted(date_format_index):
-            part = date_format_index[key]
-            val[part] = getattr(dt_obj, part)
+            if not fields['year'].get('hide'):
+                year_val = value[6:10]
+                if year_val != '0000':
+                    val['year'] = int(year_val)
+                else:
+                    val['year'] = None
 
         super(self.__class__, self.__class__).value.fset(self, val)
 
@@ -563,7 +566,7 @@ class dayComponent(Component):
     @property
     def month_name(self):
         fields = self.raw['fields']
-        if not fields['month'].get('hide'):
+        if self.value['month'] and not fields['month'].get('hide'):
             month_name = calendar.month_name[self.value['month']]
             if self.i18n.get(self.language):
                 return self.i18n[self.language].get(month_name, month_name)

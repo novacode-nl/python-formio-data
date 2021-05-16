@@ -22,6 +22,7 @@ class CommonTestCase(unittest.TestCase):
         self.builder_resource = readfile('data', 'test_example_builder_with_resource.json')
         self.builder_with_resource = readfile('data', 'test_example_builder_with_resource.json')
         self.form_json = readfile('data', 'test_example_form.json')
+        self.form_empty_json = readfile('data', 'test_example_form_empty.json')
         self.form_json_check_default = readfile('data', 'test_example_form_check_default.json')
         self.form_with_resource = readfile("data", "test_example_form_with_resource.json")
         self.builder_json_resource = readfile('data', 'test_resources_submission.json')

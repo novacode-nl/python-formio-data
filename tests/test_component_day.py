@@ -37,6 +37,17 @@ class dayComponentTestCase(ComponentTestCase):
         email = self.builder.input_components['email']
         self.assertNotIsInstance(email, dayComponent)
 
+    def test_get_form_empty_monthDayYear(self):
+        monthDayYear = self.form_empty.input_components['monthDayYear']
+        self.assertEqual(monthDayYear.type, 'day')
+        self.assertEqual(monthDayYear.label, 'Month Day Year')
+        self.assertIsInstance(monthDayYear.value, OrderedDict)
+        self.assertEqual(monthDayYear.value, {'month': None, 'day': None, 'year': None})
+        # parts
+        self.assertIsNone(monthDayYear.day)
+        self.assertIsNone(monthDayYear.month)
+        self.assertIsNone(monthDayYear.year)
+
     def test_get_form_monthDayYear(self):
         monthDayYear = self.form.input_components['monthDayYear']
         self.assertEqual(monthDayYear.type, 'day')

@@ -1,0 +1,29 @@
+{
+  "firstName": "",
+  "email": "yourmail@yourlife.io",
+  "birthdate": "",
+  "appointmentDateTime": "",
+  "lastName": "",
+  "phoneNumber": "",
+  "cardinalDirection": "",
+  "favouriteSeason": "",
+  "favouriteFood": [],
+  "monthDayYear": "00/00/0000",
+  "monthYear": "00/00/0000",
+  "dayMonthYear": "00/00/0000",
+  "dayMonth": "00/00/0000",
+  "day": "00/00/0000",
+  "month": "00/00/0000",
+  "year": "00/00/0000",
+  "survey": null,
+  "signature": "",
+  "dataGrid": [
+    {
+      "textField": "",
+      "checkbox": false
+    }
+  ],
+  "uploadBase64": [],
+  "uploadUrl": [],
+  "submit": true
+}

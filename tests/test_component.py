@@ -18,6 +18,7 @@ class ComponentTestCase(CommonTestCase):
         super(ComponentTestCase, self).setUp()
         self.builder = Builder(self.builder_json)
         self.form = Form(self.form_json, self.builder)
+        self.form_empty = Form(self.form_empty_json, self.builder)
 
         self.builder_i18n_nl = Builder(self.builder_json, language='nl', i18n=self._i18n())
         self.form_i18n_nl = Form(self.form_json, self.builder_i18n_nl)
