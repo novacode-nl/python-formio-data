@@ -378,7 +378,7 @@ class datetimeComponent(Component):
             'year': {'yyyy': '%Y', 'yy': '%y', 'y': '%y'},
             'month': {'MMMM': '%B', 'MMM': '%b', 'MM': '%m', 'M': '%-m'},
             'day': {'dd': '%d', 'd': '%-d'},
-            'hour': {'HH': '%HH', 'H': '%-H', 'hh': '%I', 'h': '%-I'},
+            'hour': {'HH': '%H', 'H': '%-H', 'hh': '%I', 'h': '%-I'},
             'minute': {'mm': '%M', 'm': '%-M'},
             'second': {'ss': '%S', 's': '%-S'},
             'am_pm': {'a': '%p'}
