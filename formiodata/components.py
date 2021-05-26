@@ -4,6 +4,7 @@
 import calendar
 import json
 import uuid
+import logging
 
 from collections import OrderedDict
 from datetime import datetime
@@ -200,12 +201,28 @@ class Component:
         """
         try:
             cond = self.raw['conditional']
-            triggering_component = self.component_owner.input_components[cond['when']]
-            triggering_value = cond['eq']
-            if triggering_component.value == triggering_value:
-                return cond['show']
-            else:
-                return not cond['show']
+            if cond.get('json'):
+                # Optional package
+                try:
+                    from json_logic import jsonLogic
+                    context = {'data': self.component_owner.form}
+                    try:
+                        context['row'] = self.component_owner.row
+                    except AttributeError:
+                        pass # only datagrid rows have a "row" attribute
+                    return jsonLogic(cond['json'], context)
+                except ImportError:
+                    logger = logging.getLogger(__name__)
+                    logger.warn(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
+                    return True
+
+            elif cond.get('when'):
+                triggering_component = self.component_owner.input_components[cond['when']]
+                triggering_value = cond['eq']
+                if triggering_component.value == triggering_value:
+                    return cond['show']
+                else:
+                    return not cond['show']
         except KeyError:
             # Unknown component or no 'when', 'eq' or 'show' property
             pass
@@ -669,6 +686,23 @@ class columnsComponent(layoutComponentBase):
         return rows
 
 
+    def render(self):
+        html_rows = []
+        for row in self.rows:
+            html_cells = []
+            for col in row:
+                for component in col['components']:
+                    if component.is_visible:
+                        component.render()
+                    else:
+                        component.html_component = ''
+                    html_cells.append('<td>'+component.html_component+'</td>')
+
+            html_rows.append('<tr>'+(''.join(html_cells))+'</tr>')
+
+        self.html_component = '<table>'+(''.join(html_rows))+'</table>'
+
+
 class fieldsetComponent(layoutComponentBase):
     pass
 
@@ -737,8 +771,23 @@ class datagridComponent(Component):
             self.builder = datagrid.builder
             self.input_components = {}
             self.components = OrderedDict()
+            self.form = datagrid.form
+            self.row = data
+            self.html_component = ''
 
             datagrid.create_component_objects(self, data)
+
+        def render(self):
+            html_components = []
+            for component in self.components.values():
+                if component.is_visible:
+                    component.render()
+                else:
+                    component.html_component = ''
+                html_components.append('<td>'+component.html_component+'</td>')
+
+            self.html_component = '<tr>'+(''.join(html_components))+'</tr>'
+
 
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
@@ -805,6 +854,11 @@ class datagridComponent(Component):
     @property
     def child_component_owner(self):
         return self
+
+    def render(self):
+        for row in self.rows:
+            row.render()
+        self.html_component = '<table>'+(''.join([row.html_component for row in self.rows]))+'</table>'
 
 
 # Premium components

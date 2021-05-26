@@ -10,9 +10,9 @@ from formiodata.form import Form
 from formiodata.components import textfieldComponent, passwordComponent
 
 
-class ConditionalVisbilitySimpleTestCase(unittest.TestCase):
+class ConditionalVisibilitySimpleTestCase(unittest.TestCase):
     def setUp(self):
-        super(ConditionalVisbilitySimpleTestCase, self).setUp()
+        super(ConditionalVisibilitySimpleTestCase, self).setUp()
 
         self.builder_json = readfile('data', 'test_conditional_visibility_simple_builder.json')
         self.hide_password_form_json = readfile('data', 'test_conditional_visibility_simple_hide_password.json')

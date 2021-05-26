@@ -47,6 +47,17 @@ git clone git@github.com:novacode-nl/python-formio-data.git
 pip(3) install -U -e python-formio-data
 ```
 
+### Optional dependencies
+
+To support conditional visibility using JSON logic, you can install
+the `json-logic-qubit` package (the `json-logic` package it is forked
+off of is currently unmaintained).  It's also possible to install it
+via the pip feature `json_logic` like so:
+
+```sh
+pip(3) install -U formio-data[json_logic]
+```
+
 ## License
 [MIT](LICENSE)
 

@@ -1,0 +1,353 @@
+{
+    "components": [
+        {
+            "defaultValue": "",
+            "id": "edr3y4q",
+            "inputType": "text",
+            "dataGridLabel": false,
+            "refreshOn": "",
+            "input": true,
+            "type": "textfield",
+            "overlay": {
+                "height": "",
+                "width": "",
+                "top": "",
+                "left": "",
+                "page": "",
+                "style": ""
+            },
+            "attributes": {
+            },
+            "logic": [],
+            "customConditional": "",
+            "conditional": {
+                "json": "",
+                "eq": "",
+                "when": null,
+                "show": null
+            },
+            "properties": {
+            },
+            "tags": [],
+            "key": "username",
+            "errorLabel": "",
+            "unique": false,
+            "validate": {
+                "unique": false,
+                "multiple": false,
+                "strictDateValidation": false,
+                "maxLength": "",
+                "minLength": "",
+                "json": "",
+                "customPrivate": false,
+                "custom": "",
+                "customMessage": "",
+                "pattern": "",
+                "required": false
+            },
+            "validateOn": "change",
+            "allowCalculateOverride": false,
+            "calculateServer": false,
+            "calculateValue": "",
+            "customDefaultValue": "",
+            "clearOnHide": true,
+            "redrawOn": "",
+            "encrypted": false,
+            "case": "",
+            "dbIndex": false,
+            "protected": false,
+            "inputFormat": "plain",
+            "persistent": true,
+            "multiple": false,
+            "modalEdit": false,
+            "tableView": true,
+            "disabled": false,
+            "spellcheck": true,
+            "autofocus": false,
+            "mask": false,
+            "showCharCount": false,
+            "showWordCount": false,
+            "hideLabel": false,
+            "hidden": false,
+            "autocomplete": "",
+            "tabindex": "",
+            "customClass": "",
+            "allowMultipleMasks": false,
+            "inputMask": "",
+            "widget": {
+                "type": "input"
+            },
+            "suffix": "",
+            "prefix": "",
+            "tooltip": "",
+            "description": "",
+            "placeholder": "",
+            "labelPosition": "top",
+            "label": "Username"
+        },
+        {
+            "id": "essijy",
+            "inputMask": "",
+            "inputFormat": "plain",
+            "inputType": "text",
+            "allowMultipleMasks": false,
+            "encrypted": false,
+            "calculateValue": "",
+            "customDefaultValue": "",
+            "dbIndex": false,
+            "dataGridLabel": false,
+            "refreshOn": "",
+            "persistent": true,
+            "unique": false,
+            "protected": true,
+            "defaultValue": null,
+            "multiple": false,
+            "input": true,
+            "type": "password",
+            "overlay": {
+                "height": "",
+                "width": "",
+                "top": "",
+                "left": "",
+                "page": "",
+                "style": ""
+            },
+            "attributes": {
+            },
+            "logic": [],
+            "customConditional": "",
+            "conditional": {
+                "json": "",
+                "eq": "",
+                "when": null,
+                "show": null
+            },
+            "properties": {
+            },
+            "tags": [],
+            "key": "password",
+            "errorLabel": "",
+            "validate": {
+                "unique": false,
+                "multiple": false,
+                "strictDateValidation": false,
+                "maxLength": "",
+                "minLength": "",
+                "json": "",
+                "customPrivate": false,
+                "custom": "",
+                "customMessage": "",
+                "pattern": "",
+                "required": false
+            },
+            "validateOn": "change",
+            "allowCalculateOverride": false,
+            "calculateServer": false,
+            "clearOnHide": true,
+            "redrawOn": "",
+            "case": "",
+            "modalEdit": false,
+            "tableView": false,
+            "disabled": false,
+            "spellcheck": true,
+            "autofocus": false,
+            "mask": false,
+            "showCharCount": false,
+            "showWordCount": false,
+            "hideLabel": false,
+            "hidden": false,
+            "autocomplete": "",
+            "tabindex": "",
+            "customClass": "",
+            "widget": {
+                "type": "input"
+            },
+            "suffix": "",
+            "prefix": "",
+            "tooltip": "",
+            "description": "",
+            "placeholder": "",
+            "labelPosition": "top",
+            "label": "Password"
+        },
+        {
+            "defaultValue": "Secret message",
+            "id": "eyx9rms",
+            "inputType": "text",
+            "dataGridLabel": false,
+            "refreshOn": "",
+            "input": true,
+            "type": "textfield",
+            "overlay": {
+                "height": "",
+                "width": "",
+                "top": "",
+                "left": "",
+                "page": "",
+                "style": ""
+            },
+            "attributes": {
+            },
+            "logic": [],
+            "customConditional": "",
+            "conditional": {
+                "json": {
+                    "and": [
+                        {
+                            "===": [
+                                {
+                                    "var": "data.username"
+                                },
+                                "user"
+                            ]
+                        },
+                        {
+                            "===": [
+                                {
+                                    "var": "data.password"
+                                },
+                                "secret"
+                            ]
+                        }
+                    ]
+                },
+                "eq": "",
+                "when": null,
+                "show": null
+            },
+            "properties": {
+            },
+            "tags": [],
+            "key": "secret",
+            "errorLabel": "",
+            "unique": false,
+            "validate": {
+                "unique": false,
+                "multiple": false,
+                "strictDateValidation": false,
+                "maxLength": "",
+                "minLength": "",
+                "json": "",
+                "customPrivate": false,
+                "custom": "",
+                "customMessage": "",
+                "pattern": "",
+                "required": false
+            },
+            "validateOn": "change",
+            "allowCalculateOverride": false,
+            "calculateServer": false,
+            "calculateValue": "",
+            "customDefaultValue": "",
+            "clearOnHide": true,
+            "redrawOn": "",
+            "encrypted": false,
+            "case": "",
+            "dbIndex": false,
+            "protected": false,
+            "inputFormat": "plain",
+            "persistent": true,
+            "multiple": false,
+            "modalEdit": false,
+            "tableView": true,
+            "disabled": false,
+            "spellcheck": true,
+            "autofocus": false,
+            "mask": false,
+            "showCharCount": false,
+            "showWordCount": false,
+            "hideLabel": false,
+            "hidden": false,
+            "autocomplete": "",
+            "tabindex": "",
+            "customClass": "",
+            "allowMultipleMasks": false,
+            "inputMask": "",
+            "widget": {
+                "type": "input"
+            },
+            "suffix": "",
+            "prefix": "",
+            "tooltip": "",
+            "description": "",
+            "placeholder": "",
+            "labelPosition": "top",
+            "label": "Secret"
+        },
+        {
+            "id": "eo7g67",
+            "rightIcon": "",
+            "leftIcon": "",
+            "allowMultipleMasks": false,
+            "properties": {
+            },
+            "showWordCount": false,
+            "showCharCount": false,
+            "encrypted": false,
+            "allowCalculateOverride": false,
+            "overlay": {
+                "height": "",
+                "width": "",
+                "top": "",
+                "left": "",
+                "style": ""
+            },
+            "conditional": {
+                "eq": "",
+                "when": null,
+                "show": null
+            },
+            "validate": {
+                "unique": false,
+                "multiple": false,
+                "strictDateValidation": false,
+                "customPrivate": false,
+                "custom": "",
+                "required": false
+            },
+            "validateOn": "change",
+            "attributes": {
+            },
+            "widget": {
+                "type": "input"
+            },
+            "calculateServer": false,
+            "calculateValue": "",
+            "customDefaultValue": "",
+            "dbIndex": false,
+            "autofocus": false,
+            "disabled": false,
+            "tabindex": "",
+            "hideLabel": false,
+            "tooltip": "",
+            "errorLabel": "",
+            "description": "",
+            "labelPosition": "top",
+            "dataGridLabel": true,
+            "modalEdit": false,
+            "tableView": false,
+            "redrawOn": "",
+            "refreshOn": "",
+            "clearOnHide": true,
+            "hidden": false,
+            "persistent": false,
+            "unique": false,
+            "protected": false,
+            "defaultValue": null,
+            "multiple": false,
+            "suffix": "",
+            "customClass": "",
+            "prefix": "",
+            "placeholder": "",
+            "input": true,
+            "theme": "primary",
+            "disableOnInvalid": true,
+            "action": "submit",
+            "block": false,
+            "size": "md",
+            "key": "submit",
+            "label": "Submit",
+            "type": "button"
+        }
+    ]
+}
