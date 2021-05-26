@@ -761,14 +761,14 @@ class datagridComponent(Component):
                 parent.components[component_obj.key] = component_obj
 
     def load_data(self, data):
+        # Always instantiate child components, even if no data.
+        # This makes it exist both in the builder and in the form.
+        self.create_component_objects(self, data)
+
         if data: # TODO: Make sure data is always a dict here?
             self._load_rows(data[self.key])
             self.value = data[self.key]
             self.raw_value = data[self.key]
-        else:
-            # Always instantiate child components, even if no data.
-            # This makes it exist both in the builder and in the form.
-            self.create_component_objects(self, None)
 
     def _load_rows(self, data):
         rows = []
