@@ -322,6 +322,11 @@ class selectComponent(Component):
 
 class radioComponent(Component):
 
+    def _encode_value(self, value):
+        # A number value got casted to integer, by json.loads().
+        # Ensure this becomes a string.
+        return str(value)
+
     @property
     def values_labels(self):
         comp = self.component_owner.input_components.get(self.key)
