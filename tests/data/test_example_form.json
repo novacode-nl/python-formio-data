@@ -5,6 +5,98 @@
     "appointmentDateTime": "2021-02-26T12:30:00+01:00",
     "lastName": "Leers",
     "phoneNumber": "(069) 999-9999",
+    "deliveryAddress": {
+        "address_components": [
+            {
+                "long_name": "33",
+                "short_name": "33",
+                "types": [
+                    "street_number"
+                ]
+            },
+            {
+                "long_name": "Rembrandtplein",
+                "short_name": "Rembrandtplein",
+                "types": [
+                    "route"
+                ]
+            },
+            {
+                "long_name": "Amsterdam-Centrum",
+                "short_name": "Amsterdam-Centrum",
+                "types": [
+                    "political",
+                    "sublocality",
+                    "sublocality_level_1"
+                ]
+            },
+            {
+                "long_name": "Amsterdam",
+                "short_name": "Amsterdam",
+                "types": [
+                    "locality",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "Amsterdam",
+                "short_name": "Amsterdam",
+                "types": [
+                    "administrative_area_level_2",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "Noord-Holland",
+                "short_name": "NH",
+                "types": [
+                    "administrative_area_level_1",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "Netherlands",
+                "short_name": "NL",
+                "types": [
+                    "country",
+                    "political"
+                ]
+            },
+            {
+                "long_name": "1017 CT",
+                "short_name": "1017 CT",
+                "types": [
+                    "postal_code"
+                ]
+            }
+        ],
+        "formatted_address": "Rembrandtplein 33, 1017 CT Amsterdam, Netherlands",
+        "geometry": {
+            "location": {
+                "lat": 52.36648719999999,
+                "lng": 4.897654699999999
+            },
+            "location_type": "ROOFTOP",
+            "viewport": {
+                "northeast": {
+                    "lat": 52.3678361802915,
+                    "lng": 4.899003680291502
+                },
+                "southwest": {
+                    "lat": 52.3651382197085,
+                    "lng": 4.896305719708497
+                }
+            }
+        },
+        "place_id": "ChIJW83Jf5UJxkcRT2TCbTla-h8",
+        "plus_code": {
+            "compound_code": "9V8X+H3 Amsterdam, Netherlands",
+            "global_code": "9F469V8X+H3"
+        },
+        "types": [
+            "street_address"
+        ]
+    },
     "cardinalDirection": "south",
     "favouriteSeason": "autumn",
     "favouriteFood": ["mexican", "chinese"],

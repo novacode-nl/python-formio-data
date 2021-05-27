@@ -383,7 +383,61 @@ class phoneNumberComponent(Component):
     pass
 
 
-# TODO: tags, address
+# TODO: tags
+
+class addressComponent(Component):
+
+    # XXX other providers not analysed and implemented yet.
+    PROVIDER_GOOGLE = 'google'
+
+    def _address(self, get_type, notation='long_name'):
+        comps = self.value.get('address_components')
+        if not comps:
+            return None
+        else:
+            for comp in comps:
+                if comp.get('types') and get_type in comp['types']:
+                    return comp.get(notation)
+            return None
+
+    @property
+    def provider(self):
+        return self.raw.get('provider')
+
+    @property
+    def postal_code(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address('postal_code')
+        else:
+            return None
+
+    @property
+    def street_name(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address('route')
+        else:
+            return None
+
+    @property
+    def street_number(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address('street_number')
+        else:
+            return None
+
+    @property
+    def city(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address('locality')
+        else:
+            return None
+
+    @property
+    def country(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address('country')
+        else:
+            return None
 
 
 class datetimeComponent(Component):

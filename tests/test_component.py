@@ -29,6 +29,7 @@ class ComponentTestCase(CommonTestCase):
                 'First Name': 'Voornaam',
                 'Last Name': 'Achternaam',
                 'Appointment Date / Time': 'Afspraak Tijdstip',
+                'Delivery Address': 'Afleveradres',
                 'Survey': 'Enquête',
                 'excellent': 'uitstekend',
                 'great': 'supergoed',
