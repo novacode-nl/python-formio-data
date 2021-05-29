@@ -12,9 +12,9 @@ aim is to provide easy access to a Form its components/fields, also
 captured as **Python objects**, which makes this API very versatile and usable.
 
 **Notes about terms:**
-  - **Builder** The Form Builder which is the design/blueprint of a Form.
-  - **Form** A filled-in Form, aka Form submission.
-  - **Component** Input (field) or layout component in the Form Builder and Form.
+  - **Builder:** The Form Builder which is the design/blueprint of a Form.
+  - **Form:** A filled-in Form, aka Form submission.
+  - **Component:** Input (field) or layout component in the Form Builder and Form.
 
 ## Features
 
