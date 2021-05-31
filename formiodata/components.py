@@ -48,7 +48,7 @@ class Component:
 
         self.builder.component_ids[self.id] = self
 
-    def load_data(self, data):
+    def load_data(self, data, load_children=True):
         if self.input and data:
             try:
                 self.value = data[self.key]
@@ -57,6 +57,9 @@ class Component:
                 # NOTE: getter will read out defaultValue if it's missing in self.form
                 # TODO: Is this the right approach?
                 pass
+
+        if not load_children:
+            return
 
         # (Input) nested components (e.g. datagrid, editgrid)
         for component in self.raw.get('components', []):
@@ -390,7 +393,10 @@ class addressComponent(Component):
     # XXX other providers not analysed and implemented yet.
     PROVIDER_GOOGLE = 'google'
 
-    def _address(self, get_type, notation='long_name'):
+    def load_data(self, data):
+        super(addressComponent, self).load_data(data, load_children=False)
+
+    def _address_google(self, get_type, notation='long_name'):
         comps = self.value.get('address_components')
         if not comps:
             return None
@@ -407,35 +413,35 @@ class addressComponent(Component):
     @property
     def postal_code(self):
         if self.provider == self.PROVIDER_GOOGLE:
-            return self._address('postal_code')
+            return self._address_google('postal_code')
         else:
             return None
 
     @property
     def street_name(self):
         if self.provider == self.PROVIDER_GOOGLE:
-            return self._address('route')
+            return self._address_google('route')
         else:
             return None
 
     @property
     def street_number(self):
         if self.provider == self.PROVIDER_GOOGLE:
-            return self._address('street_number')
+            return self._address_google('street_number')
         else:
             return None
 
     @property
     def city(self):
         if self.provider == self.PROVIDER_GOOGLE:
-            return self._address('locality')
+            return self._address_google('locality')
         else:
             return None
 
     @property
     def country(self):
         if self.provider == self.PROVIDER_GOOGLE:
-            return self._address('country')
+            return self._address_google('country')
         else:
             return None
 
