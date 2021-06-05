@@ -882,10 +882,13 @@ class datagridComponent(Component):
         # This makes it exist both in the builder and in the form.
         self.create_component_objects(self, data)
 
-        if data: # TODO: Make sure data is always a dict here?
+        # TODO: Make sure data is always a dict here?
+        if data and data.get(self.key):
             self._load_rows(data[self.key])
             self.value = data[self.key]
             self.raw_value = data[self.key]
+        elif not self.initEmpty:
+            self.rows = [self.gridRow(self, None)]
 
     def _load_rows(self, data):
         rows = []
@@ -922,6 +925,10 @@ class datagridComponent(Component):
     @property
     def child_component_owner(self):
         return self
+
+    @property
+    def initEmpty(self):
+        return self.raw.get('initEmpty')
 
     def render(self):
         for row in self.rows:

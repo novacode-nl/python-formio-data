@@ -192,9 +192,9 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(datagrid.components), 1)
         self.assertEqual(builder.component_ids['eea699r'].components['columns'].id, 'eleoxql00')
 
-        ####################################################
-        # columnsComponent: columns1 => dataGrid1 => columns
-        ####################################################
+        #################################################################
+        # columnsComponent: columns1 => dataGrid1 => <gridRow> => columns
+        #################################################################
         # parent: dataGrid1
         # components: panel, escalate (checkbox)
 
@@ -204,22 +204,18 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(columns.components), 2)
 
         # parent
-        self.assertIsInstance(columns.parent, datagridComponent)
-        self.assertEqual(columns.parent.key, 'dataGrid1')
+        self.assertIsInstance(columns.parent, datagridComponent.gridRow)
+        self.assertEqual(columns.parent.datagrid.key, 'dataGrid1')
 
         # components
-
-        # print('\n# Component: columns1 => dataGrid1 => columns')
-        # for key, comp in columns.components.items():
-        #     print((comp.id, comp.key, comp))
 
         keys = ['panel', 'escalate']
         for key, comp in columns.components.items():
             self.assertIn(comp.key, keys)
 
-        ###########################################################
-        # panelComponent: columns1 => dataGrid1 => columns => panel
-        ###########################################################
+        ########################################################################
+        # panelComponent: columns1 => dataGrid1 => <gridRow> => columns => panel
+        ########################################################################
         # parent: columns
         # components: columns
 
@@ -232,15 +228,9 @@ class NestedTestCase(unittest.TestCase):
         self.assertIsInstance(panel.parent, columnsComponent)
         self.assertEqual(panel.parent.key, 'columns')
 
-        # components
-
-        # print('\n# Component: columns1 => dataGrid1 => columns => panel')
-        # for key, comp in panel.components.items():
-        #     print((comp.id, comp.key, comp))
-
-        #########################################################################
-        # columnsComponent: columns1 => dataGrid1 => columns => panel => columns1
-        #########################################################################
+        ###################################################################################
+        # columnsComponent: columns1 => dataGrid1 => <gridRow> columns => panel => columns1
+        ###################################################################################
         # parent: panel
         # components: col (select) | col (datetime) | col (number)
 
@@ -255,10 +245,6 @@ class NestedTestCase(unittest.TestCase):
 
         # components
         self.assertEqual(len(columns.components), 3)
-
-        # print('\n# Component: columns1 => dataGrid1 => columns => panel => columns1')
-        # for key, comp in columns.components.items():
-        #     print((comp.id, comp.key, comp))
 
         keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
         for key, comp in builder.component_ids['ep08ekn'].components.items():

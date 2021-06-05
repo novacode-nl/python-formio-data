@@ -28,6 +28,9 @@ class DatagridInPanelTestcase(unittest.TestCase):
 
         datagrid = builder.components['panel'].components['dataGrid']
         self.assertEqual({'textField'}, set(datagrid.components.keys()))
+
+        # datagrid will have no visible rows when initialized
+        self.assertTrue(datagrid.initEmpty)
         self.assertEqual(len(datagrid.rows), 0)
 
 

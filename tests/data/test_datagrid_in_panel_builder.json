@@ -164,7 +164,7 @@
                     "hidden": false,
                     "tabindex": "",
                     "customClass": "",
-                    "initEmpty": false,
+                    "initEmpty": true,
                     "enableRowGroups": false,
                     "layoutFixed": false,
                     "addAnotherPosition": "bottom",
