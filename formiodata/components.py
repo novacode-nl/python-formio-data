@@ -72,6 +72,9 @@ class Component:
         # Maybe only call this (and the above) if not an input component?
         # (Layout) nested components (e.g. columns, panels)
         for k, vals in self.raw.copy().items():
+            if k == 'components':
+                continue # Already processed above, don't process subcomponents twice (#17)
+
             if isinstance(vals, list):
                 for v in vals:
                     if 'components' in v:
