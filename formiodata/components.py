@@ -26,8 +26,13 @@ class Component:
         # XXX uuid to ensure (hope this won't break anything)
         self.id = self.raw.get('id', str(uuid.uuid4()))
 
-        # submission {key: value, ...}
+        # submission at this level {key: value, ...}
+        # This includes a pseudo 'value' key which always encodes the current
+        # component's value.  NOTE: This should be refactored away for conditionals
+        # to work 100% correct when there's another element with a "value" key.
         self.form = {}
+        # Full raw data from the root on up {key: value, ...}
+        self._all_data = {}
 
         # i18n (language, translations)
         self.language = kwargs.get('language', 'en')
@@ -38,12 +43,13 @@ class Component:
         self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
-    def load(self, component_owner, parent=None, data=None):
+    def load(self, component_owner, parent=None, data=None, all_data=None):
         self.component_owner = component_owner
 
         if parent:
             self.parent = parent
 
+        self._all_data = all_data
         self.load_data(data)
 
         self.builder.component_ids[self.id] = self
@@ -66,7 +72,7 @@ class Component:
             # Only determine and load class if component type.
             if 'type' in component:
                 component_obj = self.builder.get_component_object(component)
-                component_obj.load(self.child_component_owner, parent=self, data=data)
+                component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
         # TODO: This code is iffy and tries to be generic for unknown components.
         # Maybe only call this (and the above) if not an input component?
@@ -80,7 +86,7 @@ class Component:
                     if 'components' in v:
                         for v_component in v['components']:
                             v_component_obj = self.builder.get_component_object(v_component)
-                            v_component_obj.load(self.child_component_owner, parent=self, data=data)
+                            v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
                     elif isinstance(v, list):
                         # table component etc. which holds even deeper lists with components
                         for list_v in v:
@@ -89,7 +95,7 @@ class Component:
                                     if list_v_component.get('type'):
                                         list_v_component_obj = self.builder.get_component_object(list_v_component)
                                         if list_v_component_obj.id not in self.builder.component_ids:
-                                            list_v_component_obj.load(self.child_component_owner, parent=self, data=data)
+                                            list_v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
     @property
     def id(self):
@@ -211,7 +217,7 @@ class Component:
                 # Optional package
                 try:
                     from json_logic import jsonLogic
-                    context = {'data': self.component_owner.form}
+                    context = {'data': self._all_data}
                     try:
                         context['row'] = self.component_owner.row
                     except AttributeError:
@@ -874,7 +880,7 @@ class datagridComponent(Component):
             # Only determine and load class if component type.
             if 'type' in component:
                 component_obj = parent.builder.get_component_object(component)
-                component_obj.load(component_owner=parent, parent=parent, data=data)
+                component_obj.load(component_owner=parent, parent=parent, data=data, all_data=self._all_data)
                 parent.components[component_obj.key] = component_obj
 
     def load_data(self, data):

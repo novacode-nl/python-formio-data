@@ -1283,6 +1283,111 @@
                                             "placeholder": "",
                                             "labelPosition": "top",
                                             "label": "Secret"
+                                        },
+                                        {
+                                            "id": "e1ymnj3",
+                                            "inputType": "text",
+                                            "dataGridLabel": false,
+                                            "refreshOn": "",
+                                            "hideOnChildrenHidden": false,
+                                            "input": true,
+                                            "type": "textfield",
+                                            "overlay": {
+                                                "height": "",
+                                                "width": "",
+                                                "top": "",
+                                                "left": "",
+                                                "page": "",
+                                                "style": ""
+                                            },
+                                            "attributes": {
+                                            },
+                                            "logic": [],
+                                            "customConditional": "",
+                                            "conditional": {
+                                                "json": {
+                                                    "and": [
+                                                        {
+                                                            "===": [
+                                                                {
+                                                                    "var": "data.username"
+                                                                },
+                                                                "user"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "===": [
+                                                                {
+                                                                    "var": "data.password"
+                                                                },
+                                                                "secret"
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "eq": "",
+                                                "when": null,
+                                                "show": null
+                                            },
+                                            "properties": {
+                                            },
+                                            "tags": [],
+                                            "key": "globalSecret",
+                                            "errorLabel": "",
+                                            "unique": false,
+                                            "validate": {
+                                                "unique": false,
+                                                "multiple": false,
+                                                "strictDateValidation": false,
+                                                "maxLength": "",
+                                                "minLength": "",
+                                                "json": "",
+                                                "customPrivate": false,
+                                                "custom": "",
+                                                "customMessage": "",
+                                                "pattern": "",
+                                                "required": false
+                                            },
+                                            "validateOn": "change",
+                                            "allowCalculateOverride": false,
+                                            "calculateServer": false,
+                                            "calculateValue": "",
+                                            "customDefaultValue": "",
+                                            "clearOnHide": true,
+                                            "redrawOn": "",
+                                            "encrypted": false,
+                                            "case": "",
+                                            "dbIndex": false,
+                                            "protected": false,
+                                            "inputFormat": "plain",
+                                            "persistent": true,
+                                            "defaultValue": "Another secret message",
+                                            "multiple": false,
+                                            "modalEdit": false,
+                                            "tableView": true,
+                                            "disabled": false,
+                                            "spellcheck": true,
+                                            "autofocus": false,
+                                            "mask": false,
+                                            "showCharCount": false,
+                                            "showWordCount": false,
+                                            "hideLabel": false,
+                                            "hidden": false,
+                                            "autocomplete": "",
+                                            "tabindex": "",
+                                            "customClass": "",
+                                            "allowMultipleMasks": false,
+                                            "inputMask": "",
+                                            "widget": {
+                                                "type": "input"
+                                            },
+                                            "suffix": "",
+                                            "prefix": "",
+                                            "tooltip": "",
+                                            "description": "",
+                                            "placeholder": "",
+                                            "labelPosition": "top",
+                                            "label": "Global Secret"
                                         }
                                     ]
                                 }
