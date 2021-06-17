@@ -14,6 +14,8 @@ from formiodata.utils import base64_encode_url, decode_resource_template, fetch_
 
 class Component:
 
+    _none_value = None
+
     def __init__(self, raw, builder, **kwargs):
         self.raw = raw
         self.builder = builder
@@ -167,6 +169,13 @@ class Component:
         return self.raw.get('properties')
 
     @property
+    def clearOnHide(self):
+        if 'clearOnHide' in self.raw:
+            return self.raw.get('clearOnHide')
+        else:
+            return None
+
+    @property
     def label(self):
         label = self.raw.get('label')
         if self.i18n.get(self.language):
@@ -181,7 +190,11 @@ class Component:
 
     @property
     def value(self):
-        return self.form.get('value', self.defaultValue)
+        if self.clearOnHide is not None and not self.clearOnHide:
+            default = self.defaultValue
+        else:
+            default = self._none_value
+        return self.form.get('value', default)
 
     @value.setter
     def value(self, value):
@@ -398,6 +411,8 @@ class phoneNumberComponent(Component):
 # TODO: tags
 
 class addressComponent(Component):
+
+    _none_value = {}
 
     # XXX other providers not analysed and implemented yet.
     PROVIDER_GOOGLE = 'google'
