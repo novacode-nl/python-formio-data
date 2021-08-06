@@ -1,13 +1,13 @@
 # formio-data (Python)
 
-Form.io (JSON) data API for Python.
+formio.js (JSON Form Builder) data API for Python.
 
-For information about Form.io, see [Form.io homepage](https://www.form.io)
+For information about the formio.js project, see https://github.com/formio/formio.js
 
 ## Introduction
 
 **python-formio-data** is a Python package, which loads and transforms
-Form.io **Builder JSON** and **Form JSON** into **usable Python objects**.  It's main
+formio.js **Builder JSON** and **Form JSON** into **usable Python objects**.  It's main
 aim is to provide easy access to a Form its components/fields, also
 captured as **Python objects**, which makes this API very versatile and usable.
 
@@ -71,8 +71,8 @@ For more examples of usage, see the unit-tests.
 ``` python
 >> from formiodata import Builder, Form
 >>
-# builder_json is a Form.io Builder JSON document (text/string)
-# form_json is a Form.io Form JSON document (text/string)
+# builder_json is a formio.js Builder JSON document (text/string)
+# form_json is a formio.js Form JSON document (text/string)
 >>
 >> builder = Builder(builder_json)
 >> form = Form(builder, form_json)
