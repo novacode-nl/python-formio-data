@@ -58,6 +58,18 @@ via the pip feature `json_logic` like so:
 pip(3) install -U formio-data[json_logic]
 ```
 
+## Using direnv
+
+You can use [nixpkgs](https://nixos.org/) to run a self-contained
+Python environment without any additional setup.  Once you've
+installed nixpkgs, switch into the directory and type "nix-shell" to
+get a shell from which the correct Python with packages is available.
+
+If you're using [direnv](https://direnv.net/), use `direnv allow`
+after changing into the project directory and you're good to go.  Also
+consider [nix-direnv](https://github.com/nix-community/nix-direnv) to
+speed up the experience (it can re-use a cached local installation).
+
 ## License
 [MIT](LICENSE)
 
