@@ -81,7 +81,7 @@ class Component:
         # (Layout) nested components (e.g. columns, panels)
         for k, vals in self.raw.copy().items():
             if k == 'components':
-                continue # Already processed above, don't process subcomponents twice (#17)
+                continue  # Already processed above, don't process subcomponents twice (#17)
 
             if isinstance(vals, list):
                 for v in vals:
@@ -234,7 +234,7 @@ class Component:
                     try:
                         context['row'] = self.component_owner.row
                     except AttributeError:
-                        pass # only datagrid rows have a "row" attribute
+                        pass  # only datagrid rows have a "row" attribute
                     return jsonLogic(cond['json'], context)
                 except ImportError:
                     logger = logging.getLogger(__name__)
@@ -260,6 +260,7 @@ class Component:
         return not self.hidden and self.conditionally_visible
 
 # Basic
+
 
 class textfieldComponent(Component):
     pass
@@ -371,8 +372,6 @@ class radioComponent(Component):
     def value_label(self):
         comp = self.component_owner.input_components.get(self.key)
         builder_values = comp.raw.get('values')
-        value_label = {}
-
         for b_val in builder_values:
             if b_val['value'] == self.value:
                 if self.i18n.get(self.language):
@@ -546,7 +545,7 @@ class datetimeComponent(Component):
                 py_dt_format = py_dt_format.replace(formio, py)
                 done = True
 
-        #day
+        # day
         done = False
         for formio, py in mapping['day'].items():
             if not done and formio in formio_dt_format:
@@ -729,7 +728,6 @@ class surveyComponent(Component):
             question_dict = {'question_value': question['value'], 'question_label': question_label, 'values': []}
 
             # value
-            values = []
             for b_val in builder_values:
                 if self.i18n.get(self.language):
                     val_label = self.i18n[self.language].get(b_val['label'], b_val['label'])
@@ -739,7 +737,7 @@ class surveyComponent(Component):
                 value = {
                     'label': val_label,
                     'value': b_val['value'],
-                    'checked': False # default as fallback (if new values in builder)
+                    'checked': False  # default as fallback (if new values in builder)
                 }
 
                 if self.value.get(question['value']):
@@ -750,6 +748,7 @@ class surveyComponent(Component):
             # append
             grid.append(question_dict)
         return grid
+
 
 class signatureComponent(Component):
     pass
@@ -763,6 +762,7 @@ class htmlelementComponent(Component):
     def html(self):
         html = '<%s>%s</%s>' % (self.raw['tag'], self.raw['content'], self.raw['tag'])
         return html
+
 
 class contentComponent(Component):
     pass
@@ -821,7 +821,6 @@ class columnsComponent(layoutComponentBase):
             # add last generated row
             rows.append(row)
         return rows
-
 
     def render(self):
         html_rows = []
@@ -911,7 +910,6 @@ class datagridComponent(Component):
             self.form = datagrid.form
             self.row = data
             self.html_component = ''
-
             datagrid.create_component_objects(self, data)
 
         def render(self):
@@ -922,9 +920,7 @@ class datagridComponent(Component):
                 else:
                     component.html_component = ''
                 html_components.append('<td>'+component.html_component+'</td>')
-
             self.html_component = '<tr>'+(''.join(html_components))+'</tr>'
-
 
     def __init__(self, raw, builder, **kwargs):
         # TODO when adding other data/grid components, create new
@@ -990,7 +986,6 @@ class datagridComponent(Component):
         # property of its owner.
         return True
 
-
     @property
     def child_component_owner(self):
         return self
@@ -1025,7 +1020,6 @@ class fileComponent(Component):
         if self.storage == 'url':
             res = ''
             for val in self.form.get('value'):
-                name = val.get('name')
                 url = val.get('url')
                 res += base64_encode_url(url)
             return res
