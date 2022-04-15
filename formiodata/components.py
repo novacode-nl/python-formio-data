@@ -858,20 +858,28 @@ class panelComponent(layoutComponentBase):
 
 
 class tableComponent(layoutComponentBase):
+    def __init__(self, raw, builder, **kwargs):
+        self.rows = []
+        super().__init__(raw, builder, **kwargs)
 
-    @property
-    def rows(self):
-        rows = []
-        for row in self.raw['rows']:
-            row_components = []
+    def load_data(self, data, load_children=True):
+        self.rows = []
 
-            for cols in row:
-                for col_comp in cols['components']:
-                    for key, comp in self.components.items():
-                        if col_comp['id'] == comp.id:
-                            row_components.append(comp)
-            rows.append(row_components)
-        return rows
+        for data_row in self.raw.get('rows', []):
+            row = []
+
+            for col in data_row:
+                components = []
+                for component in col['components']:
+                    # Only determine and load class if component type.
+                    if 'type' in component:
+                        component_obj = self.builder.get_component_object(component)
+                        component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+                        components.append(component_obj)
+
+                row.append({'column': col, 'components': components})
+
+            self.rows.append(row)
 
 
 class tabsComponent(layoutComponentBase):
