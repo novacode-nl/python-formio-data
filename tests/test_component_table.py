@@ -30,9 +30,16 @@ class tableComponentTestCase(ComponentTestCase):
 
     def test_get_row_labels(self):
         builder_table = self.builder.components['table']
-        table = self.form.input_components[builder_table.key]
+        table = self.form.components[builder_table.key]
 
         self.assertEqual(len(table.rows), 2)
+
+        labels = ['Text Field', 'Checkbox']
+        for row in table.rows:
+            for col in row:
+                for comp in col['components']:
+                    self.assertIn(comp.label , labels)
+
 
     def test_get_rows_values(self):
         builder_table = self.builder.components['table']
@@ -40,11 +47,14 @@ class tableComponentTestCase(ComponentTestCase):
 
         self.assertEqual(len(table.rows), 2)
 
-        textField_values = ['Elephant', 'Lion']
-        checkbox_values = [True, False]
-        for row_with_components in table.rows:
-            for component in row_with_components.input_components.values():
-                if component.type == 'textfield':
-                    self.assertIn(component.value , textField_values)
-                if component.type == 'checkbox':
-                    self.assertIn(component.value , checkbox_values)
+        # Accessing directly...
+        self.assertEqual(table.components['textField'].value, 'Elephant')
+        self.assertEqual(table.components['checkbox'].value, True)
+        self.assertEqual(table.components['textField1'].value, 'Lion')
+        self.assertEqual(table.components['checkbox1'].value, False)
+
+        # Or through rows/cols:
+        self.assertEqual(table.rows[0][0]['components'][0], table.components['textField'])
+        self.assertEqual(table.rows[0][1]['components'][0], table.components['checkbox'])
+        self.assertEqual(table.rows[1][0]['components'][0], table.components['textField1'])
+        self.assertEqual(table.rows[1][1]['components'][0], table.components['checkbox1'])
