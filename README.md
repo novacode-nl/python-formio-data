@@ -158,17 +158,17 @@ If no internet access, this test won't fail and a WARNING shall be logged regard
 From toplevel directory:
 
 ```
-python(3) -m unittest
+poetry run python -m unittest
 ```
 
 ### Run all component unittests
 
 ```
-python(3) -m unittest tests/test_nested_components.py
+poetry run python -m unittest tests/test_nested_components.py
 ```
 
 ### Run specific component unittest
 
 ```
-python3 -m unittest tests.test_component_day.dayComponentTestCase.test_get_form_dayMonthYear
+poetry run python -m unittest tests.test_component_day.dayComponentTestCase.test_get_form_dayMonthYear
 ```
