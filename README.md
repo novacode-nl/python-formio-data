@@ -44,6 +44,8 @@ Convenient for developers. Also useful for running the (unit)tests.
 
 ```sh
 git clone git@github.com:novacode-nl/python-formio-data.git
+poetry install
+poetry build
 pip(3) install -U -e python-formio-data
 ```
 
@@ -158,6 +160,7 @@ If no internet access, this test won't fail and a WARNING shall be logged regard
 From toplevel directory:
 
 ```
+poetry install # if you haven't already
 poetry run python -m unittest
 ```
 
