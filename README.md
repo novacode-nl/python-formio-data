@@ -66,7 +66,7 @@ When working in the project itself, use
 poetry install -E json_logic
 ```
 
-### Source Install with pip
+## Source Install with pip
 
 Optional dependencies need to be installed separately.
 
