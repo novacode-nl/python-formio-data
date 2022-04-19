@@ -29,7 +29,7 @@ captured as **Python objects**, which makes this API very versatile and usable.
 The source code is currently hosted on GitHub at:
 https://github.com/novacode-nl/python-formio-data
 
-## PyPI - Python Package Index
+### PyPI - Python Package Index
 
 Binary installers for the latest released version are available at the [Python
 Package Index](https://pypi.python.org/pypi/formio-data)
@@ -38,7 +38,7 @@ Package Index](https://pypi.python.org/pypi/formio-data)
 pip(3) install formio-data
 ```
 
-### Optional dependencies
+#### Optional dependencies
 
 To support conditional visibility using JSON logic, you can install
 the `json-logic-qubit` package (the `json-logic` package it is forked
@@ -49,7 +49,7 @@ via the pip feature `json_logic` like so:
 pip(3) install -U formio-data[json_logic]
 ```
 
-## Source Install with Poetry (recommended)
+### Source Install with Poetry (recommended)
 
 Convenient for developers. Also useful for running the (unit)tests.
 
@@ -58,7 +58,7 @@ git clone git@github.com:novacode-nl/python-formio-data.git
 poetry install
 ```
 
-### Optional dependencies
+#### Optional dependencies
 
 When working in the project itself, use
 
@@ -66,7 +66,7 @@ When working in the project itself, use
 poetry install -E json_logic
 ```
 
-## Source Install with pip
+### Source Install with pip
 
 Optional dependencies need to be installed separately.
 
