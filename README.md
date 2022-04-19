@@ -60,6 +60,12 @@ via the pip feature `json_logic` like so:
 pip(3) install -U formio-data[json_logic]
 ```
 
+When working in the project itself, use
+
+```sh
+poetry install -E json_logic
+```
+
 ## Using direnv
 
 You can use [nixpkgs](https://nixos.org/) to run a self-contained
