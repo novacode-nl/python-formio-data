@@ -44,6 +44,8 @@ Convenient for developers. Also useful for running the (unit)tests.
 
 ```sh
 git clone git@github.com:novacode-nl/python-formio-data.git
+poetry install
+poetry build
 pip(3) install -U -e python-formio-data
 ```
 
@@ -56,6 +58,12 @@ via the pip feature `json_logic` like so:
 
 ```sh
 pip(3) install -U formio-data[json_logic]
+```
+
+When working in the project itself, use
+
+```sh
+poetry install -E json_logic
 ```
 
 ## Using direnv
@@ -158,17 +166,18 @@ If no internet access, this test won't fail and a WARNING shall be logged regard
 From toplevel directory:
 
 ```
-python(3) -m unittest
+poetry install # if you haven't already
+poetry run python -m unittest
 ```
 
 ### Run all component unittests
 
 ```
-python(3) -m unittest tests/test_nested_components.py
+poetry run python -m unittest tests/test_nested_components.py
 ```
 
 ### Run specific component unittest
 
 ```
-python3 -m unittest tests.test_component_day.dayComponentTestCase.test_get_form_dayMonthYear
+poetry run python -m unittest tests.test_component_day.dayComponentTestCase.test_get_form_dayMonthYear
 ```
