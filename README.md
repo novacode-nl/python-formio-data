@@ -178,7 +178,15 @@ poetry install # if you haven't already
 poetry run python -m unittest
 ```
 
-### Run all component unittests
+### Run component unittests
+
+All Components, from toplevel directory:
+
+```
+poetry run python -m unittest tests/test_component_*.py
+```
+
+Nested components (complexity), from toplevel directory:
 
 ```
 poetry run python -m unittest tests/test_nested_components.py

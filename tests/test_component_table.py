@@ -40,7 +40,6 @@ class tableComponentTestCase(ComponentTestCase):
                 for comp in col['components']:
                     self.assertIn(comp.label , labels)
 
-
     def test_get_rows_values(self):
         builder_table = self.builder.components['table']
         table = self.form.components[builder_table.key]
