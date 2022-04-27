@@ -76,28 +76,6 @@ class Component:
                 component_obj = self.builder.get_component_object(component)
                 component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
-        # TODO: This code is iffy and tries to be generic for unknown components.
-        # Maybe only call this (and the above) if not an input component?
-        # (Layout) nested components (e.g. columns, panels)
-        for k, vals in self.raw.copy().items():
-            if k == 'components':
-                continue  # Already processed above, don't process subcomponents twice (#17)
-
-            if isinstance(vals, list):
-                for v in vals:
-                    if 'components' in v:
-                        for v_component in v['components']:
-                            v_component_obj = self.builder.get_component_object(v_component)
-                            v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
-                    elif isinstance(v, list):
-                        # table component etc. which holds even deeper lists with components
-                        for list_v in v:
-                            if 'components' in list_v:
-                                for list_v_component in list_v.get('components'):
-                                    if list_v_component.get('type'):
-                                        list_v_component_obj = self.builder.get_component_object(list_v_component)
-                                        if list_v_component_obj.id not in self.builder.component_ids:
-                                            list_v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
     @property
     def id(self):
@@ -773,6 +751,15 @@ class layoutComponentBase(Component):
 
 
 class columnsComponent(layoutComponentBase):
+
+    def load_data(self, data, load_children=True):
+        for column in self.raw['columns']:
+            for component in column['components']:
+                # Only determine and load class if component type.
+                if 'type' in component:
+                    component_obj = self.builder.get_component_object(component)
+                    component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+
 
     @property
     def rows(self):
