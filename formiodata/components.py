@@ -884,20 +884,20 @@ class tableComponent(layoutComponentBase):
 
 class tabsComponent(layoutComponentBase):
 
-    @property
-    def tabs(self):
-        tabs = []
-        for tab in self.raw['components']:
-            add_tab = {
-                'tab': tab,
-                'components': []
-            }
-            for comp in tab['components']:
-                for key, comp in self.components.items():
-                    if comp['key'] == comp.key:
-                        add_tab['components'].append(comp[1])
-            tabs.append(add_tab)
-        return tabs
+    def load_data(self, data, load_children=True):
+        self.tabs = []
+
+        for data_tab in self.raw.get('components', []):
+            tab = {'tab': data_tab, 'components': []}
+
+            for component in data_tab['components']:
+                # Only determine and load class if component type.
+                if 'type' in component:
+                    component_obj = self.builder.get_component_object(component)
+                    component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+                    tab['components'].append(component_obj)
+
+            self.tabs.append(tab)
 
 
 # Data components
