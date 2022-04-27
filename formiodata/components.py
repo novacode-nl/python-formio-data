@@ -56,7 +56,7 @@ class Component:
 
         self.builder.component_ids[self.id] = self
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         if self.input and data:
             try:
                 self.value = data[self.key]
@@ -65,16 +65,6 @@ class Component:
                 # NOTE: getter will read out defaultValue if it's missing in self.form
                 # TODO: Is this the right approach?
                 pass
-
-        if not load_children:
-            return
-
-        # (Input) nested components (e.g. datagrid, editgrid)
-        for component in self.raw.get('components', []):
-            # Only determine and load class if component type.
-            if 'type' in component:
-                component_obj = self.builder.get_component_object(component)
-                component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
 
     @property
@@ -393,9 +383,6 @@ class addressComponent(Component):
 
     # XXX other providers not analysed and implemented yet.
     PROVIDER_GOOGLE = 'google'
-
-    def load_data(self, data):
-        super(addressComponent, self).load_data(data, load_children=False)
 
     def _address_google(self, get_type, notation='long_name'):
         comps = self.value.get('address_components')
@@ -752,7 +739,7 @@ class layoutComponentBase(Component):
 
 class columnsComponent(layoutComponentBase):
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         for column in self.raw['columns']:
             for component in column['components']:
                 # Only determine and load class if component type.
@@ -832,6 +819,14 @@ class fieldsetComponent(layoutComponentBase):
 
 class panelComponent(layoutComponentBase):
 
+    def load_data(self, data):
+        for component in self.raw.get('components', []):
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = self.builder.get_component_object(component)
+                component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+
+
     @property
     def title(self):
         title = self.raw.get('title')
@@ -849,7 +844,7 @@ class tableComponent(layoutComponentBase):
         self.rows = []
         super().__init__(raw, builder, **kwargs)
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         self.rows = []
 
         for data_row in self.raw.get('rows', []):
@@ -871,7 +866,7 @@ class tableComponent(layoutComponentBase):
 
 class tabsComponent(layoutComponentBase):
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         self.tabs = []
 
         for data_tab in self.raw.get('components', []):
