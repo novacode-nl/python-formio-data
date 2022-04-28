@@ -56,7 +56,7 @@ class Component:
 
         self.builder.component_ids[self.id] = self
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         if self.input and data:
             try:
                 self.value = data[self.key]
@@ -66,38 +66,6 @@ class Component:
                 # TODO: Is this the right approach?
                 pass
 
-        if not load_children:
-            return
-
-        # (Input) nested components (e.g. datagrid, editgrid)
-        for component in self.raw.get('components', []):
-            # Only determine and load class if component type.
-            if 'type' in component:
-                component_obj = self.builder.get_component_object(component)
-                component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
-
-        # TODO: This code is iffy and tries to be generic for unknown components.
-        # Maybe only call this (and the above) if not an input component?
-        # (Layout) nested components (e.g. columns, panels)
-        for k, vals in self.raw.copy().items():
-            if k == 'components':
-                continue  # Already processed above, don't process subcomponents twice (#17)
-
-            if isinstance(vals, list):
-                for v in vals:
-                    if 'components' in v:
-                        for v_component in v['components']:
-                            v_component_obj = self.builder.get_component_object(v_component)
-                            v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
-                    elif isinstance(v, list):
-                        # table component etc. which holds even deeper lists with components
-                        for list_v in v:
-                            if 'components' in list_v:
-                                for list_v_component in list_v.get('components'):
-                                    if list_v_component.get('type'):
-                                        list_v_component_obj = self.builder.get_component_object(list_v_component)
-                                        if list_v_component_obj.id not in self.builder.component_ids:
-                                            list_v_component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
     @property
     def id(self):
@@ -415,9 +383,6 @@ class addressComponent(Component):
 
     # XXX other providers not analysed and implemented yet.
     PROVIDER_GOOGLE = 'google'
-
-    def load_data(self, data):
-        super(addressComponent, self).load_data(data, load_children=False)
 
     def _address_google(self, get_type, notation='long_name'):
         comps = self.value.get('address_components')
@@ -774,6 +739,15 @@ class layoutComponentBase(Component):
 
 class columnsComponent(layoutComponentBase):
 
+    def load_data(self, data):
+        for column in self.raw['columns']:
+            for component in column['components']:
+                # Only determine and load class if component type.
+                if 'type' in component:
+                    component_obj = self.builder.get_component_object(component)
+                    component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+
+
     @property
     def rows(self):
         rows = []
@@ -845,6 +819,14 @@ class fieldsetComponent(layoutComponentBase):
 
 class panelComponent(layoutComponentBase):
 
+    def load_data(self, data):
+        for component in self.raw.get('components', []):
+            # Only determine and load class if component type.
+            if 'type' in component:
+                component_obj = self.builder.get_component_object(component)
+                component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+
+
     @property
     def title(self):
         title = self.raw.get('title')
@@ -862,7 +844,7 @@ class tableComponent(layoutComponentBase):
         self.rows = []
         super().__init__(raw, builder, **kwargs)
 
-    def load_data(self, data, load_children=True):
+    def load_data(self, data):
         self.rows = []
 
         for data_row in self.raw.get('rows', []):
@@ -884,20 +866,20 @@ class tableComponent(layoutComponentBase):
 
 class tabsComponent(layoutComponentBase):
 
-    @property
-    def tabs(self):
-        tabs = []
-        for tab in self.raw['components']:
-            add_tab = {
-                'tab': tab,
-                'components': []
-            }
-            for comp in tab['components']:
-                for key, comp in self.components.items():
-                    if comp['key'] == comp.key:
-                        add_tab['components'].append(comp[1])
-            tabs.append(add_tab)
-        return tabs
+    def load_data(self, data):
+        self.tabs = []
+
+        for data_tab in self.raw.get('components', []):
+            tab = {'tab': data_tab, 'components': []}
+
+            for component in data_tab['components']:
+                # Only determine and load class if component type.
+                if 'type' in component:
+                    component_obj = self.builder.get_component_object(component)
+                    component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+                    tab['components'].append(component_obj)
+
+            self.tabs.append(tab)
 
 
 # Data components

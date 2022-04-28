@@ -38,13 +38,13 @@ class tabsComponentTestCase(ComponentTestCase):
                 self.assertEqual(tab['tab']['label'], 'Tab 1')
                 # components in tab
                 self.assertEqual(len(tab['components']), 1)
-                textfieldTab1 = tab['tab']['components'][0]
-                self.assertNotIsInstance(textfieldTab1, textfieldComponent)
+                textfieldTab1 = tab['components'][0]
+                self.assertIsInstance(textfieldTab1, textfieldComponent)
                 self.assertEqual(textfieldTab1.value, 'text in tab 1')
             if tab['tab']['key'] == 'tab2':
                 self.assertEqual(tab['tab']['label'], 'Tab 2')
                 # components in tab
                 self.assertEqual(len(tab['components']), 1)
-                numberTab2 = tab['tab']['components'][0]
-                self.assertNotIsInstance(numberTab2, numberComponent)
+                numberTab2 = tab['components'][0]
+                self.assertIsInstance(numberTab2, numberComponent)
                 self.assertEqual(numberTab2.value, 2)
