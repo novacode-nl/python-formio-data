@@ -66,7 +66,6 @@ class Component:
                 # TODO: Is this the right approach?
                 pass
 
-
     @property
     def id(self):
         return self._id
@@ -747,7 +746,6 @@ class columnsComponent(layoutComponentBase):
                     component_obj = self.builder.get_component_object(component)
                     component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
 
-
     @property
     def rows(self):
         rows = []
@@ -825,7 +823,6 @@ class panelComponent(layoutComponentBase):
             if 'type' in component:
                 component_obj = self.builder.get_component_object(component)
                 component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
-
 
     @property
     def title(self):
