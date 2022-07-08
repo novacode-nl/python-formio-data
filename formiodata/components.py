@@ -129,7 +129,7 @@ class Component:
 
     @property
     def required(self):
-        return self.raw.get('validate').get('required')
+        return self.raw.get('validate', {}).get('required')
 
     @property
     def properties(self):
@@ -759,7 +759,10 @@ class columnsComponent(layoutComponentBase):
 
             for col_comp in col['components']:
                 for key, comp in self.components.items():
-                    if col_comp['id'] == comp.id:
+                    if col_comp.get('id') and col_comp['id'] == comp.id:
+                        components.append(comp)
+
+                    elif col_comp.get('key') and col_comp['key'] == comp.key:
                         components.append(comp)
 
             if col['width'] >= 12:
