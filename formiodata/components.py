@@ -129,7 +129,7 @@ class Component:
 
     @property
     def required(self):
-        return self.raw.get('validate').get('required')
+        return self.raw.get('validate', {}).get('required')
 
     @property
     def properties(self):
