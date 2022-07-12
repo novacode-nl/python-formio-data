@@ -18,7 +18,7 @@ captured as **Python objects**, which makes this API very versatile and usable.
 
 ## Features
 
-  - Compatible with Python 3.3 and later
+  - Compatible with Python 3.6 and later
   - Constructor of the **Builder** and **Form** class, only requires
     the JSON and an optional language code for translations.
   - Get a Form object its Components as a usable object e.g. datetime, boolean, dict (for select component) etc.
@@ -174,7 +174,7 @@ If no internet access, this test won't fail and a WARNING shall be logged regard
 From toplevel directory:
 
 ```
-poetry install # if you haven't already
+poetry install -E json_logic  # if you haven't already
 poetry run python -m unittest
 ```
 
