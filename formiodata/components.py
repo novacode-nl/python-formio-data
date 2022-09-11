@@ -11,6 +11,8 @@ from datetime import datetime
 
 from formiodata.utils import base64_encode_url, decode_resource_template, fetch_dict_get_value
 
+logger = logging.getLogger(__name__)
+
 
 class Component:
 
@@ -190,6 +192,11 @@ class Component:
         """
         If conditional visibility applies, evaluate to see if it is visible.
         Note that the component can also be hidden, which is a separate concept.
+
+        IMPORTANT
+        =========
+        Currently JSONLogic (json) precedes the Simple (when).
+        This causes backward compatibility issues when changing the priority order.
         """
         try:
             cond = self.raw['conditional']
@@ -204,10 +211,8 @@ class Component:
                         pass  # only datagrid rows have a "row" attribute
                     return jsonLogic(cond['json'], context)
                 except ImportError:
-                    logger = logging.getLogger(__name__)
-                    logger.warn(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
+                    logger.warning(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
                     return True
-
             elif cond.get('when'):
                 triggering_component = self.component_owner.input_components[cond['when']]
                 triggering_value = cond['eq']
@@ -224,7 +229,13 @@ class Component:
 
     @property
     def is_visible(self):
-        return not self.hidden and self.conditionally_visible
+        conditional = self.raw.get('conditional')
+        if conditional and (conditional.get('json') or conditional.get('when')):
+            # Not implement (JavaScript):
+            # conditional_show = self.raw.get('show')
+            return self.conditionally_visible
+        else:
+            return not self.hidden
 
 # Basic
 
