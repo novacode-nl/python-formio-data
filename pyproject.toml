@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "formio-data"
-version = "0.4.6"
+version = "0.4.7"
 homepage = "https://github.com/novacode-nl/python-formio-data"
 description = "formio.js JSON-data API"
 readme = "README.md"
