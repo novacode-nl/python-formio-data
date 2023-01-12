@@ -73,9 +73,11 @@ class Form:
         logging.warning('DEPRECATION WARNING: data attr/property shall be deleted in a future version.')
         return self._data
 
-    def get_component_from_path(self, component_path):
+    def get_component_by_path(self, component_path):
         """
-        Get component object from path (provided by the Formio.js JS/API)
+        Get component object by path
+
+        (Eg provided by the Formio.js JS/API).
         Especially handy for data Components eg datagridComponent.
 
         Example path:
