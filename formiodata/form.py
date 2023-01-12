@@ -73,37 +73,37 @@ class Form:
         logging.warning('DEPRECATION WARNING: data attr/property shall be deleted in a future version.')
         return self._data
 
-    def get_component_owner_from_path(self, component, parent_component, path):
+    def get_component_from_path(self, component_path):
         """
-        Get component owner from path (provided by the Formio.js JS/API).
-        Especially handy for data Components eg datagridComponent, where
-        a row is a component owner.
+        Get component object from path (provided by the Formio.js JS/API)
+        Especially handy for data Components eg datagridComponent.
 
         Example path:
         dataGrid[0].lastname => lastname in the first row [0] of a datagrid
 
-        @param component: the component to start the traversal
-        @param parent_component: possible parent component of the component
-        @param path: the Formio.js JS/API path
-        return component_owner: JSON data ie the component owner
-        """
-        path_nodes = path.split('.')
         # Example path_nodes:
         # dataGrid[0].lastname => ['dataGrid[0]', 'lastname']
-        component_owner = self.form
-        if component and not path_nodes and component.key == path:
-            return component_owner
-        elif parent_component:
-            node = self.form[parent_component.key]
-            for path_node in path_nodes:
-                # get the component_owner eg row in datagrid
-                m = re.search(r"\[([A-Za-z0-9_]+)\]", path_node)
-                if m:
-                    idx = int(m.group(1))
-                    node = node[idx]
-            return node
-        else:
-            return self.form
+
+        @param component_path: the Formio.js JS/API path
+        @return component: a Component object
+        """
+        path_nodes = component_path.split('.')
+        # Example path_nodes:
+        # dataGrid[0].lastname => ['dataGrid[0]', 'lastname']
+        components = self.input_components
+        for path_node in path_nodes:
+            # get the component_owner eg row in datagrid
+            m = re.search(r"\[([A-Za-z0-9_]+)\]", path_node)
+            if m:
+                idx_notation = m.group(0)  # eg: '[0]', '[1]', etc
+                idx = int(m.group(1))  # eg: 0, 1, etc
+                key = path_node.replace(idx_notation, '')
+                component = components[key]
+                if hasattr(component, 'rows'):
+                    components = component.rows[idx].input_components
+            else:
+                component = components[path_node]
+        return component
 
     def render_components(self, force=False):
         for key, component in self.input_components.items():

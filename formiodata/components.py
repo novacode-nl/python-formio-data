@@ -167,6 +167,9 @@ class Component:
 
     @value.setter
     def value(self, value):
+        self.set_value(value)
+
+    def _set_value(self, value):
         self.form['value'] = self._encode_value(value)
 
     @property
@@ -175,7 +178,15 @@ class Component:
 
     @raw_value.setter
     def raw_value(self, value):
+        self._set_raw_value(value)
+
+    def _set_raw_value(self, value):
         self.form['raw_value'] = value
+
+    def set_value(self, value):
+        """ Set raw_value and value at once! """
+        self._set_raw_value(value)
+        self._set_value(value)
 
     @property
     def hidden(self):
