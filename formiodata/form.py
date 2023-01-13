@@ -94,7 +94,7 @@ class Form:
         # dataGrid[0].lastname => ['dataGrid[0]', 'lastname']
         components = self.input_components
         for path_node in path_nodes:
-            # get the component_owner eg row in datagrid
+            # eg: regex search '[0]' in 'dataGrid[0]'
             m = re.search(r"\[([A-Za-z0-9_]+)\]", path_node)
             if m:
                 idx_notation = m.group(0)  # eg: '[0]', '[1]', etc
