@@ -1015,6 +1015,17 @@ class datagridComponent(Component):
         self.html_component = '<table>'+(''.join([row.html_component for row in self.rows]))+'</table>'
 
 
+class editgridComponent(Component):
+
+    def __init__(self, raw, builder, **kwargs):
+        # TODO when adding other data/grid components, create new
+        # dataComponent class these can inherit from.
+        self.input_components = {}
+        self.rows = []
+        super().__init__(raw, builder, **kwargs)
+        self.form = {'value': []}
+
+
 # Premium components
 
 class fileComponent(Component):

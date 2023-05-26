@@ -1,7 +1,6 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import json
 import logging
 import unittest
 
@@ -10,8 +9,18 @@ from datetime import datetime, date, timezone, timedelta
 from tests.utils import readfile
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import columnsComponent, datetimeComponent, emailComponent, numberComponent, \
-    selectComponent, textfieldComponent, panelComponent, datagridComponent, checkboxComponent
+from formiodata.components import (
+    columnsComponent,
+    datetimeComponent,
+    emailComponent,
+    numberComponent,
+    selectComponent,
+    textfieldComponent,
+    checkboxComponent,
+    panelComponent,
+    datagridComponent,
+    editgridComponent,
+)
 
 
 class NestedTestCase(unittest.TestCase):
@@ -30,7 +39,6 @@ class NestedTestCase(unittest.TestCase):
         self.builder_json = readfile('data', 'test_nested_components_builder.json')
         self.form_json = readfile('data', 'test_nested_components_form.json')
 
-
     def test_Builder_component_ids(self):
         """ Builder: component_ids (Dict) for direct mapping """
 
@@ -42,7 +50,7 @@ class NestedTestCase(unittest.TestCase):
         #     else:
         #         print((comp.id, comp.key, comp))
 
-        self.assertEqual(len(builder.component_ids.keys()), 32)
+        self.assertEqual(len(builder.component_ids.keys()), 33)
 
     def test_Builder_components(self):
         """ Builder: components (OrderedDict) hierarchy, from toplevel and traverse
@@ -66,7 +74,9 @@ class NestedTestCase(unittest.TestCase):
 
         builder = Builder(self.builder_json)
 
-        ## debug
+        #######
+        # debug
+        #######
         # for key, comp in builder.components.items():
         #     print((comp.id, comp.key, comp.type, comp.parent))
 
@@ -119,7 +129,7 @@ class NestedTestCase(unittest.TestCase):
         # parent: None
         # components: actionType, startDateTime, dataGrid1 (deviceType, measurementTime, temperatureCelsius)
 
-        columns = builder.component_ids['ejghurn']
+        columns = builder.component_ids['ezrqb3e']
 
         self.assertIsInstance(columns, columnsComponent)
         self.assertEqual(columns.key, 'columns1')
@@ -133,10 +143,10 @@ class NestedTestCase(unittest.TestCase):
         # for key, comp in columns.components.items():
         #     print((comp.id, comp.key, comp))
 
-        self.assertEqual(len(columns.components), 3)
-        self.assertEqual(len(builder.components['columns1'].components), 3)
+        self.assertEqual(len(columns.components), 4)
+        self.assertEqual(len(builder.components['columns1'].components), 4)
 
-        keys = ['actionType', 'startDateTime', 'dataGrid1']
+        keys = ['actionType', 'startDateTime', 'dataGrid1', 'editGrid1']
         for key, comp in builder.components['columns1'].components.items():
             self.assertIn(comp.key, keys)
 
@@ -191,6 +201,31 @@ class NestedTestCase(unittest.TestCase):
         # dataGrid1.components: columns
         self.assertEqual(len(datagrid.components), 1)
         self.assertEqual(builder.component_ids['eea699r'].components['columns'].id, 'eleoxql00')
+
+        ##########################################
+        # editgridComponent: columns1 => editGrid1
+        ##########################################
+        # parent: columns1
+        # components: columns (which contains: panel, escalate checkbox)
+
+        editgrid = builder.component_ids['eh7pkpc']
+
+        self.assertIsInstance(editgrid, editgridComponent)
+        self.assertEqual(editgrid.key, 'editGrid1')
+
+        # parent
+        self.assertIsInstance(editgrid.parent, columnsComponent)
+        self.assertEqual(editgrid.parent.key, 'columns1')
+
+        # components
+
+        # print('\n# Component: columns1 => dataGrid')
+        # for key, comp in datagrid.components.items():
+        #     print((comp.id, comp.key, comp))
+
+        # dataGrid1.components: columns
+        self.assertEqual(len(editgrid.components), 1)
+        self.assertEqual(editgrid.component_ids['eh7pkpc'].components['columns'].id, 'eleoxql00')
 
         #################################################################
         # columnsComponent: columns1 => dataGrid1 => <gridRow> => columns
@@ -280,9 +315,9 @@ class NestedTestCase(unittest.TestCase):
 
     def test_Builder_input_components_count(self):
         builder = Builder(self.builder_json)
-        # 17 input_components are present in key/val of file: data/test_nesting_form.json
+        # 18 input_components are present in key/val of file: data/test_nesting_form.json
         # (except the submit ie buttonComponent)
-        self.assertEqual(len(builder.input_components), 17)
+        self.assertEqual(len(builder.input_components), 18)
 
     def test_Form_components_count(self):
         builder = Builder(self.builder_json)
@@ -293,9 +328,9 @@ class NestedTestCase(unittest.TestCase):
     def test_Form_input_components_count(self):
         builder = Builder(self.builder_json)
         form = Form(self.form_json, builder)
-        # 17 input_components are present in key/val of file: data/test_nesting_form.json
+        # 18 input_components are present in key/val of file: data/test_nesting_form.json
         # (except the submit ie buttonComponent)
-        self.assertEqual(len(form.input_components), 17)
+        self.assertEqual(len(form.input_components), 18)
 
     def test_Form_input_components_not_datagrid(self):
         """ Form: basic (not datagrid) input components """
@@ -457,7 +492,7 @@ class NestedTestCase(unittest.TestCase):
         columns1 = form.components['columns1']
         self.assertIsInstance(columns1, columnsComponent)
         self.assertEqual(columns1.key, 'columns1')
-        self.assertEqual(len(columns1.rows), 2)
+        self.assertEqual(len(columns1.rows), 3)
 
         # row_1 has 2 columns
         row_1 = columns1.rows[0]
@@ -465,12 +500,12 @@ class NestedTestCase(unittest.TestCase):
         # row_1: col_1
         row_1_col_1 = row_1[0]
 
-        ## keys
+        # keys
         keys = ['actionType']
         for comp in row_1_col_1['components']:
             self.assertIn(comp.key, keys)
 
-        ## values
+        # values
         for comp in row_1_col_1['components']:
             if comp.key == 'actionType':
                 self.assertEqual(comp.value, 'check')
@@ -478,12 +513,12 @@ class NestedTestCase(unittest.TestCase):
         # row_1: col_2
         row_1_col_2 = row_1[1]
 
-        ## keys
+        # keys
         keys = ['startDateTime']
         for comp in row_1_col_2['components']:
             self.assertIn(comp.key, keys)
 
-        ## values
+        # values
         for comp in row_1_col_2['components']:
             if comp.key == 'startDateTime':
                 self.assertEqual(comp.to_date(), date(2021, 4, 9))
@@ -501,22 +536,27 @@ class NestedTestCase(unittest.TestCase):
         columns1 = form.components['columns1']
         self.assertIsInstance(columns1, columnsComponent)
         self.assertEqual(columns1.key, 'columns1')
-        self.assertEqual(len(columns1.rows), 2)
+        self.assertEqual(len(columns1.rows), 3)
 
         # row_2 has 1 column
         row_2 = columns1.rows[1]
         row_2_col_1 = row_2[0]
 
-        ## keys
-        keys = ['dataGrid1']
+        # keys
+        keys = ['dataGrid1', 'editGrid1']
         dataGrid1 = None
+        editGrid1 = None
         for comp in row_2_col_1['components']:
             self.assertIn(comp.key, keys)
 
             if comp.key == 'dataGrid1':
                 dataGrid1 = comp
+            elif comp.key == 'editGrid1':
+                editGrid1 = comp
 
+        ###########
         # dataGrid1
+        ###########
         self.assertEqual(len(dataGrid1.rows), 3)
         for row in dataGrid1.rows:
             # row has only 1 component
@@ -525,9 +565,9 @@ class NestedTestCase(unittest.TestCase):
             self.assertIsInstance(comp, columnsComponent)
             self.assertEqual(comp.key, 'columns')
 
-        ## dataGrid1 // row 1
+        # dataGrid1 // row 1
         columns_row = dataGrid1.rows[0]
-        
+
         # XXX panel.components is OrderedDict()
         columns_in_panel = columns_row.components['columns'].components['panel'].components['columns1']
 
@@ -535,21 +575,21 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(columns_in_panel.rows), 1)
         row_columns_in_panel = columns_in_panel.rows[0]
 
-        ## keys
+        # keys
         keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
         for comp in row_columns_in_panel[0]['components']:
             self.assertIn(comp.key, keys)
 
-        ## component objects
+        # component objects
         for comp in row_columns_in_panel[0]['components']:
             if comp.key == 'deviceType':
                 self.assertIsInstance(comp, selectComponent)
             elif comp.key == 'measurementTime':
                 self.assertIsInstance(comp, datetimeComponent)
             elif comp.key == 'temperatureCelsius':
-                self.assertIsInstance(comp, integerComponent)
+                self.assertIsInstance(comp, numberComponent)
 
-        ## values
+        # values
         measurementTime = datetime(2021, 4, 9, 9, 00)
         for comp in row_columns_in_panel[0]['components']:
             if comp.key == 'deviceType':
@@ -559,8 +599,53 @@ class NestedTestCase(unittest.TestCase):
             elif comp.key == 'temperatureCelsius':
                 self.assertEqual(comp.value, 65)
 
-        ## TODO dataGrid1 // row 2
+        # TODO dataGrid1 // row 2
         # dataGrid1_row_2 = dataGrid1.rows[1]
 
-        ## TODO dataGrid1 // row 3
+        # TODO dataGrid1 // row 3
         # dataGrid1_row_3 = dataGrid1.rows[2]
+
+        ###########
+        # editGrid1
+        ###########
+        self.assertEqual(len(editGrid1.rows), 3)
+        for row in editGrid1.rows:
+            # row has only 1 component
+            self.assertEqual(1, len(row.components.keys()))
+            comp = row.components['columns']
+            self.assertIsInstance(comp, columnsComponent)
+            self.assertEqual(comp.key, 'columns')
+
+        # editGrid1 // row 1
+        columns_row = editGrid1.rows[0]
+
+        # XXX panel.components is OrderedDict()
+        columns_in_panel = columns_row.components['columns'].components['panel'].components['columns1']
+
+        # only 1 row
+        self.assertEqual(len(columns_in_panel.rows), 1)
+        row_columns_in_panel = columns_in_panel.rows[0]
+
+        # keys
+        keys = ['presentColor', 'measurementTime', 'temperatureCelsius']
+        for comp in row_columns_in_panel[0]['components']:
+            self.assertIn(comp.key, keys)
+
+        # component objects
+        for comp in row_columns_in_panel[0]['components']:
+            if comp.key == 'presentColor':
+                self.assertIsInstance(comp, selectComponent)
+            elif comp.key == 'measurementTime':
+                self.assertIsInstance(comp, datetimeComponent)
+            elif comp.key == 'temperatureCelsius':
+                self.assertIsInstance(comp, numberComponent)
+
+        # values
+        measurementTime = datetime(2023, 5, 26, 9, 00)
+        for comp in row_columns_in_panel[0]['components']:
+            if comp.key == 'presentColor':
+                self.assertEqual(comp.value, 'yellow')
+            elif comp.key == 'measurementTime':
+                self.assertEqual(comp.to_datetime(), measurementTime)
+            elif comp.key == 'temperatureCelsius':
+                self.assertEqual(comp.value, 45)

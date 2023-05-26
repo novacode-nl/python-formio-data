@@ -30,7 +30,7 @@ class addressComponentTestCase(ComponentTestCase):
         self.assertIsNone(address.street_name)
         self.assertIsNone(address.street_number)
         self.assertIsNone(address.city)
-        self.assertIsNone(address.country)        
+        self.assertIsNone(address.country)
 
     def test_get_form_address(self):
         address = self.form.input_components['deliveryAddress']

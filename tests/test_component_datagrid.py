@@ -8,11 +8,8 @@ from formiodata.components import datagridComponent
 class datagridComponentTestCase(ComponentTestCase):
 
     def test_object(self):
-        # TextfieldComponent
         dataGrid = self.builder.components['dataGrid']
         self.assertIsInstance(dataGrid, datagridComponent)
-
-        # Not TextfieldComponent
         email = self.builder.input_components['email']
         self.assertNotIsInstance(email, datagridComponent)
 
