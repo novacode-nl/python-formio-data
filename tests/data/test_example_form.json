@@ -133,19 +133,25 @@
             "textField": "This is the FIRST row",
             "date": "2023-01-02T00:00:00+01:00",
             "checkbox": false,
-            "numberInEditGrid": 123
+            "numberInEditGrid": 123,
+            "textArea": "The first textarea.\nSuch nice!",
+            "select": "option1"
         },
         {
             "textField": "This is the SECOND row",
             "date": "2023-05-26T00:00:00+02:00",
             "checkbox": false,
-            "numberInEditGrid": 789
+            "numberInEditGrid": 789,
+            "textArea": "",
+            "select": "option2"
         },
         {
             "textField": "This is the THIRD row",
             "date": "2023-07-03T00:00:00+02:00",
             "checkbox": false,
-            "numberInEditGrid": 456
+            "numberInEditGrid": 456,
+            "textArea": "",
+            "select": ""
         }
     ],
     "textField1": "Lion",
@@ -172,6 +178,7 @@
             "originalName": "31220867.png"
         }
     ],
+    "submit": true,
     "howManySeats": 4,
     "numberTab2": 2
 }
