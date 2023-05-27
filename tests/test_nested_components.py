@@ -50,7 +50,7 @@ class NestedTestCase(unittest.TestCase):
         #     else:
         #         print((comp.id, comp.key, comp))
 
-        self.assertEqual(len(builder.component_ids.keys()), 33)
+        self.assertEqual(len(builder.component_ids.keys()), 40)
 
     def test_Builder_components(self):
         """ Builder: components (OrderedDict) hierarchy, from toplevel and traverse
@@ -183,7 +183,7 @@ class NestedTestCase(unittest.TestCase):
         # parent: columns1
         # components: columns (which contains: panel, escalate checkbox)
 
-        datagrid = builder.component_ids['eea699r']
+        datagrid = builder.component_ids['ehf11y9']
 
         self.assertIsInstance(datagrid, datagridComponent)
         self.assertEqual(datagrid.key, 'dataGrid1')
@@ -200,7 +200,7 @@ class NestedTestCase(unittest.TestCase):
 
         # dataGrid1.components: columns
         self.assertEqual(len(datagrid.components), 1)
-        self.assertEqual(builder.component_ids['eea699r'].components['columns'].id, 'eleoxql00')
+        self.assertEqual(builder.component_ids['ehf11y9'].components['columns'].id, 'ekgpz100')
 
         ##########################################
         # editgridComponent: columns1 => editGrid1
@@ -225,7 +225,7 @@ class NestedTestCase(unittest.TestCase):
 
         # dataGrid1.components: columns
         self.assertEqual(len(editgrid.components), 1)
-        self.assertEqual(editgrid.component_ids['eh7pkpc'].components['columns'].id, 'eleoxql00')
+        self.assertEqual(editgrid.components['columns'].id, 'e1u0nm')
 
         #################################################################
         # columnsComponent: columns1 => dataGrid1 => <gridRow> => columns
@@ -233,14 +233,14 @@ class NestedTestCase(unittest.TestCase):
         # parent: dataGrid1
         # components: panel, escalate (checkbox)
 
-        columns = builder.component_ids['eleoxql00']
+        columns = builder.component_ids['ekgpz100']
 
         self.assertIsInstance(columns, columnsComponent)
         self.assertEqual(len(columns.components), 2)
 
         # parent
         self.assertIsInstance(columns.parent, datagridComponent.gridRow)
-        self.assertEqual(columns.parent.datagrid.key, 'dataGrid1')
+        self.assertEqual(columns.parent.grid.key, 'dataGrid1')
 
         # components
 
@@ -254,7 +254,7 @@ class NestedTestCase(unittest.TestCase):
         # parent: columns
         # components: columns
 
-        panel = builder.component_ids['ek5p7n6'] 
+        panel = builder.component_ids['eyhv2q']
 
         self.assertIsInstance(panel, panelComponent)
         self.assertEqual(len(panel.components), 1)
@@ -269,7 +269,7 @@ class NestedTestCase(unittest.TestCase):
         # parent: panel
         # components: col (select) | col (datetime) | col (number)
 
-        columns = builder.component_ids['ep08ekn']
+        columns = builder.component_ids['es6547h']
 
         self.assertIsInstance(columns, columnsComponent)
         self.assertEqual(columns.key, 'columns1')
@@ -282,7 +282,7 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(columns.components), 3)
 
         keys = ['deviceType', 'measurementTime', 'temperatureCelsius']
-        for key, comp in builder.component_ids['ep08ekn'].components.items():
+        for key, comp in columns.components.items():
             self.assertIn(comp.key, keys)
 
         for key, comp in columns.components.items():
@@ -540,19 +540,32 @@ class NestedTestCase(unittest.TestCase):
 
         # row_2 has 1 column
         row_2 = columns1.rows[1]
+        self.assertEqual(1, len(row_2))
         row_2_col_1 = row_2[0]
+
+        # row_3 also has 1 column
+        row_3 = columns1.rows[2]
+        self.assertEqual(1, len(row_3))
+        row_3_col_1 = row_3[0]
 
         # keys
         keys = ['dataGrid1', 'editGrid1']
         dataGrid1 = None
         editGrid1 = None
+        # NOTE: Why are we iterating?  Might as well pick the value directly...
         for comp in row_2_col_1['components']:
             self.assertIn(comp.key, keys)
-
             if comp.key == 'dataGrid1':
                 dataGrid1 = comp
-            elif comp.key == 'editGrid1':
+
+        for comp in row_3_col_1['components']:
+            self.assertIn(comp.key, keys)
+            if comp.key == 'editGrid1':
                 editGrid1 = comp
+
+        self.assertNotEqual(dataGrid1, editGrid1)
+        self.assertIsNotNone(dataGrid1)
+        self.assertIsNotNone(editGrid1)
 
         ###########
         # dataGrid1
@@ -620,7 +633,7 @@ class NestedTestCase(unittest.TestCase):
         columns_row = editGrid1.rows[0]
 
         # XXX panel.components is OrderedDict()
-        columns_in_panel = columns_row.components['columns'].components['panel'].components['columns1']
+        columns_in_panel = columns_row.components['columns'].components['panel1'].components['columns3']
 
         # only 1 row
         self.assertEqual(len(columns_in_panel.rows), 1)
