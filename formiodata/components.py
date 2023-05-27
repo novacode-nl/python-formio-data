@@ -909,7 +909,7 @@ class tabsComponent(layoutComponentBase):
 
 # Data components
 
-class datagridComponent(Component):
+class baseGridComponent(Component):
 
     class gridRow:
         """Not *really* a component, but it implements the same
@@ -917,15 +917,15 @@ class datagridComponent(Component):
         TODO: Consider if there should be a shared base component for
         this (ComponentOwner?)
         """
-        def __init__(self, datagrid, data):
-            self.datagrid = datagrid
-            self.builder = datagrid.builder
+        def __init__(self, grid, data):
+            self.grid = grid
+            self.builder = grid.builder
             self.input_components = {}
             self.components = OrderedDict()
-            self.form = datagrid.form
+            self.form = grid.form
             self.row = data
             self.html_component = ''
-            datagrid.create_component_objects(self, data)
+            grid.create_component_objects(self, data)
 
         def render(self):
             html_components = []
@@ -947,7 +947,7 @@ class datagridComponent(Component):
 
     def create_component_objects(self, parent, data):
         """This is a weird one, it creates component object for the
-        "blueprint" inside the Builder, with parent = dataGrid, and in
+        "blueprint" inside the Builder, with parent = grid, and in
         a form on each grid row with parent = gridRow
         """
         for component in self.raw.get('components', []):
@@ -995,7 +995,7 @@ class datagridComponent(Component):
 
     @property
     def is_form_component(self):
-        # NOTE: A datagrid is not _really_ a form component, but it
+        # NOTE: A grid is not _really_ a form component, but it
         # has a key in the JSON for loading the form, so it acts as
         # such, and it will create an entry in the "input_components"
         # property of its owner.
@@ -1015,16 +1015,11 @@ class datagridComponent(Component):
         self.html_component = '<table>'+(''.join([row.html_component for row in self.rows]))+'</table>'
 
 
-class editgridComponent(Component):
+class datagridComponent(baseGridComponent):
+    pass
 
-    def __init__(self, raw, builder, **kwargs):
-        # TODO when adding other data/grid components, create new
-        # dataComponent class these can inherit from.
-        self.input_components = {}
-        self.rows = []
-        super().__init__(raw, builder, **kwargs)
-        self.form = {'value': []}
-
+class editgridComponent(baseGridComponent):
+    pass
 
 # Premium components
 
