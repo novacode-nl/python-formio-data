@@ -196,7 +196,8 @@ class Component:
         return value
 
     def render(self):
-        self.html_component = '<p>%s</p>' % self.value
+        if self.value is not None:
+            self.html_component = '<p>%s</p>' % self.value
 
     @property
     def conditionally_visible(self):
