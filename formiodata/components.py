@@ -1025,7 +1025,7 @@ class editgridComponent(baseGridComponent):
 
     @property
     def initEmpty(self):
-        return self.raw.get('openWhenEmpty')
+        return not self.raw.get('openWhenEmpty')
 
 
 # Premium components
