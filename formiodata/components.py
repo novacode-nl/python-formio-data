@@ -1017,10 +1017,16 @@ class baseGridComponent(Component):
 
 
 class datagridComponent(baseGridComponent):
+    # XXX should we move the initEmpty from base
     pass
 
+
 class editgridComponent(baseGridComponent):
-    pass
+
+    @property
+    def initEmpty(self):
+        return self.raw.get('openWhenEmpty')
+
 
 # Premium components
 
