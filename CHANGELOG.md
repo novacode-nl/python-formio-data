@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.12
+## 0.5.0
 
 - Implement `initEmpty` in `editgridComponent`, which obtains a different key (`openWhenEmpty`) in the form builder schema.
 
