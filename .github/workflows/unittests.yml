@@ -1,0 +1,48 @@
+name: Test Python-formio-data
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  test-without-json-logic:
+    name: Basic unit tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Set up Nix with direnv support
+      uses: aldoborrero/use-nix-action@v2
+      with:
+        nix_path: nixpkgs=channel:nixos-23.05
+
+    - name: Install basic dependencies via poetry
+      run: poetry install
+
+    - name: Run the tests
+      run: poetry run python -m unittest
+
+
+  test-with-json-logic:
+    name: Unit tests with json_logic
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Set up Nix with direnv support
+      uses: aldoborrero/use-nix-action@v2
+      with:
+        nix_path: nixpkgs=channel:nixos-23.05
+
+    - name: Install dependencies via poetry, including json_logic
+      run: poetry install -E json_logic
+
+    - name: Run the tests
+      run: poetry run python -m unittest
