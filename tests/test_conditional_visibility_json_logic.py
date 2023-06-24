@@ -4,13 +4,13 @@
 import json
 import unittest
 
-from tests.utils import readfile
+from tests.utils import readfile, ConditionalVisibilityTestHelpers
 from formiodata.builder import Builder
 from formiodata.form import Form
 from formiodata.components import textfieldComponent, passwordComponent
 
 
-class ConditionalVisibilityJsonLogicTestCase(unittest.TestCase):
+class ConditionalVisibilityJsonLogicTestCase(ConditionalVisibilityTestHelpers, unittest.TestCase):
     def setUp(self):
         super(ConditionalVisibilityJsonLogicTestCase, self).setUp()
 
@@ -22,23 +22,23 @@ class ConditionalVisibilityJsonLogicTestCase(unittest.TestCase):
     def test_conditionally_shown_form_elements_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
-        self.assertTrue(builder.input_components['username'].conditionally_visible)
-        self.assertTrue(builder.input_components['password'].conditionally_visible)
-        self.assertFalse(builder.input_components['secret'].conditionally_visible)
+        self.assertVisible(builder.input_components['username'])
+        self.assertVisible(builder.input_components['password'])
+        self.assertNotVisible(builder.input_components['secret'])
 
 
     def test_conditionally_shown_form_elements_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
-        self.assertTrue(hide_secret_form.input_components['username'].conditionally_visible)
-        self.assertTrue(hide_secret_form.input_components['password'].conditionally_visible)
-        self.assertFalse(hide_secret_form.input_components['secret'].conditionally_visible)
+        self.assertVisible(hide_secret_form.input_components['username'])
+        self.assertVisible(hide_secret_form.input_components['password'])
+        self.assertNotVisible(hide_secret_form.input_components['secret'])
 
         show_secret_form = Form(self.show_secret_form_json, builder)
-        self.assertTrue(show_secret_form.input_components['username'].conditionally_visible)
-        self.assertTrue(show_secret_form.input_components['password'].conditionally_visible)
-        self.assertTrue(show_secret_form.input_components['secret'].conditionally_visible)
+        self.assertVisible(show_secret_form.input_components['username'])
+        self.assertVisible(show_secret_form.input_components['password'])
+        self.assertVisible(show_secret_form.input_components['secret'])
 
 
     def test_conditionally_shown_form_elements_do_not_render_when_hidden(self):

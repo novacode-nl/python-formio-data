@@ -16,3 +16,24 @@ def log_unittest(unittest_obj, msg, log_level='info'):
         log += ' -- %s' % unittest_obj.shortDescription()
     log += ' - %s' % msg
     getattr(logging, log_level)(log)
+
+
+class ConditionalVisibilityTestHelpers:
+    def setUp(self):
+        super(ConditionalVisibilityTestHelpers, self).setUp()
+        try:
+            from json_logic import jsonLogic
+            self._have_json_logic = True
+        except ImportError:
+            self._have_json_logic = False
+
+    def assertVisible(self, component):
+        self.assertTrue(component.conditionally_visible)
+
+    def assertNotVisible(self, component):
+        if component.raw['conditional'].get('json') and not self._have_json_logic:
+            # Without json_logic, all components with json conditionals
+            # are considered always visible
+            self.assertTrue(component.conditionally_visible)
+        else:
+            self.assertFalse(component.conditionally_visible)
