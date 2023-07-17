@@ -154,16 +154,28 @@ Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
 # datagrid input
 >> datagridMeasurements = builder.components['datagridMeasurements']
 
->> [print(row.input_components['measurementDatetime'].builder_path_key) for row in datagridMeasurements.rows]
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_path_key)
+>>     for row in datagridMeasurements.rows
+>> ]
 ['pageMeasurements', 'columnsExternal', 'datagridMeasurements', 'measurementDatetime']
 
->> [print(row.input_components['measurementDatetime'].builder_path_labels) for row in datagridMeasurements.rows]
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_path_labels)
+>>     for row in datagridMeasurements.rows
+>> ]
 ['Page Measurements', 'Columns External', 'Data Grid Measurements', 'Measurement Datetime']
 
->> [print(row.input_components['measurementDatetime'].builder_input_path_key) for row in datagridMeasurements.rows]
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_input_path_key)
+>>     for row in datagridMeasurements.rows
+>> ]
 ['datagridMeasurements', 'measurementDatetime']
 
->> [print(row.input_components['measurementDatetime'].builder_input_path_labels) for row in datagridMeasurements.rows]
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_input_path_labels)
+>>     for row in datagridMeasurements.rows
+>> ]
 ['Data Grid Measurements', 'Measurement Datetime']
 
 #################################
