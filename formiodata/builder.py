@@ -2,8 +2,6 @@
 # See LICENSE file for full licensing details.
 
 import json
-import logging
-import uuid
 
 from collections import OrderedDict
 from copy import deepcopy
@@ -36,7 +34,8 @@ class Builder:
 
         # Key/value dictionay of all components for instant access.
         self.components = OrderedDict()
-        self.component_ids = {}
+        self.components_path_key = OrderedDict()
+        self.component_ids = OrderedDict()
 
         # Key/value dictionay of Form input-only components (i.e., no layout components) for instant access.
         self.input_components = {}

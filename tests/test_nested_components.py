@@ -98,8 +98,15 @@ class NestedTestCase(unittest.TestCase):
         # for key, comp in columns.components.items():
         #     print((comp.id, comp.key, comp))
 
+        # components
         self.assertEqual(len(columns.components), 6)
         self.assertEqual(len(builder.components['columns'].components), 6)
+
+        # paths
+        self.assertEqual(columns.builder_path_key, ['columns'])
+        self.assertEqual(columns.builder_path_label, ['Columns'])
+        self.assertEqual(columns.builder_input_path_key, [])
+        self.assertEqual(columns.builder_input_path_label, [])
 
         #############################
         # (top) panelComponent: panel
@@ -122,6 +129,12 @@ class NestedTestCase(unittest.TestCase):
         # components
         self.assertEqual(len(panel.components), 2)
         self.assertEqual(len(builder.components['panel'].components), 2)
+
+        # paths
+        self.assertEqual(panel.builder_path_key, ['panel'])
+        self.assertEqual(panel.builder_path_label, ['Panel'])
+        self.assertEqual(panel.builder_input_path_key, [])
+        self.assertEqual(panel.builder_input_path_label, [])
 
         ##################################
         # (top) columnsComponent: columns1
@@ -150,6 +163,12 @@ class NestedTestCase(unittest.TestCase):
         for key, comp in builder.components['columns1'].components.items():
             self.assertIn(comp.key, keys)
 
+        # paths
+        self.assertEqual(columns.builder_path_key, ['columns1'])
+        self.assertEqual(columns.builder_path_label, ['Columns'])
+        self.assertEqual(columns.builder_input_path_key, [])
+        self.assertEqual(columns.builder_input_path_label, [])
+
         ###################################
         # (top) datagridComponent: dataGrid
         ###################################
@@ -177,6 +196,12 @@ class NestedTestCase(unittest.TestCase):
         for key, comp in builder.components['dataGrid'].components.items():
             self.assertIn(comp.key, keys)
 
+        # paths
+        self.assertEqual(datagrid.builder_path_key, ['dataGrid'])
+        self.assertEqual(datagrid.builder_path_label, ['Data Grid'])
+        self.assertEqual(datagrid.builder_input_path_key, ['dataGrid'])
+        self.assertEqual(datagrid.builder_input_path_label, ['Data Grid'])
+
         ##########################################
         # datagridComponent: columns1 => dataGrid1
         ##########################################
@@ -201,6 +226,12 @@ class NestedTestCase(unittest.TestCase):
         # dataGrid1.components: columns
         self.assertEqual(len(datagrid.components), 1)
         self.assertEqual(builder.component_ids['ehf11y9'].components['columns'].id, 'ekgpz100')
+
+        # paths
+        self.assertEqual(datagrid.builder_path_key, ['columns1', 'dataGrid1'])
+        self.assertEqual(datagrid.builder_path_label, ['Columns', 'Data Grid'])
+        self.assertEqual(datagrid.builder_input_path_key, ['dataGrid1'])
+        self.assertEqual(datagrid.builder_input_path_label, ['Data Grid'])
 
         ##########################################
         # editgridComponent: columns1 => editGrid1
@@ -227,6 +258,12 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(len(editgrid.components), 1)
         self.assertEqual(editgrid.components['columns'].id, 'e1u0nm')
 
+        # paths
+        self.assertEqual(editgrid.builder_path_key, ['columns1', 'editGrid1'])
+        self.assertEqual(editgrid.builder_path_label, ['Columns', 'Edit Grid'])
+        self.assertEqual(editgrid.builder_input_path_key, ['editGrid1'])
+        self.assertEqual(editgrid.builder_input_path_label, ['Edit Grid'])
+
         #################################################################
         # columnsComponent: columns1 => dataGrid1 => <gridRow> => columns
         #################################################################
@@ -243,10 +280,15 @@ class NestedTestCase(unittest.TestCase):
         self.assertEqual(columns.parent.grid.key, 'dataGrid1')
 
         # components
-
         keys = ['panel', 'escalate']
         for key, comp in columns.components.items():
             self.assertIn(comp.key, keys)
+
+        # paths
+        self.assertEqual(columns.builder_path_key, ['columns1', 'dataGrid1', 'columns'])
+        self.assertEqual(columns.builder_path_label, ['Columns', 'Data Grid', 'Columns'])
+        self.assertEqual(columns.builder_input_path_key, ['dataGrid1'])
+        self.assertEqual(columns.builder_input_path_label, ['Data Grid'])
 
         ########################################################################
         # panelComponent: columns1 => dataGrid1 => <gridRow> => columns => panel
@@ -262,6 +304,12 @@ class NestedTestCase(unittest.TestCase):
         # parent
         self.assertIsInstance(panel.parent, columnsComponent)
         self.assertEqual(panel.parent.key, 'columns')
+
+        # paths
+        self.assertEqual(panel.builder_path_key, ['columns1', 'dataGrid1', 'columns', 'panel'])
+        self.assertEqual(panel.builder_path_label, ['Columns', 'Data Grid', 'Columns', 'Panel'])
+        self.assertEqual(panel.builder_input_path_key, ['dataGrid1'])
+        self.assertEqual(panel.builder_input_path_label, ['Data Grid'])
 
         ###################################################################################
         # columnsComponent: columns1 => dataGrid1 => <gridRow> columns => panel => columns1
@@ -293,21 +341,90 @@ class NestedTestCase(unittest.TestCase):
             if key == 'deviceType':
                 self.assertIsInstance(comp, selectComponent)
                 self.assertEqual(comp.label, 'Device Type')
+                # paths
+                self.assertEqual(
+                    comp.builder_path_key,
+                    ['columns1', 'dataGrid1', 'columns', 'panel', 'columns1', 'deviceType']
+                )
+                self.assertEqual(
+                    comp.builder_path_label,
+                    ['Columns', 'Data Grid', 'Columns', 'Panel', 'Columns', 'Device Type']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_key,
+                    ['dataGrid1', 'deviceType']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_label,
+                    ['Data Grid', 'Device Type']
+                )
                 # setter
                 comp.label = 'Machine Type'
                 self.assertEqual(comp.label, 'Machine Type')
             if key == 'measurementTime':
                 self.assertIsInstance(comp, datetimeComponent)
                 self.assertEqual(comp.label, 'Measurement Time')
+                # paths
+                self.assertEqual(
+                    comp.builder_path_key,
+                    ['columns1', 'dataGrid1', 'columns', 'panel', 'columns1', 'measurementTime']
+                )
+                self.assertEqual(
+                    comp.builder_path_label,
+                    ['Columns', 'Data Grid', 'Columns', 'Panel', 'Columns', 'Measurement Time']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_key,
+                    ['dataGrid1', 'measurementTime']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_label,
+                    ['Data Grid', 'Measurement Time']
+                )
                 # setter
                 comp.label = 'Measurement Date / Time'
                 self.assertEqual(comp.label, 'Measurement Date / Time')
             if key == 'temperatureCelsius':
                 self.assertIsInstance(comp, numberComponent)
                 self.assertEqual(comp.label, 'Temperature Celsius')
+                # paths
+                self.assertEqual(
+                    comp.builder_path_key,
+                    ['columns1', 'dataGrid1', 'columns', 'panel', 'columns1', 'temperatureCelsius']
+                )
+                self.assertEqual(
+                    comp.builder_path_label,
+                    ['Columns', 'Data Grid', 'Columns', 'Panel', 'Columns', 'Temperature Celsius']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_key,
+                    ['dataGrid1', 'temperatureCelsius']
+                )
+                self.assertEqual(
+                    comp.builder_input_path_label,
+                    ['Data Grid', 'Temperature Celsius']
+                )
                 # setter
                 comp.label = 'Temperature Fahrenheit'
                 self.assertEqual(comp.label, 'Temperature Fahrenheit')
+
+        # paths
+        self.assertEqual(
+            columns.builder_path_key,
+            ['columns1', 'dataGrid1', 'columns', 'panel', 'columns1']
+        )
+        self.assertEqual(
+            columns.builder_path_label,
+            ['Columns', 'Data Grid', 'Columns', 'Panel', 'Columns']
+        )
+        self.assertEqual(
+            columns.builder_input_path_key,
+            ['dataGrid1']
+        )
+        self.assertEqual(
+            columns.builder_input_path_label,
+            ['Data Grid']
+        )
 
     def test_Builder_components_count(self):
         builder = Builder(self.builder_json)
@@ -357,7 +474,7 @@ class NestedTestCase(unittest.TestCase):
         season = form.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
         self.assertEqual(season.value, 'autumn')
-        self.assertEqual(season.value_label, 'Autumn')        
+        self.assertEqual(season.value_label, 'Autumn')
         self.assertEqual(season.type, 'select')
 
     def test_Form_input_components_datagrid_simple(self):
@@ -426,7 +543,7 @@ class NestedTestCase(unittest.TestCase):
         #################################
         # (top) columnsComponent: columns
         #################################
-        
+
         columns = form.components['columns']
         self.assertIsInstance(columns, columnsComponent)
         self.assertEqual(columns.key, 'columns')
@@ -438,11 +555,11 @@ class NestedTestCase(unittest.TestCase):
         col_1 = row[0]
         col_1_keys = ['firstName', 'email', 'birthdate', 'appointmentDateTime']
 
-        ## keys
+        # col_1 / keys
         for comp in col_1['components']:
             self.assertIn(comp.key, col_1_keys)
 
-        ## component objects
+        # col_1 / component objects
         for comp in col_1['components']:
             if comp.key == 'firstName':
                 self.assertIsInstance(comp, textfieldComponent)
@@ -453,7 +570,7 @@ class NestedTestCase(unittest.TestCase):
             elif comp.key == 'appointmentDateTime':
                 self.assertIsInstance(comp, datetimeComponent)
 
-        ## values
+        # col_1 / values
         for comp in col_1['components']:
             if comp.key == 'firstName':
                 self.assertEqual(comp.value, 'Bob')
@@ -468,11 +585,11 @@ class NestedTestCase(unittest.TestCase):
         col_2 = row[1]
         col_2_keys = ['lastName', 'phoneNumber']
 
-        ## keys
+        # col_2 / keys
         for comp in col_2['components']:
             self.assertIn(comp.key, col_2_keys)
 
-        ## values
+        # col_2 / values
         for comp in col_2['components']:
             if comp.key == 'lastName':
                 self.assertEqual(comp.value, 'Leers')

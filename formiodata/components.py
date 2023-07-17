@@ -27,6 +27,19 @@ class Component:
         # components can also be seen as children
         self.components = OrderedDict()
 
+        # List of complete path components with keys. This includes
+        # layout components.
+        self.builder_path_key = []
+        # List of complete path components with labels. This includes
+        # layout components.
+        self.builder_path_label = []
+        # List of input components in path with keys. This only
+        # includes input components, so no layout components.
+        self.builder_input_path_key = []
+        # List of input components in path with labels. This only
+        # includes input components, so no layout components.
+        self.builder_input_path_label = []
+
         # XXX uuid to ensure (hope this won't break anything)
         self.id = self.raw.get('id', str(uuid.uuid4()))
 
@@ -57,6 +70,11 @@ class Component:
         self.load_data(data)
 
         self.builder.component_ids[self.id] = self
+
+        # parh
+        self.set_builder_path()
+        builder_path_key = '.'.join(self.builder_path_key)
+        self.builder.components_path_key[builder_path_key] = self
 
     def load_data(self, data):
         if self.input and data:
@@ -124,6 +142,39 @@ class Component:
     def child_component_owner(self):
         """The owner object for child components, to use in the recursion"""
         return self.component_owner
+
+    def set_builder_path(self):
+        builder_path_key = [self.key]
+        builder_path_label = [self.label]
+        builder_input_path_key = []
+        builder_input_path_label = []
+
+        if self.is_form_component:
+            builder_input_path_key.append(self.key)
+            builder_input_path_label.append(self.label)
+
+        parent = self.parent
+        while parent:
+            if hasattr(parent, 'key'):
+                builder_path_key.append(parent.key)
+                builder_path_label.append(parent.label)
+                if parent.is_form_component:
+                    builder_input_path_key.append(parent.key)
+                    builder_input_path_label.append(parent.label)
+                parent = parent.parent
+            elif parent.__class__.__name__ == 'gridRow':
+                parent = parent.grid
+            else:
+                parent = parent.component_owner
+        builder_path_key.reverse()
+        builder_path_label.reverse()
+        self.builder_path_key = builder_path_key
+        self.builder_path_label = builder_path_label
+        # input path
+        builder_input_path_key.reverse()
+        builder_input_path_label.reverse()
+        self.builder_input_path_key = builder_input_path_key
+        self.builder_input_path_label = builder_input_path_label
 
     @property
     def validate(self):
@@ -921,6 +972,7 @@ class baseGridComponent(Component):
         def __init__(self, grid, data):
             self.grid = grid
             self.builder = grid.builder
+            self.builder_path_key = None
             self.input_components = {}
             self.components = OrderedDict()
             self.form = grid.form

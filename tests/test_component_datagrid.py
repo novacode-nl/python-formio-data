@@ -25,6 +25,27 @@ class datagridComponentTestCase(ComponentTestCase):
         dataGrid = self.builder.components['dataGrid']
         self.assertEqual(dataGrid.label, 'Data Grid')
 
+    def test_paths(self):
+        dataGrid = self.builder.components['dataGrid']
+        # datagrid
+        self.assertEqual(dataGrid.builder_path_key, ['dataGrid'])
+        self.assertEqual(dataGrid.builder_path_label, ['Data Grid'])
+        self.assertEqual(dataGrid.builder_input_path_key, ['dataGrid'])
+        self.assertEqual(dataGrid.builder_input_path_label, ['Data Grid'])
+        # datagrid inputs
+        for pos, row_with_components in enumerate(dataGrid.rows):
+            for component in row_with_components.input_components.values():
+                if component.key == 'textField':
+                    self.assertEqual(component.builder_path_key, ['dataGrid', 'textField'])
+                    self.assertEqual(component.builder_path_label, ['Data Grid', 'Text Field'])
+                    self.assertEqual(component.builder_input_path_key, ['dataGrid', 'textField'])
+                    self.assertEqual(component.builder_input_path_label, ['Data Grid', 'Text Field'])
+                if component.key == 'checkbox':
+                    self.assertEqual(component.builder_path_key, ['dataGrid', 'checkbox'])
+                    self.assertEqual(component.builder_path_label, ['Data Grid', 'Checkbox'])
+                    self.assertEqual(component.builder_input_path_key, ['dataGrid', 'checkbox'])
+                    self.assertEqual(component.builder_input_path_label, ['Data Grid', 'Checkbox'])
+
     def test_get_row_labels(self):
         builder_dataGrid = self.builder.components['dataGrid']
         dataGrid = self.form.input_components[builder_dataGrid.key]
@@ -45,7 +66,7 @@ class datagridComponentTestCase(ComponentTestCase):
         checkbox_values = [True, False]
         for pos, row_with_components in enumerate(dataGrid.rows):
             for component in row_with_components.input_components.values():
-                if component.type == 'textfield':
+                if component.key == 'textField':
                     self.assertEqual(textField_values[pos], component.value)
-                if component.type == 'checkbox':
+                if component.key == 'checkbox':
                     self.assertEqual(checkbox_values[pos], component.value)
