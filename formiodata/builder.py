@@ -2,11 +2,14 @@
 # See LICENSE file for full licensing details.
 
 import json
+import logging
 
 from collections import OrderedDict
 from copy import deepcopy
 
 from formiodata import components
+
+logger = logging.getLogger(__name__)
 
 
 class Builder:
@@ -90,7 +93,6 @@ class Builder:
                 "%s\n"
             logging.warning(msg % component)
             return False
-
 
     @property
     def form(self):

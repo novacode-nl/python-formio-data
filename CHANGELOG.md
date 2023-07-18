@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+Fix error in `get_component_object` (`builder.py`) => `NameError: name 'logging is not defined'`\
+Accidentally removed the `import logging` in previous version 1.0.0
+
 ## 1.0.0
 
 Implement component (object) path properties in a builder (object) context.
