@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+Refactor builder component path properties, to store objects, with key and label getters.
+
 ## 1.0.1
 
 Fix error in `get_component_object` (`builder.py`) => `NameError: name 'logging is not defined'`\
@@ -7,7 +11,7 @@ Accidentally removed the `import logging` in previous version 1.0.0
 
 ## 1.0.0
 
-Implement component (object) path properties in a builder (object) context.
+Implement builder component path properties (keys, labels).
 
 `builder_path_key`
 List of complete path components with keys. This includes layout components.

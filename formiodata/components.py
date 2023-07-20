@@ -27,18 +27,11 @@ class Component:
         # components can also be seen as children
         self.components = OrderedDict()
 
-        # List of complete path components with keys. This includes
-        # layout components.
-        self.builder_path_key = []
-        # List of complete path components with labels. This includes
-        # layout components.
-        self.builder_path_label = []
-        # List of input components in path with keys. This only
+        # List of complete path components. This includes layout
+        # components.
+        self.builder_path = []
         # includes input components, so no layout components.
-        self.builder_input_path_key = []
-        # List of input components in path with labels. This only
-        # includes input components, so no layout components.
-        self.builder_input_path_label = []
+        self.builder_input_path = []
 
         # XXX uuid to ensure (hope this won't break anything)
         self.id = self.raw.get('id', str(uuid.uuid4()))
@@ -72,8 +65,9 @@ class Component:
         self.builder.component_ids[self.id] = self
 
         # parh
-        self.set_builder_path()
-        builder_path_key = '.'.join(self.builder_path_key)
+        self.set_builder_paths()
+        builder_path_keys = [p.key for p in self.builder_path]
+        builder_path_key = '.'.join(builder_path_keys)
         self.builder.components_path_key[builder_path_key] = self
 
     def load_data(self, data):
@@ -143,38 +137,46 @@ class Component:
         """The owner object for child components, to use in the recursion"""
         return self.component_owner
 
-    def set_builder_path(self):
-        builder_path_key = [self.key]
-        builder_path_label = [self.label]
-        builder_input_path_key = []
-        builder_input_path_label = []
+    @property
+    def builder_path_key(self):
+        return [p.key for p in self.builder_path]
 
+    @property
+    def builder_path_label(self):
+        return [p.label for p in self.builder_path]
+
+    @property
+    def builder_input_path_key(self):
+        return [p.key for p in self.builder_input_path]
+
+    @property
+    def builder_input_path_label(self):
+        return [p.label for p in self.builder_input_path]
+
+    def set_builder_paths(self):
+        builder_path = [self]
+        builder_input_path = []
         if self.is_form_component:
-            builder_input_path_key.append(self.key)
-            builder_input_path_label.append(self.label)
-
+            if self.builder.load_path_objects:
+                builder_input_path.append(self)
         parent = self.parent
         while parent:
             if hasattr(parent, 'key'):
-                builder_path_key.append(parent.key)
-                builder_path_label.append(parent.label)
+                if self.builder.load_path_objects:
+                    builder_path.append(parent)
                 if parent.is_form_component:
-                    builder_input_path_key.append(parent.key)
-                    builder_input_path_label.append(parent.label)
+                    if self.builder.load_path_objects:
+                        builder_input_path.append(parent)
                 parent = parent.parent
             elif parent.__class__.__name__ == 'gridRow':
                 parent = parent.grid
             else:
                 parent = parent.component_owner
-        builder_path_key.reverse()
-        builder_path_label.reverse()
-        self.builder_path_key = builder_path_key
-        self.builder_path_label = builder_path_label
+        builder_path.reverse()
+        self.builder_path = builder_path
         # input path
-        builder_input_path_key.reverse()
-        builder_input_path_label.reverse()
-        self.builder_input_path_key = builder_input_path_key
-        self.builder_input_path_label = builder_input_path_label
+        builder_input_path.reverse()
+        self.builder_input_path = builder_input_path
 
     @property
     def validate(self):
@@ -972,7 +974,7 @@ class baseGridComponent(Component):
         def __init__(self, grid, data):
             self.grid = grid
             self.builder = grid.builder
-            self.builder_path_key = None
+            self.builder_path = None
             self.input_components = {}
             self.components = OrderedDict()
             self.form = grid.form

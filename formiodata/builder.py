@@ -19,6 +19,7 @@ class Builder:
         @param schema_json
         @param lang
         """
+
         if isinstance(schema_json, dict):
             self.schema = schema_json
         else:
@@ -28,6 +29,9 @@ class Builder:
         # i18n (translations)
         self.i18n = kwargs.get('i18n', {})
         self.resources = kwargs.get('resources', {})
+
+        # options from kwargs
+        self.load_path_objects = kwargs.get('load_path_objects', True)
 
         # Raw components from the schema
         self._raw_components = []
