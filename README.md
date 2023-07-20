@@ -147,35 +147,49 @@ Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
 >> print(form.data.firstname.value)
 'Bob'
 
-#################
-# components path
-#################
+#############################
+# component path (properties)
+#############################
 
 # datagrid input
 >> datagridMeasurements = builder.components['datagridMeasurements']
 
-# Component builder_path_key property
+# builder_path
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_path)
+>>     for row in datagridMeasurements.rows
+>> ]
+[<panelComponent>, <columnsComponent>, <datagridComponent>, <datetimeComponent>]
+
+# builder_path_key
 >> [
 >>     print(row.input_components['measurementDatetime'].builder_path_key)
 >>     for row in datagridMeasurements.rows
 >> ]
 ['pageMeasurements', 'columnsExternal', 'datagridMeasurements', 'measurementDatetime']
 
-# Component builder_path_labels property
+# builder_path_labels
 >> [
 >>     print(row.input_components['measurementDatetime'].builder_path_labels)
 >>     for row in datagridMeasurements.rows
 >> ]
 ['Page Measurements', 'Columns External', 'Data Grid Measurements', 'Measurement Datetime']
 
-# Component builder_input_path_key property
+# builder_input_path
+>> [
+>>     print(row.input_components['measurementDatetime'].builder_input_path)
+>>     for row in datagridMeasurements.rows
+>> ]
+[<datagridComponent>, <datetimeComponent>]
+
+# builder_input_path_key
 >> [
 >>     print(row.input_components['measurementDatetime'].builder_input_path_key)
 >>     for row in datagridMeasurements.rows
 >> ]
 ['datagridMeasurements', 'measurementDatetime']
 
-# Component builder_input_path_labels property
+# builder_input_path_labels
 >> [
 >>     print(row.input_components['measurementDatetime'].builder_input_path_labels)
 >>     for row in datagridMeasurements.rows
