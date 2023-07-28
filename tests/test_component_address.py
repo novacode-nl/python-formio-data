@@ -45,6 +45,7 @@ class addressComponentTestCase(ComponentTestCase):
         self.assertEqual(address.street_number, '33')
         self.assertEqual(address.city, 'Amsterdam')
         self.assertEqual(address.country, 'Netherlands')
+        self.assertEqual(address.country_code, 'NL')
 
     # i18n translations
     def test_get_label_i18n_nl(self):

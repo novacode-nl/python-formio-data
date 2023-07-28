@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+Add the country_code property in the addressComponent.
+
 ## 1.0.2
 
 Refactor builder component path properties, to store objects, with key and label getters.

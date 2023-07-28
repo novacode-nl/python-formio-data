@@ -508,6 +508,13 @@ class addressComponent(Component):
         else:
             return None
 
+    @property
+    def country_code(self):
+        if self.provider == self.PROVIDER_GOOGLE:
+            return self._address_google('country', 'short_name')
+        else:
+            return None
+
 
 class datetimeComponent(Component):
 
