@@ -246,11 +246,19 @@ class Component:
         return self.raw.get('hidden')
 
     @property
+    def tableView(self):
+        return self.raw.get('tableView')
+
+    @property
+    def disabled(self):
+        return self.raw.get('disabled')
+
+    @property
     def conditional(self):
         return self.raw.get('conditional')
 
     @property
-    def custom_conditional(self):
+    def customConditional(self):
         return self.raw.get('customConditional')
 
     @property

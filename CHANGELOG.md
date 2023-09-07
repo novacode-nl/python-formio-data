@@ -1,11 +1,17 @@
 # Changelog
 
+## 1.0.5
+
+Add Component properties:
+- `tableView`: Display // Table View
+- `disabled`: Display // Disabled
+
 ## 1.0.4
 
-Add some Component properties:
-- `conditional`: Simple Conditional
-- `custom_conditional`: Custom Conditional
-- `templates`: Eg templates for layout and (data) grids.
+Add Component properties:
+- `conditional`: Conditional // Simple Conditional
+- `custom_conditional`: Conditional // Custom Conditional
+- `templates`: Templates (eg templates for layout and (data) grids.)
 - `logic`: Logic (trigger/action pairs).
 
 ## 1.0.3
