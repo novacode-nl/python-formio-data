@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.4
+
+Add some Component properties:
+- `conditional`: Simple Conditional
+- `custom_conditional`: Custom Conditional
+- `templates`: Eg templates for layout and (data) grids.
+- `logic`: Logic (trigger/action pairs).
+
 ## 1.0.3
 
 Add the country_code property in the addressComponent.

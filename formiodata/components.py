@@ -245,6 +245,22 @@ class Component:
     def hidden(self):
         return self.raw.get('hidden')
 
+    @property
+    def conditional(self):
+        return self.raw.get('conditional')
+
+    @property
+    def custom_conditional(self):
+        return self.raw.get('customConditional')
+
+    @property
+    def templates(self):
+        return self.raw.get('templates')
+
+    @property
+    def logic(self):
+        return self.raw.get('logic')
+
     def _encode_value(self, value):
         return value
 
