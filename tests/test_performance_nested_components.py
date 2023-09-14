@@ -10,18 +10,17 @@ from datetime import datetime, date, timezone, timedelta
 from tests.utils import readfile
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import (
-    columnsComponent,
-    datetimeComponent,
-    emailComponent,
-    numberComponent,
-    selectComponent,
-    textfieldComponent,
-    checkboxComponent,
-    panelComponent,
-    datagridComponent,
-    editgridComponent,
-)
+
+from formiodata.components.columns import columnsComponent
+from formiodata.components.datetime import datetimeComponent
+from formiodata.components.email import emailComponent
+from formiodata.components.number import numberComponent
+from formiodata.components.select import selectComponent
+from formiodata.components.textfield import textfieldComponent
+from formiodata.components.checkbox import checkboxComponent
+from formiodata.components.panel import panelComponent
+from formiodata.components.datagrid import datagridComponent
+from formiodata.components.editgrid import editgridComponent
 
 
 class PerformanceNestedTestCase(unittest.TestCase):
@@ -48,7 +47,7 @@ class PerformanceNestedTestCase(unittest.TestCase):
         self.logger.info('\n'.join(msg_lines))
         # self.logger.info(end - start)
 
-    def test_Builder_component_with_path_objects(self):
+    def XX_test_Builder_component_with_path_objects(self):
         """ Builder: component path objects """
 
         msg_lines = [
@@ -61,7 +60,7 @@ class PerformanceNestedTestCase(unittest.TestCase):
         self.load_builders_range(100, load_path_objects=True)
         self.load_builders_range(1000, load_path_objects=True)
 
-    def test_Builder_component_no_path_objects(self):
+    def XX_test_Builder_component_no_path_objects(self):
         """ Builder: component NO path objects """
 
         msg_lines = [

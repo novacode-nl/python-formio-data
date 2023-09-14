@@ -1,9 +1,8 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
-import json
 
 from formiodata.builder import Builder
-from formiodata.components import resourceComponent
+from formiodata.components.resource import resourceComponent
 from formiodata.form import Form
 from tests.test_component import ComponentTestCase
 

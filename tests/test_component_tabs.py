@@ -2,7 +2,9 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import tabsComponent, textfieldComponent, numberComponent
+from formiodata.components.tabs import tabsComponent
+from formiodata.components.textfield import textfieldComponent
+from formiodata.components.number import numberComponent
 
 
 class tabsComponentTestCase(ComponentTestCase):

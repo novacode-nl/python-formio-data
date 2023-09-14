@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.1.0
+
+Put component classes as files in the new `components` directory.\
+Change the instantiation of a component in the `get_component_object` method of the `Builder` class.
+
+**Warning**:
+
+This changes the `import` declaration (path) of how components should be imported.
+
+**Old style import:**:
+
+```python
+from formiodata.components import textfieldComponent
+```
+
+**New style import:**
+
+```python
+from formiodata.components.textfield import textfieldComponent
+```
+
+Also some additional minor improvements, e.g. remove unused imports and newlines.
+
 ## 1.0.5
 
 Add Component properties:

@@ -1,6 +1,5 @@
 from formiodata.form import Form
 from test_component import ComponentTestCase
-from formiodata.components import emailComponent
 
 
 class valueDefaultEmailComponent(ComponentTestCase):

@@ -1,10 +1,8 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-from collections import OrderedDict
-
 from test_component import ComponentTestCase
-from formiodata.components import addressComponent
+from formiodata.components.address import addressComponent
 
 
 class addressComponentTestCase(ComponentTestCase):

@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import editgridComponent
+from formiodata.components.editgrid import editgridComponent
 
 
 class editgridComponentTestCase(ComponentTestCase):

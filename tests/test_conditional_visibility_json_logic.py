@@ -1,13 +1,12 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import json
 import unittest
 
 from tests.utils import readfile, ConditionalVisibilityTestHelpers
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import textfieldComponent, passwordComponent
+
 
 
 class ConditionalVisibilityJsonLogicTestCase(ConditionalVisibilityTestHelpers, unittest.TestCase):
@@ -18,14 +17,12 @@ class ConditionalVisibilityJsonLogicTestCase(ConditionalVisibilityTestHelpers, u
         self.hide_secret_form_json = readfile('data', 'test_conditional_visibility_json_logic_hide_secret.json')
         self.show_secret_form_json = readfile('data', 'test_conditional_visibility_json_logic_show_secret.json')
 
-
     def test_conditionally_shown_form_elements_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
         self.assertVisible(builder.input_components['username'])
         self.assertVisible(builder.input_components['password'])
         self.assertNotVisible(builder.input_components['secret'])
-
 
     def test_conditionally_shown_form_elements_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
@@ -39,7 +36,6 @@ class ConditionalVisibilityJsonLogicTestCase(ConditionalVisibilityTestHelpers, u
         self.assertVisible(show_secret_form.input_components['username'])
         self.assertVisible(show_secret_form.input_components['password'])
         self.assertVisible(show_secret_form.input_components['secret'])
-
 
     def test_conditionally_shown_form_elements_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)

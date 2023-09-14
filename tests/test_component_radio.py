@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import radioComponent
+from formiodata.components.radio import radioComponent
 
 
 class radioComponentTestCase(ComponentTestCase):

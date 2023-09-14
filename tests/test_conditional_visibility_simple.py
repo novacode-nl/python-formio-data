@@ -1,13 +1,11 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import json
 import unittest
 
 from tests.utils import readfile, ConditionalVisibilityTestHelpers
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import textfieldComponent, passwordComponent
 
 
 class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unittest.TestCase):
@@ -18,14 +16,12 @@ class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unit
         self.hide_password_form_json = readfile('data', 'test_conditional_visibility_simple_hide_password.json')
         self.show_textfield_form_json = readfile('data', 'test_conditional_visibility_simple_show_textfield.json')
 
-
     def test_conditionally_shown_form_elements_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
         self.assertVisible(builder.input_components['textField'])
         self.assertNotVisible(builder.input_components['maybeTextField'])
         self.assertVisible(builder.input_components['maybePassword'])
-
 
     def test_conditionally_shown_form_elements_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
@@ -39,7 +35,6 @@ class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unit
         self.assertVisible(show_textfield_form.input_components['textField'])
         self.assertVisible(show_textfield_form.input_components['maybeTextField'])
         self.assertVisible(show_textfield_form.input_components['maybePassword'])
-
 
     def test_conditionally_shown_form_elements_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
