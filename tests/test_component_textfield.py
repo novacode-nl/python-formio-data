@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import textfieldComponent
+from formiodata.components.textfield import textfieldComponent
 
 
 class textfieldComponentTestCase(ComponentTestCase):
@@ -42,7 +42,7 @@ class textfieldComponentTestCase(ComponentTestCase):
         self.assertEqual(firstName.label, 'First Name')
         self.assertEqual(firstName.value, 'Bob')
         self.assertEqual(firstName.type, 'textfield')
-        
+
     def test_get_form_data(self):
         firstName = self.form.input.firstName
         self.assertEqual(firstName.label, 'First Name')

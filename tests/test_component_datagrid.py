@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import datagridComponent
+from formiodata.components.datagrid import datagridComponent
 
 
 class datagridComponentTestCase(ComponentTestCase):

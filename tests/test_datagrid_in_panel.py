@@ -1,13 +1,12 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import json
 import unittest
 
 from tests.utils import readfile
+
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import textfieldComponent, passwordComponent
 
 
 # Regression test for #17
@@ -17,7 +16,6 @@ class DatagridInPanelTestcase(unittest.TestCase):
 
         self.builder_json = readfile('data', 'test_datagrid_in_panel_builder.json')
         self.one_row_form_json = readfile('data', 'test_datagrid_in_panel_one_row_form.json')
-
 
     def test_default_state_in_builder_has_one_row(self):
         builder = Builder(self.builder_json)

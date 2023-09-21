@@ -1,13 +1,12 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
-import json
 import unittest
 
 from tests.utils import readfile, ConditionalVisibilityTestHelpers
 from formiodata.builder import Builder
 from formiodata.form import Form
-from formiodata.components import textfieldComponent, passwordComponent
+
 
 class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelpers, unittest.TestCase):
     def setUp(self):

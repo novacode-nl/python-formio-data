@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import selectComponent
+from formiodata.components.select import selectComponent
 
 
 class selectMultipleComponentTestCase(ComponentTestCase):

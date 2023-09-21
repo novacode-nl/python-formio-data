@@ -2,8 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import fileComponent
-from formiodata.utils import base64_encode_url
+from formiodata.components.file import fileComponent
 
 
 class fileComponentStorageUrlTestCase(ComponentTestCase):

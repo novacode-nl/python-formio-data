@@ -2,10 +2,9 @@
 # See LICENSE file for full licensing details.
 
 from collections import OrderedDict
-from datetime import datetime, date
 
 from test_component import ComponentTestCase
-from formiodata.components import dayComponent
+from formiodata.components.day import dayComponent
 
 
 class dayComponentTestCase(ComponentTestCase):
@@ -16,7 +15,7 @@ class dayComponentTestCase(ComponentTestCase):
         self.assertIsInstance(monthDayYear, dayComponent)
 
         monthYear = self.builder.input_components['monthYear']
-        self.assertIsInstance(monthDayYear, dayComponent)
+        self.assertIsInstance(monthYear, dayComponent)
 
         dayMonthYear = self.builder.input_components['dayMonthYear']
         self.assertIsInstance(dayMonthYear, dayComponent)
@@ -28,10 +27,10 @@ class dayComponentTestCase(ComponentTestCase):
         self.assertIsInstance(day, dayComponent)
 
         month = self.builder.input_components['month']
-        self.assertIsInstance(day, dayComponent)
+        self.assertIsInstance(month, dayComponent)
 
         year = self.builder.input_components['year']
-        self.assertIsInstance(day, dayComponent)
+        self.assertIsInstance(year, dayComponent)
 
         # Not dayComponent
         email = self.builder.input_components['email']

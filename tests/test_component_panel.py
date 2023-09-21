@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import panelComponent
+from formiodata.components.panel import panelComponent
 
 
 class panelComponentTestCase(ComponentTestCase):

@@ -7,7 +7,7 @@ import logging
 from collections import OrderedDict
 from copy import deepcopy
 
-from formiodata import components
+from formiodata.components.component import Component
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,9 @@ class Builder:
         if component_type:
             try:
                 cls_name = '%sComponent' % component_type
-                cls = getattr(components, cls_name)
+                import_path = 'formiodata.components.%s' % component_type
+                module = __import__(import_path, fromlist=[cls_name])
+                cls = getattr(module, cls_name)
                 component_obj = cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
                 return component_obj
             except AttributeError as e:
@@ -89,7 +91,7 @@ class Builder:
                 logging.error(e)
                 # TODO: implement property (by kwargs) whether to return
                 # (raw) Component object or throw exception,
-                return components.Component(component, self)
+                return Component(component, self)
         else:
             msg = "Can't instantiate a (raw) component without a type.\n\n" \
                 "Component raw data\n" \

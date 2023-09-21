@@ -2,7 +2,7 @@
 # See LICENSE file for full licensing details.
 
 from test_component import ComponentTestCase
-from formiodata.components import emailComponent
+from formiodata.components.email import emailComponent
 
 
 class emailComponentTestCase(ComponentTestCase):
@@ -17,8 +17,8 @@ class emailComponentTestCase(ComponentTestCase):
         self.assertNotIsInstance(firstName, emailComponent)
 
     def test_get_key(self):
-       email = self.builder.input_components['email']
-       self.assertEqual(email.key, 'email')
+        email = self.builder.input_components['email']
+        self.assertEqual(email.key, 'email')
 
     def test_get_type(self):
         email = self.builder.input_components['email']

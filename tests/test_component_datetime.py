@@ -4,7 +4,7 @@
 from datetime import datetime, date
 
 from test_component import ComponentTestCase
-from formiodata.components import datetimeComponent
+from formiodata.components.datetime import datetimeComponent
 
 
 class datetimeComponentTestCase(ComponentTestCase):
