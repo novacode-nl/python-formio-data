@@ -14,10 +14,24 @@ logger = logging.getLogger(__name__)
 
 class Builder:
 
-    def __init__(self, schema_json, **kwargs):
+    def __init__(
+        self,
+        schema_json,
+        language='en',
+        i18n={},
+        resources={},
+        load_path_objects=True,
+        component_class_mapping={},
+        **kwargs
+    ):
         """
         @param schema_json
-        @param lang
+        @param language
+        @param i18n
+        @param resources
+        @param resources
+        @param load_path_objects
+        @param component_class_mapping
         """
 
         if isinstance(schema_json, dict):
@@ -25,13 +39,11 @@ class Builder:
         else:
             self.schema = json.loads(schema_json)
 
-        self.language = kwargs.get('language', 'en')
-        # i18n (translations)
-        self.i18n = kwargs.get('i18n', {})
-        self.resources = kwargs.get('resources', {})
-
-        # options from kwargs
-        self.load_path_objects = kwargs.get('load_path_objects', True)
+        self.language = language
+        self.i18n = i18n
+        self.resources = resources
+        self.load_path_objects = load_path_objects
+        self.component_class_mapping = component_class_mapping
 
         # Raw components from the schema
         self._raw_components = []
@@ -79,10 +91,20 @@ class Builder:
         component_type = component.get('type')
         if component_type:
             try:
-                cls_name = '%sComponent' % component_type
-                import_path = 'formiodata.components.%s' % component_type
-                module = __import__(import_path, fromlist=[cls_name])
-                cls = getattr(module, cls_name)
+                try:
+                    mapping_value = self.component_class_mapping[component_type]
+                    if isinstance(mapping_value, str):
+                        cls_name = '%sComponent' % mapping_value
+                        import_path = 'formiodata.components.%s' % mapping_value
+                        module = __import__(import_path, fromlist=[cls_name])
+                        cls = getattr(module, cls_name)
+                    else:
+                        cls = self.component_class_mapping[component_type]
+                except KeyError:
+                    cls_name = '%sComponent' % component_type
+                    import_path = 'formiodata.components.%s' % component_type
+                    module = __import__(import_path, fromlist=[cls_name])
+                    cls = getattr(module, cls_name)
                 component_obj = cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
                 return component_obj
             except AttributeError as e:

@@ -12,11 +12,13 @@ from formiodata.builder import Builder
 
 class Form:
 
-    def __init__(self, form_json, builder=None, builder_schema_json=None, lang='en', **kwargs):
+    def __init__(
+        self, form_json, builder=None, builder_schema_json=None, lang="en", **kwargs
+    ):
         """
         @param form_json
         @param builder Builder
-        @param builder_schema
+        @param builder_schema_json
         @param lang
         """
         if isinstance(form_json, dict):
