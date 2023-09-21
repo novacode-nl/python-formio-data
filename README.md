@@ -209,6 +209,32 @@ Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
   {'firstName': <textfieldComponent>, 'lastName: <textfieldComponent>}, 
   {'email': <emailComponent>, 'companyName: <textfieldComponent>}
 ]
+
+##########################
+# components class mapping
+##########################
+
+# Below an example which verbosely shows the feature:
+# - First set a custom component type 'custom_editgrid' in the Builder JSON schema.
+# - Check (assert) whether the component object is an instance of the mapped editgridComponent.
+# This code is also present in the unittest (file): tests/test_component_class_mapping.py
+
+schema_dict = json.loads(self.builder_json)
+
+# change 'editgrid' type to 'custom_editgrid'
+for comp in schema_dict['components']:
+    if comp['key'] == 'editGrid':
+        comp['type'] = 'custom_editgrid'
+
+component_class_mapping = {'custom_editgrid': editgridComponent}
+builder = Builder(
+    schema_json,
+    component_class_mapping=component_class_mapping,
+)
+
+custom_editgrid = builder.components['editGrid']
+self.assertIsInstance(custom_editgrid, editgridComponent)
+self.assertEqual(custom_editgrid.type, 'custom_editgrid')
 ```
 
 ## Unit tests

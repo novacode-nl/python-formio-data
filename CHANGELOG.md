@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+
+New "component class mapping feature" for the Builder instantiation:\
+Map a custom component type to an implemented component class, which is then loaded.
+
+An example is available in the unittests of file: `tests/test_component_class_mapping.py`
+
+Also refactored the Builder constructor, from some `kwargs` to keyword arguments.
+
 ## 1.1.0
 
 Put component classes as files in the new `components` directory.\
