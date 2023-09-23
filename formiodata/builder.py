@@ -84,6 +84,24 @@ class Builder:
                 component_obj.load(component_owner=self, parent=None, data=None)
                 self.components[component_obj.key] = component_obj
 
+    def get_component_class(self, component):
+        component_type = component.get('type')
+        try:
+            mapping_value = self.component_class_mapping[component_type]
+            if isinstance(mapping_value, str):
+                cls_name = '%sComponent' % mapping_value
+                import_path = 'formiodata.components.%s' % mapping_value
+                module = __import__(import_path, fromlist=[cls_name])
+                cls = getattr(module, cls_name)
+            else:
+                cls = self.component_class_mapping[component_type]
+        except KeyError:
+            cls_name = '%sComponent' % component_type
+            import_path = 'formiodata.components.%s' % component_type
+            module = __import__(import_path, fromlist=[cls_name])
+            cls = getattr(module, cls_name)
+        return cls
+
     def get_component_object(self, component):
         """
         @param component
@@ -91,23 +109,10 @@ class Builder:
         component_type = component.get('type')
         if component_type:
             try:
-                try:
-                    mapping_value = self.component_class_mapping[component_type]
-                    if isinstance(mapping_value, str):
-                        cls_name = '%sComponent' % mapping_value
-                        import_path = 'formiodata.components.%s' % mapping_value
-                        module = __import__(import_path, fromlist=[cls_name])
-                        cls = getattr(module, cls_name)
-                    else:
-                        cls = self.component_class_mapping[component_type]
-                except KeyError:
-                    cls_name = '%sComponent' % component_type
-                    import_path = 'formiodata.components.%s' % component_type
-                    module = __import__(import_path, fromlist=[cls_name])
-                    cls = getattr(module, cls_name)
+                cls = self.get_component_class(component)
                 component_obj = cls(component, self, language=self.language, i18n=self.i18n, resources=self.resources)
                 return component_obj
-            except AttributeError as e:
+            except (AttributeError, ModuleNotFoundError) as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
                 logging.error(e)

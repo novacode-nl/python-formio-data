@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1
+
+Fix `get_component_object` (Builder) method to handle `ModuleNotFoundError`.\
+Therefor implemented the `get_component_class` method to determine the class with a fallback to the base `Component` class.
+
 ## 1.2.0
 
 New "component class mapping feature" for the Builder instantiation:\
