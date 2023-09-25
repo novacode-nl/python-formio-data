@@ -38,9 +38,9 @@ class selectOneComponentTestCase(ComponentTestCase):
         season = self.form.input_components['favouriteSeason']
         self.assertEqual(season.label, 'Favourite Season')
         self.assertEqual(season.value, 'autumn')
-        self.assertEqual(season.value_label, 'Autumn')        
+        self.assertEqual(season.value_label, 'Autumn')
         self.assertEqual(season.type, 'select')
-        
+
     def test_get_form_data(self):
         season = self.form.input.favouriteSeason
         self.assertEqual(season.label, 'Favourite Season')

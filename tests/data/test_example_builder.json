@@ -1456,6 +1456,37 @@
       }
     },
     {
+      "label": "Select Boxes",
+      "optionsLabelPosition": "right",
+      "tableView": false,
+      "values": [
+        {
+            "label": "North",
+            "value": "north",
+            "shortcut": ""
+        },
+        {
+            "label": "East",
+            "value": "east",
+            "shortcut": ""
+        },
+        {
+            "label": "South",
+            "value": "south",
+            "shortcut": ""
+        },
+        {
+            "label": "West",
+            "value": "west",
+            "shortcut": ""
+        }
+      ],
+      "key": "selectBoxes",
+      "type": "selectboxes",
+      "input": true,
+      "inputType": "checkbox"
+    },
+    {
       "collapsible": false,
       "tableView": false,
       "key": "panel",
