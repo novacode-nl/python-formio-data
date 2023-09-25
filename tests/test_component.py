@@ -42,6 +42,7 @@ class ComponentTestCase(CommonTestCase):
                 'East': 'Oost',
                 'South': 'Zuid',
                 'West': 'West',
+                'Select Boxes': 'Select aanvink opties',
                 'Month Day Year': 'Maand dag jaar',
                 'Day Month Year': 'Dag maand jaar',
                 'May': 'Mei',

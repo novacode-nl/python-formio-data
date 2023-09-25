@@ -41,7 +41,7 @@ class selectMultipleComponentTestCase(ComponentTestCase):
         self.assertEqual(food.value_labels, ['Mexican', 'Chinese'])
         self.assertEqual(food.value_label, False)
         self.assertEqual(food.type, 'select')
-        
+
     def test_get_form_data(self):
         food = self.form.input.favouriteFood
         self.assertEqual(food.label, 'Favourite Food')
