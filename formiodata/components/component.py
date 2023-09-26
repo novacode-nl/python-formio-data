@@ -287,31 +287,39 @@ class Component:
         try:
             cond = self.raw['conditional']
             if cond.get('json'):
-                # Optional package
-                try:
-                    from json_logic import jsonLogic
-                    context = {'data': self._all_data}
-                    try:
-                        context['row'] = self.component_owner.row
-                    except AttributeError:
-                        pass  # only datagrid rows have a "row" attribute
-                    return jsonLogic(cond['json'], context)
-                except ImportError:
-                    logger.warning(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
-                    return True
+                return self.conditional_visible_json_logic()
             elif cond.get('when'):
-                triggering_component = self.component_owner.input_components[cond['when']]
-                triggering_value = cond['eq']
-                if triggering_component.value == triggering_value:
-                    return cond['show']
-                else:
-                    return not cond['show']
+                return self.conditional_visible_when()
         except KeyError:
             # Unknown component or no 'when', 'eq' or 'show' property
             pass
 
         # By default, it's visible
         return True
+
+    def conditional_visible_when(self):
+        cond = self.raw['conditional']
+        triggering_component = self.component_owner.input_components[cond['when']]
+        triggering_value = cond['eq']
+        if triggering_component.value == triggering_value:
+            return cond['show']
+        else:
+            return not cond['show']
+
+    def conditional_visible_json_logic(self):
+        # Optional package
+        try:
+            from json_logic import jsonLogic
+            context = {'data': self._all_data}
+            try:
+                context['row'] = self.component_owner.row
+            except AttributeError:
+                pass  # only datagrid rows have a "row" attribute
+            cond = self.raw['conditional']
+            return jsonLogic(cond['json'], context)
+        except ImportError:
+            logger.warning(f'Could not load json logic extension; will not evaluate visibility of {self.__class__.__name__} {self.id} ("{self.key}")')
+            return True
 
     @property
     def is_visible(self):

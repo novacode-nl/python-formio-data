@@ -20,3 +20,14 @@ class selectboxesComponent(Component):
                 val = {'key': b_val['value'], 'label': label, 'value': self.value.get(b_val['value'])}
                 values_labels[b_val['value']] = val
         return values_labels
+
+    def conditional_visible_when(self):
+        cond = self.raw['conditional']
+        triggering_component = self.component_owner.input_components[cond['when']]
+        triggering_value = cond['eq']
+        if triggering_component.value and triggering_component.value.get(
+            triggering_value
+        ):
+            return cond['show']
+        else:
+            return not cond['show']
