@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.2
+
+Refactored the `Component` class `conditionally_visible` method, to call the following 2 methods which can be extended in component subclasses:
+- `conditional_visible_json_when`
+- `conditional_visible_json_logic`
+
+Implemented the `conditional_visible_json_when` method for the `selectboxesComponent`.\
+Extended the unittest `ConditionalVisibilitySimpleTestCase` with simple conditional visibility for the `selectboxesComponent`.
+
 ## 1.2.1
 
 Fix `get_component_object` (Builder) method to handle `ModuleNotFoundError`.\
