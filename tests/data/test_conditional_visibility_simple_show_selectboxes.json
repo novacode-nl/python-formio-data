@@ -11,10 +11,5 @@
     "analyst": false,
     "developer": true,
     "devops": false
-  },
-  "technologyFunction": {
-    "analyst": false,
-    "developer": true,
-    "devops": false
   }
 }
