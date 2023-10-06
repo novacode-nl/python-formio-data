@@ -13,7 +13,13 @@ from formiodata.builder import Builder
 class Form:
 
     def __init__(
-        self, form_json, builder=None, builder_schema_json=None, lang="en", **kwargs
+        self,
+        form_json,
+        builder=None,
+        builder_schema_json=None,
+        lang="en",
+        component_class_mapping={},
+        **kwargs
     ):
         """
         @param form_json
@@ -29,6 +35,7 @@ class Form:
         self.builder = builder
         self.builder_schema_json = builder_schema_json
         self.lang = lang
+        self.component_class_mapping = component_class_mapping
 
         if self.builder and self.builder_schema_json:
             raise Exception("Constructor accepts either builder or builder_schema_json.")
@@ -56,7 +63,11 @@ class Form:
         self._input = self._data = FormInput(self)
 
     def set_builder_by_builder_schema_json(self):
-        self.builder = Builder(self.builder_schema_json, self.lang)
+        self.builder = Builder(
+            self.builder_schema_json,
+            language=self.lang,
+            component_class_mapping=self.component_class_mapping
+        )
 
     def load_components(self):
         for key, component in self.builder.components.items():

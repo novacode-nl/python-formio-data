@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.3
+
+Improve the `datetimeComponent` to properly parse a date with a custom format, when the `enableTime` (new property) is False.
+
+Provide the `component_class_mapping` (interface) in the keyword arguments of the Form (class) instantiation.
+
 ## 1.2.2
 
 Refactored the `Component` class `conditionally_visible` method, to call the following 2 methods which can be extended in component subclasses:

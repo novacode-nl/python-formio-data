@@ -1,6 +1,7 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
+from copy import copy
 from datetime import datetime
 
 from .component import Component
@@ -8,12 +9,16 @@ from .component import Component
 
 class datetimeComponent(Component):
 
+    @property
+    def enableTime(self):
+        return self.raw.get('enableTime')
+
     def _format_mappings(self):
         """
         Dictionary of mappings between Formio Datetime component
         (key) to Python format (value).
 
-        Formio uses the format codes referenced in:
+        Formio uses the (JS uibDateParser) format codes referenced in:
         https://github.com/angular-ui/bootstrap/tree/master/src/dateparser/docs#uibdateparsers-format-codes
         """
         return {
@@ -64,61 +69,84 @@ class datetimeComponent(Component):
             return value
 
         component = self.component_owner.input_components.get(self.key)
-        dt = self._fromisoformat(value)
-        py_dt_format = formio_dt_format = component.raw.get('format')
-        mapping = self._format_mappings()
 
-        # year
-        done = False
-        for formio, py in mapping['year'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+        # if not component.raw.get('enableTime'):
+        if not self.enableTime:
+            # OMG some parsing to deal with the ISO format (storage).
+            try:
+                datetime.fromisoformat(value)
+                super(self.__class__, self.__class__).value.fset(self, value)
+            except ValueError:
+                dt_format = self.raw.get('format')
+                py_format = copy(dt_format)
+                for date_part, mapping in self._format_mappings().items():
+                    done_date_part = False
+                    for fm_formio, fm_py in mapping.items():
+                        # fm_formio are (JS) uibDateParser codes, see comment
+                        # in _format_mappings
+                        if not done_date_part and fm_formio in dt_format:
+                            py_format = py_format.replace(fm_formio, fm_py)
+                            done_date_part = True
+                py_dt = datetime.strptime(value, py_format)
+                val = datetime.fromisoformat(py_dt)
+                super(self.__class__, self.__class__).value.fset(self, val)
+            return
+        else:
+            dt = self._fromisoformat(value)
+            py_dt_format = formio_dt_format = component.raw.get('format')
+            mapping = self._format_mappings()
 
-        # month
-        done = False
-        for formio, py in mapping['month'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # year
+            done = False
+            for formio, py in mapping['year'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        # day
-        done = False
-        for formio, py in mapping['day'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # month
+            done = False
+            for formio, py in mapping['month'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        # hour
-        done = False
-        for formio, py in mapping['hour'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # day
+            done = False
+            for formio, py in mapping['day'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        # minute
-        done = False
-        for formio, py in mapping['minute'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # hour
+            done = False
+            for formio, py in mapping['hour'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        # second
-        done = False
-        for formio, py in mapping['second'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # minute
+            done = False
+            for formio, py in mapping['minute'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        # 12 hours AM/PM
-        done = False
-        for formio, py in mapping['am_pm'].items():
-            if not done and formio in formio_dt_format:
-                py_dt_format = py_dt_format.replace(formio, py)
-                done = True
+            # second
+            done = False
+            for formio, py in mapping['second'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
 
-        val = dt.strftime(py_dt_format)
-        super(self.__class__, self.__class__).value.fset(self, val)
+            # 12 hours AM/PM
+            done = False
+            for formio, py in mapping['am_pm'].items():
+                if not done and formio in formio_dt_format:
+                    py_dt_format = py_dt_format.replace(formio, py)
+                    done = True
+
+            val = dt.strftime(py_dt_format)
+            super(self.__class__, self.__class__).value.fset(self, val)
 
     def to_datetime(self):
         if not self.raw_value:
