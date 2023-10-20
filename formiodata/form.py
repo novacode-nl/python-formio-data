@@ -5,7 +5,7 @@ import json
 import logging
 import re
 
-from collections import OrderedDict
+from collections import defaultdict, OrderedDict
 
 from formiodata.builder import Builder
 
@@ -119,6 +119,22 @@ class Form:
             else:
                 component = components[path_node]
         return component
+
+    def validation_errors(self):
+        """
+        @return errors dict: Dictionary where key is component key and
+            value is a Dictionary with errors.
+        """
+        errors = defaultdict(dict)
+        for component_key, component in self.input_components.items():
+            component_errors = component.validation_errors()
+            if isinstance(component_errors, dict):
+                for error_type, val in component_errors.items():
+                    vals = {error_type: val}
+                    errors[component_key].update(vals)
+            elif isinstance(component_errors, list):
+                errors[component_key] = component_errors
+        return errors
 
     def render_components(self, force=False):
         for key, component in self.input_components.items():

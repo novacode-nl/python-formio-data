@@ -117,7 +117,7 @@
               "allowCalculateOverride": false,
               "validateOn": "change",
               "validate": {
-                "required": false,
+                "required": true,
                 "pattern": "",
                 "customMessage": "",
                 "custom": "",
@@ -518,7 +518,7 @@
                 "maxLength": "",
                 "minLength": "",
                 "pattern": "",
-                "required": false,
+                "required": true,
                 "strictDateValidation": false,
                 "multiple": false,
                 "unique": false
@@ -2988,7 +2988,7 @@
           "allowCalculateOverride": false,
           "validateOn": "change",
           "validate": {
-            "required": false,
+            "required": true,
             "pattern": "",
             "customMessage": "",
             "custom": "",

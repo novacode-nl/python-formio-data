@@ -107,6 +107,18 @@ class baseGridComponent(Component):
     def initEmpty(self):
         return self.raw.get('initEmpty')
 
+    def validation_errors(self):
+        errors = []
+        for row_idx, row in enumerate(self.rows):
+            for component_key, component in row.input_components.items():
+                component_errors = component.validation_errors()
+                if bool(component_errors):
+                    # scalar (not grid) components get a Dict from
+                    # method validation_errors()
+                    vals = {component_key: component_errors}
+                    errors.append(vals)
+        return errors
+
     def render(self):
         for row in self.rows:
             row.render()
