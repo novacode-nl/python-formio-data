@@ -61,7 +61,7 @@ class Component:
 
         self.builder.component_ids[self.id] = self
 
-        # parh
+        # path
         self.set_builder_paths()
         builder_path_keys = [p.key for p in self.builder_path]
         builder_path_key = '.'.join(builder_path_keys)
@@ -330,3 +330,12 @@ class Component:
             return self.conditionally_visible
         else:
             return not self.hidden
+
+    def validation_errors(self):
+        errors = {}
+        if self.required and not self.value:
+            msg_tmpl = '{{field}} is required'
+            if self.i18n.get(self.language):
+                msg_tmpl = self.i18n[self.language].get(msg_tmpl, msg_tmpl)
+            errors['required'] = msg_tmpl.replace('{{field}}', self.label)
+        return errors
