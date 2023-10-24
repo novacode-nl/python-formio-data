@@ -18,16 +18,14 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.hide_global_secret_only_form_json = readfile('data', 'test_conditional_visibility_nested_json_logic_hide_global_secret_only.json')
         self.show_global_secret_only_form_json = readfile('data', 'test_conditional_visibility_nested_json_logic_show_global_secret_only.json')
 
-
-    def test_conditionally_shown_top_level_form_elements_have_default_state_in_builder(self):
+    def test_conditionally_shown_top_level_components_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
         self.assertVisible(builder.input_components['username'])
         self.assertVisible(builder.input_components['password'])
         self.assertNotVisible(builder.input_components['secret'])
 
-
-    def test_conditionally_shown_form_elements_in_panel_have_default_state_in_builder(self):
+    def test_conditionally_shown_components_in_panel_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
         self.assertVisible(builder.input_components['username1'])
@@ -38,8 +36,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertVisible(builder.input_components['password2'])
         self.assertNotVisible(builder.input_components['secret2'])
 
-
-    def test_conditionally_shown_top_level_form_elements_toggle_on_condition_being_met(self):
+    def test_conditionally_shown_top_level_components_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -52,8 +49,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertVisible(show_secret_form.input_components['password'])
         self.assertVisible(show_secret_form.input_components['secret'])
 
-
-    def test_conditionally_shown_form_elements_in_panel_toggle_on_condition_being_met(self):
+    def test_conditionally_shown_components_in_panel_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -74,8 +70,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertVisible(show_secret_form.input_components['password2'])
         self.assertVisible(show_secret_form.input_components['secret2'])
 
-
-    def test_conditionally_shown_form_elements_in_data_grid_toggle_on_local_row_condition_met(self):
+    def test_conditionally_shown_components_in_data_grid_toggle_on_local_row_condition_met(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -108,8 +103,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertVisible(show_secret_second_row.input_components['secret3'])
         self.assertVisible(show_secret_second_row.input_components['globalSecret'])
 
-
-    def test_conditionally_shown_form_elements_in_data_grid_toggle_on_global_data_condition_met(self):
+    def test_conditionally_shown_components_in_data_grid_toggle_on_global_data_condition_met(self):
         builder = Builder(self.builder_json)
 
         show_global_secret_only_form = Form(self.show_global_secret_only_form_json, builder)
@@ -142,8 +136,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertVisible(hide_global_secret_only_second_row.input_components['secret3'])
         self.assertNotVisible(hide_global_secret_only_second_row.input_components['globalSecret'])
 
-
-    def test_conditionally_shown_top_level_form_elements_do_not_render_when_hidden(self):
+    def test_conditionally_shown_top_level_components_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -158,8 +151,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertEqual('<p>secret</p>', show_secret_form.input_components['password'].html_component)
         self.assertEqual('<p>Secret message</p>', show_secret_form.input_components['secret'].html_component)
 
-
-    def test_conditionally_shown_form_elements_in_panel_do_not_render_when_hidden(self):
+    def test_conditionally_shown_components_in_panel_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -182,8 +174,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
         self.assertEqual('<p>secret</p>', show_secret_form.input_components['password2'].html_component)
         self.assertEqual('<p>Secret message</p>', show_secret_form.input_components['secret2'].html_component)
 
-
-    def test_conditionally_shown_form_elements_for_local_row_condition_in_data_grid_do_not_render_when_hidden(self):
+    def test_conditionally_shown_components_for_local_row_condition_in_data_grid_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
 
         hide_secret_form = Form(self.hide_secret_form_json, builder)
@@ -234,8 +225,7 @@ class ConditionalVisibilityNestedJsonLogicTestCase(ConditionalVisibilityTestHelp
             show_secret_datagrid.html_component
         )
 
-
-    def test_conditionally_shown_form_elements_for_global_data_condition_in_data_grid_do_not_render_when_hidden(self):
+    def test_conditionally_shown_components_for_global_data_condition_in_data_grid_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
 
         show_global_secret_only_form = Form(self.show_global_secret_only_form_json, builder)

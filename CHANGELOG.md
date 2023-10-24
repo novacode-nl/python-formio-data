@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.4
+
+Implementation of "simple" validation required.
+
+For a Form object the validation errors can be retrieved by the new
+`validation_errors()` method.
+
+The new component method `validation_errors()` can be extended and
+returns either a dictionary or a list (for grid components) with the
+validation errors.
+
 ## 1.2.3
 
 Improve the `datetimeComponent` to properly parse a date with a custom format, when the `enableTime` (new property) is False.

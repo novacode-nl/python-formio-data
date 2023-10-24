@@ -7,8 +7,8 @@ For information about the formio.js project, see https://github.com/formio/formi
 ## Introduction
 
 **python-formio-data** is a Python package, which loads and transforms
-formio.js **Builder JSON** and **Form JSON** into **usable Python objects**.  It's main
-aim is to provide easy access to a Form its components/fields, also
+formio.js **Builder JSON** and **Form JSON** into **usable Python objects**.\
+It's main aim is to provide easy access to a Form its components/fields, also
 captured as **Python objects**, which makes this API very versatile and usable.
 
 **Notes about terms:**
@@ -147,6 +147,21 @@ Datetime: datetime.datetime(2021, 5, 8, 11, 41, 5, 919943), Fahrenheit: 131
 >> print(form.data.firstname.value)
 'Bob'
 
+###################
+# validation errors
+###################
+
+>> print(form.validation_errors())
+{
+    'companyName': 'Company Name is required',
+    'editgridActivities': [
+        {'description': 'Description is required'},
+        {},  # no validation error (row 2)
+        {},  # no validation error (row 3)
+        {'description': 'Description is required', 'startDate': 'Start Date is required'}
+    ]
+}
+
 #############################
 # component path (properties)
 #############################
@@ -241,7 +256,7 @@ self.assertEqual(custom_editgrid.type, 'custom_editgrid')
 
 **Note:**
 
-Internet access is recommended for running the `filecStorageUrlComponentTestCase`, because this also tests the URL Storage (type).\
+Internet access is recommended for running the `fileStorageUrlComponentTestCase`, because this also tests the URL Storage (type).\
 If no internet access, this test won't fail and a WARNING shall be logged regarding a ConnectionError.
 
 ### Run all unittests

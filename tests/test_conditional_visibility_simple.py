@@ -17,7 +17,7 @@ class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unit
         self.show_selectboxes_form_json = readfile('data', 'test_conditional_visibility_simple_show_selectboxes.json')
         self.show_textfield_form_json = readfile('data', 'test_conditional_visibility_simple_show_textfield.json')
 
-    def test_conditionally_shown_form_elements_have_default_state_in_builder(self):
+    def test_conditionally_shown_components_have_default_state_in_builder(self):
         builder = Builder(self.builder_json)
 
         self.assertVisible(builder.input_components['textField'])
@@ -26,7 +26,7 @@ class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unit
         self.assertNotVisible(builder.input_components['sales'])
         self.assertNotVisible(builder.input_components['technology'])
 
-    def test_conditionally_shown_form_elements_toggle_on_condition_being_met(self):
+    def test_conditionally_shown_components_toggle_on_condition_being_met(self):
         builder = Builder(self.builder_json)
 
         hide_password_form = Form(self.hide_password_form_json, builder)
@@ -44,7 +44,7 @@ class ConditionalVisibilitySimpleTestCase(ConditionalVisibilityTestHelpers, unit
         self.assertVisible(show_selectboxes_form.input_components['technology'])
         self.assertNotVisible(show_selectboxes_form.input_components['sales'])
 
-    def test_conditionally_shown_form_elements_do_not_render_when_hidden(self):
+    def test_conditionally_shown_components_do_not_render_when_hidden(self):
         builder = Builder(self.builder_json)
 
         hide_password_form = Form(self.hide_password_form_json, builder)
