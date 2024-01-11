@@ -6,13 +6,19 @@ from .layout_base import layoutComponentBase
 
 class columnsComponent(layoutComponentBase):
 
-    def load_data(self, data):
+    def load_data(self, data, is_form=False):
         for column in self.raw['columns']:
             for component in column['components']:
                 # Only determine and load class if component type.
                 if 'type' in component:
                     component_obj = self.builder.get_component_object(component)
-                    component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+                    component_obj.load(
+                        self.child_component_owner,
+                        parent=self,
+                        data=data,
+                        all_data=self._all_data,
+                        is_form=is_form,
+                    )
 
     @property
     def rows(self):

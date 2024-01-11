@@ -10,6 +10,6 @@ class buttonComponent(Component):
     def is_form_component(self):
         return False
 
-    def load_data(self, data):
+    def load_data(self, data, is_form=False):
         # just bypass this
         pass

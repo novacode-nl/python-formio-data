@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.5
+
+Improve the load methods for components and `gridRow`, by passing
+whether it applies to a Form `is_form`, otherwise it's obtained as a
+Builder.
+
+Ensure an empty form `gridRow` doesn't appear in a grid's `rows`
+property, made possible by the other `is_form` change.
+
 ## 1.2.4
 
 Implementation of "simple" validation required.

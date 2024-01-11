@@ -50,14 +50,14 @@ class Component:
         self.html_component = ""
         self.defaultValue = self.raw.get('defaultValue')
 
-    def load(self, component_owner, parent=None, data=None, all_data=None):
+    def load(self, component_owner, parent=None, data=None, all_data=None, is_form=False):
         self.component_owner = component_owner
 
         if parent:
             self.parent = parent
 
         self._all_data = all_data
-        self.load_data(data)
+        self.load_data(data, is_form=is_form)
 
         self.builder.component_ids[self.id] = self
 
@@ -67,7 +67,7 @@ class Component:
         builder_path_key = '.'.join(builder_path_keys)
         self.builder.components_path_key[builder_path_key] = self
 
-    def load_data(self, data):
+    def load_data(self, data, is_form=False):
         if self.input and data:
             try:
                 self.value = data[self.key]

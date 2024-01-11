@@ -81,7 +81,7 @@ class Builder:
             if 'type' in component:
                 component_obj = self.get_component_object(component)
                 # start and traverse from toplevel
-                component_obj.load(component_owner=self, parent=None, data=None)
+                component_obj.load(component_owner=self, parent=None, data=None, is_form=False)
                 self.components[component_obj.key] = component_obj
 
     def get_component_class(self, component):

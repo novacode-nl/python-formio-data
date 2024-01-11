@@ -9,7 +9,7 @@ class tableComponent(layoutComponentBase):
         self.rows = []
         super().__init__(raw, builder, **kwargs)
 
-    def load_data(self, data):
+    def load_data(self, data, is_form=False):
         self.rows = []
 
         for data_row in self.raw.get('rows', []):
@@ -21,7 +21,13 @@ class tableComponent(layoutComponentBase):
                     # Only determine and load class if component type.
                     if 'type' in component:
                         component_obj = self.builder.get_component_object(component)
-                        component_obj.load(self.child_component_owner, parent=self, data=data, all_data=self._all_data)
+                        component_obj.load(
+                            self.child_component_owner,
+                            parent=self,
+                            data=data,
+                            all_data=self._all_data,
+                            is_form=is_form,
+                        )
                         components.append(component_obj)
 
                 row.append({'column': col, 'components': components})

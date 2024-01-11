@@ -73,7 +73,13 @@ class Form:
         for key, component in self.builder.components.items():
             # New object, don't affect the Builder component
             component_obj = self.builder.get_component_object(component.raw)
-            component_obj.load(component_owner=self, parent=None, data=self.form, all_data=self.form)
+            component_obj.load(
+                component_owner=self,
+                parent=None,
+                data=self.form,
+                all_data=self.form,
+                is_form=True,
+            )
             self.components[key] = component_obj
             self.component_ids[component_obj.id] = component_obj
 

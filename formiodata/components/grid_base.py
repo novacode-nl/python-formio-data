@@ -55,7 +55,7 @@ class baseGridComponent(Component):
                 component_obj.load(component_owner=parent, parent=parent, data=data, all_data=self._all_data)
                 parent.components[component_obj.key] = component_obj
 
-    def load_data(self, data):
+    def load_data(self, data, is_form=False):
         # Always instantiate child components, even if no data.
         # This makes it exist both in the builder and in the form.
         self.create_component_objects(self, data)
@@ -65,7 +65,7 @@ class baseGridComponent(Component):
             self._load_rows(data[self.key])
             self.value = data[self.key]
             self.raw_value = data[self.key]
-        elif not self.initEmpty:
+        elif not self.initEmpty and not is_form:
             self.rows = [self.gridRow(self, None)]
 
     def _load_rows(self, data):
