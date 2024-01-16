@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.6
+
+- Fix `datetimeComponent` value setter, to properyly parse when the
+  `enableTime` property is `False`.\
+  This fixes a bug/regression in version 1.2.3.
+- Update README concerning the datetime component value.
+
 ## 1.2.5
 
 Improve the load methods for components and `gridRow`, by passing
@@ -22,13 +29,16 @@ validation errors.
 
 ## 1.2.3
 
-Improve the `datetimeComponent` to properly parse a date with a custom format, when the `enableTime` (new property) is False.
+Improve the `datetimeComponent` value setter, to properly parse a date
+with a custom format, when the `enableTime` (new property) is `False`.
 
 Provide the `component_class_mapping` (interface) in the keyword arguments of the Form (class) instantiation.
 
 ## 1.2.2
 
-Refactored the `Component` class `conditionally_visible` method, to call the following 2 methods which can be extended in component subclasses:
+Refactored the `Component` class `conditionally_visible` method, to
+call the following 2 methods which can be extended in component
+subclasses:
 - `conditional_visible_json_when`
 - `conditional_visible_json_logic`
 

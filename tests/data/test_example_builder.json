@@ -343,7 +343,7 @@
               "useLocaleSettings": false,
               "allowInput": true,
               "enableDate": true,
-              "enableTime": true,
+              "enableTime": false,
               "defaultDate": "",
               "displayInTimezone": "viewer",
               "timezone": "",

@@ -74,8 +74,21 @@ class datetimeComponent(Component):
         if not self.enableTime:
             # OMG some parsing to deal with the ISO format (storage).
             try:
-                datetime.fromisoformat(value)
-                super(self.__class__, self.__class__).value.fset(self, value)
+                dt = datetime.fromisoformat(value)
+                dt_format = self.raw.get('format')
+                py_format = copy(dt_format)
+                for date_part, mapping in self._format_mappings().items():
+                    done_date_part = False
+                    for fm_formio, fm_py in mapping.items():
+                        # fm_formio are (JS) uibDateParser codes, see comment
+                        # in _format_mappings
+                        if not done_date_part and fm_formio in dt_format:
+                            py_format = py_format.replace(fm_formio, fm_py)
+                            done_date_part = True
+                super(self.__class__, self.__class__).value.fset(
+                    self,
+                    dt.strftime(py_format)
+                )
             except ValueError:
                 dt_format = self.raw.get('format')
                 py_format = copy(dt_format)
