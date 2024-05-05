@@ -1,8 +1,13 @@
 # Changelog
 
+## 1.2.7
+
+Fix ValueError in `datetimeComponent` value setter exception handler:\
+`ValueError: <class 'TypeError'>: "fromisoformat: argument must be str" while evaluating`
+
 ## 1.2.6
 
-- Fix `datetimeComponent` value setter, to properyly parse when the
+- Fix `datetimeComponent` value setter, to properly parse when the
   `enableTime` property is `False`.\
   This fixes a bug/regression in version 1.2.3.
 - Update README concerning the datetime component value.

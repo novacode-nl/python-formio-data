@@ -101,7 +101,7 @@ class datetimeComponent(Component):
                             py_format = py_format.replace(fm_formio, fm_py)
                             done_date_part = True
                 py_dt = datetime.strptime(value, py_format)
-                val = datetime.fromisoformat(py_dt)
+                val = py_dt.isoformat()
                 super(self.__class__, self.__class__).value.fset(self, val)
             return
         else:
