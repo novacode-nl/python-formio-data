@@ -465,7 +465,7 @@ class NestedTestCase(unittest.TestCase):
         birthdate = form.input_components['birthdate']
         self.assertIsInstance(birthdate, datetimeComponent)
         self.assertEqual(birthdate.label, 'Birthdate')
-        self.assertEqual(birthdate.value, '1999-12-31')
+        self.assertEqual(birthdate.value, '1999-12-31T12:00:00+01:00')
         self.assertEqual(birthdate.type, 'datetime')
         self.assertIsInstance(birthdate.to_datetime().date(), date)
 

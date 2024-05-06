@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0
+
+Fix `datetimeComponent` which is always stored as ISO with combined date, time and timezone.\
+The previous implementation was wrong and now backwards imcompatible.\
+
+**Warning**:
+
+Test all `datetimeComponent` setters and their impact on implementations.
+
 ## 1.2.7
 
 Fix ValueError in `datetimeComponent` value setter exception handler:\

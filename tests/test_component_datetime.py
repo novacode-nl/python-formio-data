@@ -56,23 +56,23 @@ class datetimeComponentTestCase(ComponentTestCase):
     def test_get_form(self):
         birthdate = self.form.input_components['birthdate']
         self.assertEqual(birthdate.label, 'Birthdate')
-        self.assertEqual(birthdate.value, '1999-12-31')
+        self.assertEqual(birthdate.value, '1999-12-31T12:00:00+01:00')
         self.assertEqual(birthdate.type, 'datetime')
 
         appointmentDateTime = self.form.input_components['appointmentDateTime']
         self.assertEqual(appointmentDateTime.label, 'Appointment Date / Time')
-        self.assertEqual(appointmentDateTime.value, '2021-02-26 12:30 PM')
+        self.assertEqual(appointmentDateTime.value, '2021-02-26T12:30:00+01:00')
         self.assertEqual(appointmentDateTime.type, 'datetime')
 
     def test_get_form_data(self):
         birthdate = self.form.input.birthdate
         self.assertEqual(birthdate.label, 'Birthdate')
-        self.assertEqual(birthdate.value, '1999-12-31')
+        self.assertEqual(birthdate.value, '1999-12-31T12:00:00+01:00')
         self.assertEqual(birthdate.type, 'datetime')
 
         appointmentDateTime = self.form.input.appointmentDateTime
         self.assertEqual(appointmentDateTime.label, 'Appointment Date / Time')
-        self.assertEqual(appointmentDateTime.value, '2021-02-26 12:30 PM')
+        self.assertEqual(appointmentDateTime.value, '2021-02-26T12:30:00+01:00')
         self.assertEqual(appointmentDateTime.type, 'datetime')
 
     def test_to_datetime(self):
