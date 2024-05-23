@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.2
+
+Improve the `selectComponent` class to support the property Data Source Type (`dataSrc`) with URL.\
+This applies to the methods `value_label` and `value_labels`, which use the stored label(s).\
+So this doesn't execute a request to the URL, because we can't take any control (e.g. due to authentication) over the host/server/service,
+
 ## 2.0.1
 
 Improve the `Component` class `conditional_visible_when` method, to also obtain a Dictionary for the value of triggering component.\
