@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+Improve the `Component` class `conditional_visible_when` method, to also obtain a Dictionary for the value of triggering component.\
+Remove the now redundant `conditional_visible_when` method from the `selectboxesComponent`, because a generic implementation is now in the `Component` class.
+
 ## 2.0.0
 
 Fix `datetimeComponent` which is always stored as ISO with combined date, time and timezone.\

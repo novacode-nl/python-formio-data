@@ -301,7 +301,12 @@ class Component:
         cond = self.raw['conditional']
         triggering_component = self.component_owner.input_components[cond['when']]
         triggering_value = cond['eq']
-        if triggering_component.value == triggering_value:
+        if isinstance(
+            triggering_component.value, dict
+        ) and triggering_component.value.get(triggering_value):
+            # E.g. triggering_component like selectboxesComponent
+            return cond["show"]
+        elif triggering_component.value == triggering_value:
             return cond['show']
         else:
             return not cond['show']
