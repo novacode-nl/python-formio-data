@@ -7,6 +7,10 @@ from .component import Component
 class selectboxesComponent(Component):
 
     @property
+    def dataSrc(self):
+        return self.raw.get('dataSrc')
+
+    @property
     def values_labels(self):
         comp = self.component_owner.input_components.get(self.key)
         builder_values = comp.raw.get('values')

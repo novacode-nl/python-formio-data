@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+Add `dataSrc` getter (property) in `selectboxesComponent`.
+
 ## 2.0.2
 
 Improve the `selectComponent` class to support the property Data Source Type (`dataSrc`) with URL.\
