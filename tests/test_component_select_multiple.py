@@ -39,7 +39,7 @@ class selectMultipleComponentTestCase(ComponentTestCase):
         self.assertEqual(food.label, 'Favourite Food')
         self.assertEqual(food.value, ['mexican', 'chinese'])
         self.assertEqual(food.value_labels, ['Mexican', 'Chinese'])
-        self.assertEqual(food.value_label, False)
+        self.assertEqual(food.value_label, None)
         self.assertEqual(food.type, 'select')
 
     def test_get_form_data(self):
@@ -47,7 +47,7 @@ class selectMultipleComponentTestCase(ComponentTestCase):
         self.assertEqual(food.label, 'Favourite Food')
         self.assertEqual(food.value, ['mexican', 'chinese'])
         self.assertEqual(food.value_labels, ['Mexican', 'Chinese'])
-        self.assertEqual(food.value_label, False)
+        self.assertEqual(food.value_label, None)
         self.assertEqual(food.type, 'select')
 
     # i18n translations

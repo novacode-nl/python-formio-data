@@ -48,6 +48,15 @@ class selectOneComponentTestCase(ComponentTestCase):
         self.assertEqual(season.value_label, 'Autumn')
         self.assertEqual(season.type, 'select')
 
+    def test_empty_value(self):
+        season = self.form.input_components['favouriteSeason']
+        self.assertEqual(season.label, 'Favourite Season')
+        self.assertEqual(season.value, 'autumn')
+        season.value = None
+        self.assertEqual(season.value, None)
+        self.assertEqual(season.value_label, None)
+        self.assertEqual(season.type, 'select')
+
     # i18n translations
     def test_get_label_i18n_nl(self):
         season = self.builder_i18n_nl.input_components['favouriteSeason']

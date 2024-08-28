@@ -1,8 +1,17 @@
 # Changelog
 
+## 2.1.0
+
+Fix `value_label` property (getter) in `selectComponent`, if no value is set.
+
+**WARNING - Backward incompatibility**\
+This also changes `value_label` return value from `False` to `None` if no value is set.\
+So check whether to update any usage (code).\
+However no need when `None` is used in comparisons (`if` etc), which converts to boolean `False`.
+
 ## 2.0.3
 
-Add `dataSrc` getter (property) in `selectboxesComponent`.
+Add `dataSrc` property (getter) in `selectboxesComponent`.
 
 ## 2.0.2
 

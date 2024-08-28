@@ -16,6 +16,8 @@ class selectComponent(Component):
 
     @property
     def value_label(self):
+        if not self.value:
+            return None
         comp = self.component_owner.input_components.get(self.key)
         if self.dataSrc == 'url':
             label = self.value['label']
@@ -39,7 +41,7 @@ class selectComponent(Component):
                     else:
                         return label
             else:
-                return False
+                return None
 
     @property
     def value_labels(self):
