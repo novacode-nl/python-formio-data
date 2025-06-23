@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+Fix import error in `get_component_class` to log a warning instead of error.
+
 ## 2.1.0
 
 Fix `value_label` property (getter) in `selectComponent`, if no value is set.

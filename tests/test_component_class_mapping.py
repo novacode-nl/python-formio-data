@@ -5,6 +5,7 @@ import json
 
 from test_common import CommonTestCase
 from formiodata.builder import Builder
+from formiodata.components.component import Component
 from formiodata.components.editgrid import editgridComponent
 
 
@@ -39,3 +40,14 @@ class ComponentClassMappingTestCase(CommonTestCase):
         custom_editgrid = builder.components['editGrid']
         self.assertIsInstance(custom_editgrid, editgridComponent)
         self.assertEqual(custom_editgrid.type, 'custom_editgrid')
+
+    def test_component_no_class_mapping_import_error(self):
+        schema_dict = json.loads(self.builder_json)
+        for comp in schema_dict['components']:
+            if comp['key'] == 'editGrid':
+                comp['type'] = 'editgrid_no_class_mapping'
+
+        schema_json = json.dumps(schema_dict)
+        builder = Builder(schema_json)
+        custom_editgrid = builder.components['editGrid']
+        self.assertIsInstance(custom_editgrid, Component)
