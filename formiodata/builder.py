@@ -115,7 +115,8 @@ class Builder:
             except (AttributeError, ModuleNotFoundError) as e:
                 # TODO try to find/load first from self._component_cls else
                 # re-raise exception or silence (log error and return False)
-                logging.error(e)
+                logger.warning(e)
+                logger.warning("Falling back to the base Component object.")
                 # TODO: implement property (by kwargs) whether to return
                 # (raw) Component object or throw exception,
                 return Component(component, self)
