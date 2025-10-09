@@ -2,11 +2,10 @@
 # See LICENSE file for full licensing details.
 
 import json
-import uuid
 import logging
+import uuid
 
 from collections import OrderedDict
-
 
 logger = logging.getLogger(__name__)
 

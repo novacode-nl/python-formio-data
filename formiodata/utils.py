@@ -6,6 +6,8 @@ import requests
 import tempfile
 import re
 
+from datetime import datetime
+
 
 def base64_encode_url(url):
     content = requests.get(url).content
@@ -36,3 +38,25 @@ def fetch_dict_get_value(dict_src, list_keys):
         return fetch_dict_get_value(nextdict, list_keys)
     else:
         return dict_src.get(node)
+
+def datetime_fromisoformat(date_string):
+    # Backport of Python 3.7 datetime.fromisoformat
+    if hasattr(datetime, 'fromisoformat'):
+        # Python >= 3.7
+        return datetime.fromisoformat(date_string)
+    else:
+        # Python < 3.7
+        # replaces the fromisoformat, not available in Python < 3.7
+        #
+        # XXX following:
+        # - Raises: '2021-02-25T00:00:00+01:00' does not match format '%Y-%m-%dT%H:%M%z'
+        # - Due to %z not obtaing the colon in '+1:00' (tz offset)
+        # - More info: https://stackoverflow.com/questions/54268458/datetime-strptime-issue-with-a-timezone-offset-with-colons
+        # fmt_str =  r"%Y-%m-%dT%H:%M:%S%z"
+        # return datetime.strptime(value, fmt_str)
+        #
+        # REQUIREMENT (TODO document, setup dependency or try/except raise exception)
+        # - pip install dateutil
+        # - https://dateutil.readthedocs.io/
+        from dateutil.parser import parse
+        return parse(date_string)

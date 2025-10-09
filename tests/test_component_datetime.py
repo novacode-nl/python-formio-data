@@ -83,6 +83,27 @@ class datetimeComponentTestCase(ComponentTestCase):
         appointmentDateTime = self.form.input.appointmentDateTime
         self.assertIsInstance(appointmentDateTime.to_datetime(), datetime)
 
+    def test_to_datetime_tzinfo(self):
+        tz = 'Europe/Amsterdam'
+        birthdate = self.form.input.birthdate
+        birthdate_tz = birthdate.to_datetime_astimezone(tz)
+        self.assertIsInstance(birthdate_tz, datetime)
+        self.assertIsInstance(birthdate_tz.date(), date)
+        self.assertEqual(birthdate_tz.tzname(), 'CET')
+
+        tz = 'CET'
+        appointmentDateTime = self.form.input.appointmentDateTime
+        appointmentDateTime_tz = appointmentDateTime.to_datetime_astimezone(tz)
+        self.assertIsInstance(appointmentDateTime_tz, datetime)
+        self.assertEqual(appointmentDateTime_tz.tzname(), 'CET')
+
+        tz = 'America/New_York'
+        appointmentDateTime = self.form.input.appointmentDateTime
+        appointmentDateTime_tz = appointmentDateTime.to_datetime_astimezone(tz)
+        self.assertIsInstance(appointmentDateTime_tz, datetime)
+        self.assertEqual(appointmentDateTime_tz.tzname(), 'EST')
+        self.assertEqual(appointmentDateTime_tz, appointmentDateTime.to_datetime())
+
     # i18n translations
     def test_get_label_i18n_nl(self):
         appointmentDateTime = self.builder_i18n_nl.input_components['appointmentDateTime']

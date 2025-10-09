@@ -1,10 +1,15 @@
 # Copyright Nova Code (http://www.novacode.nl)
 # See LICENSE file for full licensing details.
 
+import logging
+
 from copy import copy
 from datetime import datetime
 
 from .component import Component
+from ..utils import datetime_fromisoformat
+
+logger = logging.getLogger(__name__)
 
 
 class datetimeComponent(Component):
@@ -32,26 +37,7 @@ class datetimeComponent(Component):
         }
 
     def _fromisoformat(self, value):
-        # Backport of Python 3.7 datetime.fromisoformat
-        if hasattr(datetime, 'fromisoformat'):
-            # Python >= 3.7
-            return datetime.fromisoformat(value)
-        else:
-            # Python < 3.7
-            # replaces the fromisoformat, not available in Python < 3.7
-            #
-            # XXX following:
-            # - Raises: '2021-02-25T00:00:00+01:00' does not match format '%Y-%m-%dT%H:%M%z'
-            # - Due to %z not obtaing the colon in '+1:00' (tz offset)
-            # - More info: https://stackoverflow.com/questions/54268458/datetime-strptime-issue-with-a-timezone-offset-with-colons
-            # fmt_str =  r"%Y-%m-%dT%H:%M:%S%z"
-            # return datetime.strptime(value, fmt_str)
-            #
-            # REQUIREMENT (TODO document, setup dependency or try/except raise exception)
-            # - pip install dateutil
-            # - https://dateutil.readthedocs.io/
-            from dateutil.parser import parse
-            return parse(value)
+        return datetime_fromisoformat(value)
 
     @property
     def value(self):
@@ -78,3 +64,27 @@ class datetimeComponent(Component):
         if not self.raw_value:
             return None
         return self.to_datetime().date()
+
+    def to_datetime_astimezone(self, tz):
+        # Wrapper method
+        # Requires optional package
+        if not self.raw_value:
+            return None
+        dt = self.to_datetime()
+        try:
+            from zoneinfo import ZoneInfo
+            # Python >= 3.9
+            tz_dt = dt.astimezone(ZoneInfo(tz))
+        except ImportError:
+            # Python < 3.9
+            # REQUIREMENT (TODO document, setup dependency or try/except raise exception)
+            # - pip install pytz
+            # - https://pypi.org/project/pytz/
+            try:
+                import pytz
+                timezone = pytz.timezone(tz)
+                tz_dt = dt.replace(tzinfo=timezone)
+            except ImportError:
+                logger.warning(f'Could not load zoninfo and tzdata (python >= 3.9 ) or pytz extension; will not evaluate to_datetime_tzinfo of {self.__class__.__name__} {self.id} ("{self.key}")')
+            return True
+        return tz_dt
