@@ -3,9 +3,9 @@
 }:
 
 pkgs.mkShell {
-  name = "xml-jats-converter-shell";
+  name = "pyhon-formio-data";
   buildInputs = with pkgs; [
-      python38
+      python314
       poetry
   ];
 }
