@@ -13,11 +13,8 @@ exclude = ["tests/*"]
 python = "^3.6"
 
 python-dateutil = { version = "^2.8.2", python = "<= 3.6" }
-pytz = { version = "^2024.2", python = "<= 3.6" }
 requests = "*"
 json_logic_qubit = { version = "^0.9.1", optional = true }
-tzdata = { version = "^2025.2", python = ">= 3.9", optional = true }
 
 [tool.poetry.extras]
 json_logic = ["json_logic_qubit"]
-tzdata= ["tzdata"]

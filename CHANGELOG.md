@@ -1,12 +1,15 @@
 # Changelog
 
+# 2.1.4
+
+Fix `pyproject.toml`.
+
 # 2.1.3
 
-Fix `pyproject.toml`: `pytz` dependency for Python 3.6 and below.
+Update `pyproject.toml`.
 
 # 2.1.2
 Add datetime_fromisoformat in utils and refactor datetime component to use it.
-Also add datetime wrapper method to_datetime_astimezone.
 
 ## 2.1.1
 

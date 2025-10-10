@@ -64,27 +64,3 @@ class datetimeComponent(Component):
         if not self.raw_value:
             return None
         return self.to_datetime().date()
-
-    def to_datetime_astimezone(self, tz):
-        # Wrapper method
-        # Requires optional package
-        if not self.raw_value:
-            return None
-        dt = self.to_datetime()
-        try:
-            from zoneinfo import ZoneInfo
-            # Python >= 3.9
-            tz_dt = dt.astimezone(ZoneInfo(tz))
-        except ImportError:
-            # Python < 3.9
-            # REQUIREMENT (TODO document, setup dependency or try/except raise exception)
-            # - pip install pytz
-            # - https://pypi.org/project/pytz/
-            try:
-                import pytz
-                timezone = pytz.timezone(tz)
-                tz_dt = dt.replace(tzinfo=timezone)
-            except ImportError:
-                logger.warning(f'Could not load zoninfo and tzdata (python >= 3.9 ) or pytz extension; will not evaluate to_datetime_tzinfo of {self.__class__.__name__} {self.id} ("{self.key}")')
-            return True
-        return tz_dt
