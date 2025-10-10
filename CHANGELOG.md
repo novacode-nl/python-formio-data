@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.1.5
+
+Update to Nixpkgs 25.05 (development nix-shell), which includes poetry 2.1.3
+
 # 2.1.4
 
 Fix `pyproject.toml`.
