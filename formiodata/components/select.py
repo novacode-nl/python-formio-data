@@ -15,6 +15,18 @@ class selectComponent(Component):
         return self.raw.get('multiple')
 
     @property
+    def value(self):
+        value = super().value
+        if self.dataSrc == 'url' and isinstance(value, str) and not value:
+            return {}
+        else:
+            return value
+
+    @value.setter
+    def value(self, value):
+        return super(self.__class__, self.__class__).value.fset(self, value)
+
+    @property
     def value_label(self):
         if not self.value:
             return None
