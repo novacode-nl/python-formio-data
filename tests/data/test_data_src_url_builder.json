@@ -1,0 +1,37 @@
+{
+    "components": [
+        {
+            "label": "Country",
+            "widget": "choicesjs",
+            "tableView": true,
+            "dataSrc": "url",
+            "defaultValue": [
+                {}
+            ],
+            "data": {
+                "headers": [
+                    {
+                        "key": "",
+                        "value": ""
+                    }
+                ]
+            },
+            "refreshOn": "",
+            "clearOnRefresh": true,
+            "customDefaultValue": "value = {};",
+            "validate": {
+                "required": true
+            },
+            "validateWhenHidden": false,
+            "key": "country",
+            "properties": null,
+            "type": "select",
+            "lazyLoad": false,
+            "disableLimit": false,
+            "filter": "api=getData&model=res.country&label=display_name&domain_api=countryGroup&country_group={{data.countryGroup}}",
+            "noRefreshOnScroll": false,
+            "ignoreCache": true,
+            "input": true
+        }
+    ]
+}

@@ -120,10 +120,12 @@ class Form:
                 idx = int(m.group(1))  # eg: 0, 1, etc
                 key = path_node.replace(idx_notation, '')
                 component = components[key]
-                if hasattr(component, 'rows'):
+                if hasattr(component, 'rows') and idx < len(component.rows):
                     components = component.rows[idx].input_components
-            else:
+            elif path_node in components:
                 component = components[path_node]
+            else:
+                component = None
         return component
 
     def validation_errors(self):
