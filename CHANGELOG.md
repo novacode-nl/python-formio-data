@@ -1,25 +1,25 @@
 # Changelog
 
-# 2.1.6
+## 2.1.6
 
 Fixes:
 - Fix for `selectComponent` with data source URL (`"dataSrc": "url"`), when no value is set.
 - Fix `get_component_by_path` method to properly handle components with no value set.
 
-# 2.1.5
+## 2.1.5
 
 Update to Nixpkgs 25.05 (development nix-shell), which includes poetry 2.1.3
 
-# 2.1.4
+## 2.1.4
 
 Fix `pyproject.toml`.
 
-# 2.1.3
+## 2.1.3
 
 Update `pyproject.toml`.
 
 # 2.1.2
-Add methos `datetime_fromisoformat` in utils and refactor `datetimeComponent` to use it.
+Add method `datetime_fromisoformat` in utils and refactor `datetimeComponent` to use it.
 
 ## 2.1.1
 
