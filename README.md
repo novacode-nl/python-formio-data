@@ -6,7 +6,7 @@ For information about the formio.js project, see https://github.com/formio/formi
 
 ## Introduction
 
-**python-formio-data** is a Python package, which loads and transforms
+**formio-data** is a Python package, which loads and transforms
 formio.js **Builder JSON** and **Form JSON** into **usable Python objects**.\
 It's main aim is to provide easy access to a Form its components/fields, also
 captured as **Python objects**, which makes this API very versatile and usable.
