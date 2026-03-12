@@ -131,7 +131,7 @@ class NestedTestCase(unittest.TestCase):
 
         # paths
         self.assertEqual(panel.builder_path_key, ['panel'])
-        self.assertEqual(panel.builder_path_label, ['Panel'])
+        self.assertEqual(panel.builder_path_label, ['My Favourites'])
         self.assertEqual(panel.builder_input_path_key, [])
         self.assertEqual(panel.builder_input_path_label, [])
 

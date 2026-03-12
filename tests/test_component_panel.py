@@ -26,7 +26,7 @@ class panelComponentTestCase(ComponentTestCase):
 
     def test_get_label(self):
         panel = self.builder.components['panel']
-        self.assertEqual(panel.label, 'Panel')
+        self.assertEqual(panel.label, 'My Favourites')
 
     def test_get_title(self):
         panel = self.builder.components['panel']
@@ -35,4 +35,5 @@ class panelComponentTestCase(ComponentTestCase):
     # i18n translations
     def test_get_title_i18n_nl(self):
         panel = self.builder_i18n_nl.components['panel']
+        self.assertEqual(panel.label, 'Mijn favorieten')
         self.assertEqual(panel.title, 'Mijn favorieten')

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.7
+
+Improve `panelComponent` `label` property to return the panel `title` instead.\
+This is actually more correct, because the `label` property is not visible in the form (and builder) for a panel component, but the `title` property is.
+
 ## 2.1.6
 
 Fixes:

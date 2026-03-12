@@ -20,6 +20,10 @@ class panelComponent(layoutComponentBase):
                 )
 
     @property
+    def label(self):
+        return self.title
+
+    @property
     def title(self):
         title = self.raw.get('title')
         if not title:
