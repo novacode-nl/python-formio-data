@@ -1,6 +1,6 @@
 # formio-data (Python)
 
-formio.js (JSON Form Builder, Form) data API for Python.
+Python object API for formio.js Form Builder and Form (JSON) data.
 
 For information about the formio.js project, see https://github.com/formio/formio.js
 
