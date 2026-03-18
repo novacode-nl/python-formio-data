@@ -103,7 +103,7 @@ For more examples of usage, see the unit-tests.
 # form_json is a formio.js Form JSON document (text/string)
 >>
 >> builder = Builder(builder_json)
->> form = Form(builder, form_json)
+>> form = Form(form_json, builder)
 
 ##################
 # input components
