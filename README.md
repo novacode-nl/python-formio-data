@@ -18,11 +18,10 @@ captured as **Python objects**, which makes this API very versatile and usable.
 
 ## Features
 
-  - Compatible with Python 3.6 and later
-  - Constructor of the **Builder** and **Form** class, only requires
-    the JSON and an optional language code for translations.
+  - Compatible with Python 3.6 and later.
+  - Constructor of the **Builder** and **Form** class, only requires the JSON and an optional language code for translations.
   - Get a Form object its Components as a usable object e.g. datetime, boolean, dict (for select component) etc.
-  - Open source (MIT License)
+  - Open source (MIT License).
 
 ## Installation
 
@@ -31,8 +30,7 @@ https://github.com/novacode-nl/python-formio-data
 
 ### PyPI - Python Package Index
 
-Binary installers for the latest released version are available at the [Python
-Package Index](https://pypi.python.org/pypi/formio-data)
+Binary installers for the latest released version are available at the [Python Package Index](https://pypi.python.org/pypi/formio-data).
 
 ```sh
 pip(3) install formio-data
@@ -55,6 +53,7 @@ Convenient for developers. Also useful for running the (unit)tests.
 
 ```sh
 git clone git@github.com:novacode-nl/python-formio-data.git
+cd python-formio-data
 poetry install
 ```
 
@@ -71,6 +70,7 @@ poetry install -E json_logic
 Optional dependencies need to be installed separately.
 
 ```sh
+git clone git@github.com:novacode-nl/python-formio-data.git
 pip(3) install -U -e python-formio-data
 ```
 
